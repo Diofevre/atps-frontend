@@ -92,11 +92,14 @@ function App() {
     );
   }
 
-  const validTopics = data.topics.filter(topic => 
-    !topic.topic_name.toLowerCase().includes('test') && 
-    topic.topic_name !== 'Removed' &&
-    !topic.topic_name.match(/^[0-9]+$/)
-  );
+  const validTopics = data.topics
+    .filter(topic => topic.topic_name !== null)
+    .filter(topic => {
+      const topicName = topic.topic_name as string;
+      return !topicName.toLowerCase().includes('test') && 
+        topicName !== 'Removed' &&
+        !topicName.match(/^[0-9]+$/);
+    });
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
