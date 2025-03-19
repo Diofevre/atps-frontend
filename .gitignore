@@ -67,13 +67,6 @@ pnpm-lock.yaml
 # Next.js Static Export
 /export
 
-# Images
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.svg
-
 # Other
 *.local
 *.cache
