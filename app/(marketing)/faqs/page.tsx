@@ -3,17 +3,10 @@
 import React from 'react';
 import SupportPageMarketing from '../_components/faqs_details';
 import { motion } from 'framer-motion';
-import { Compass } from 'lucide-react';
 
 const FAQs = () => {
   return (
     <div className="min-h-screen pt-32 px-6 lg:px-8 bg-slate-900/80 backdrop-blur-xl">
-      {/* Navigation Indicator */}
-      <div className="absolute top-8 left-8 flex items-center gap-2 text-[#94A3B8]">
-        <Compass className="w-5 h-5 animate-pulse" />
-        <span className="text-sm font-medium">ATPS Aviation / FAQs</span>
-      </div>
-      
       <div className="max-w-[1440px] mx-auto">
         {/* Header Section */}
         <motion.div 

@@ -2,7 +2,7 @@
 'use client'
 
 import { Loader } from '@/components/ui/loader';
-import { Compass, Globe } from 'lucide-react';
+import { Globe } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 
 interface Article {
@@ -39,12 +39,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-900/80 backdrop-blur-xl">
-      {/* Navigation Indicator */}
-      <div className="absolute top-8 left-8 flex items-center gap-2 text-[#94A3B8]">
-        <Compass className="w-5 h-5 animate-pulse" />
-        <span className="text-sm font-medium">ATPS Aviation / Blog</span>
-      </div>
-
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=2048')] bg-cover bg-center opacity-10"></div>

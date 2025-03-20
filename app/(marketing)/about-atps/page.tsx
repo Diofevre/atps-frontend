@@ -1,5 +1,5 @@
 import { features_about, stats_about } from "@/lib/marketing_page/constant";
-import { Compass, Shield } from "lucide-react";
+import { Shield } from "lucide-react";
 
 const AboutATPS = () => {
   return (
@@ -15,12 +15,6 @@ const AboutATPS = () => {
 
         {/* Content */}
         <div className="relative z-10">
-          {/* Navigation */}
-          <div className="absolute top-8 left-8 flex items-center gap-2 text-[#94A3B8]">
-            <Compass className="w-5 h-5 animate-pulse" />
-            <span className="text-sm font-medium">ATPS Aviation / About</span>
-          </div>
-
           {/* Hero Text & Stats */}
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-24">

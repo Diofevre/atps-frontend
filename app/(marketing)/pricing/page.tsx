@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { subscriptionService } from '@/lib/subscription/service/subscription-service';
 import { useAuth } from '@clerk/nextjs';
-import { BookOpen, Compass, Plane, Sparkles, X } from 'lucide-react';
+import { BookOpen, Plane, Sparkles, X } from 'lucide-react';
 import { features_pricing } from '@/lib/marketing_page/constant';
 
 interface Subscription {
@@ -98,12 +98,6 @@ const PricingPage = () => {
 
   return (
     <div className="min-h-screen pt-32 pb-16 bg-slate-900/80 backdrop-blur-xl">
-      {/* Navigation Indicator */}
-      <div className="absolute top-8 left-8 flex items-center gap-2 text-[#94A3B8]">
-        <Compass className="w-5 h-5 animate-pulse" />
-        <span className="text-sm font-medium">ATPS Aviation / Pricing</span>
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         <motion.div 
           className="text-center mb-16"
@@ -227,6 +221,7 @@ const PricingPage = () => {
             <button
               onClick={() => setShowConfirmModal(false)}
               className="absolute right-4 top-4 text-gray-400 hover:text-white"
+              title="Close"
             >
               <X className="w-5 h-5" />
             </button>
