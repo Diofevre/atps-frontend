@@ -63,9 +63,14 @@ const Sidebar = () => {
       </ul>
 
       {/* Bottom Mode Section */}
-      <div className="mt-auto p-2 pb-0 cursor-pointer" onClick={() => router.push('/settings')}>
-        <div className="flex items-center gap-2">
-          <GiUpgrade className="text-2xl min-w-[24px]" />
+      <div 
+        onClick={() => router.push('/settings')}
+        className={`cursor-pointer hover:bg-primary/5 rounded-md transition-colors duration-200 hover:text-[#EECE84] ${
+          pathname === '/settings' && 'text-[#EECE84] bg-primary/5'
+        }`}
+      >
+        <div className={`flex items-center gap-2 ${isOpen && 'p-2'}`}>
+          <GiUpgrade className="text-2xl min-w-[24px] ml-2" />
           <div className={`flex flex-col whitespace-nowrap overflow-hidden transition-all duration-300 ${
             isOpen ? "opacity-100 w-32" : "opacity-0 w-0"
           }`}>

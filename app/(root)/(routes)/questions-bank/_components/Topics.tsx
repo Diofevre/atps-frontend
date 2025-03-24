@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react"
+"use client";
+
+import React from "react";
 import {
   Select,
   SelectContent,
@@ -6,12 +8,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { useAuth } from "@clerk/nextjs"
+} from "@/components/ui/select";
+import { useAuth } from "@clerk/nextjs";
+import useSWR from "swr";
 
 interface Topic {
-  id: string
-  topic_name: string
+  id: string;
+  topic_name: string;
 }
 
 interface TopicsProps {
@@ -20,66 +23,60 @@ interface TopicsProps {
   selectedTopicName?: string;
 }
 
+interface TopicsResponse {
+  topics: Topic[];
+}
+
 const Topics = ({ onSelectionChange, selectedTopic, selectedTopicName }: TopicsProps) => {
   const { getToken } = useAuth();
-  const [options, setOptions] = useState<{ value: string; label: string }[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    const fetchTopics = async () => {
-      const token = await getToken();
-
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/topics`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        })
-        if (!response.ok) {
-          throw new Error(`Failed to fetch topics: ${response.statusText}`)
-        }
-        const data = await response.json()
-        if (data.topics && Array.isArray(data.topics)) {
-          const formattedTopics = data.topics.map((topic: Topic) => ({
-            value: topic.id,
-            label: topic.topic_name,
-          }))
-          setOptions(formattedTopics)
-          setError(null)
-        } else {
-          throw new Error("Unexpected API response format")
-        }
-      } catch (error) {
-        console.error("Error fetching topics:", error)
-      } finally {
-        setLoading(false)
+  const fetcher = async (url: string) => {
+    const token = await getToken();
+    if (!token) throw new Error("Authentication token not available");
+    
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${token}`
       }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch topics: ${response.statusText}`);
     }
 
-    fetchTopics()
-  }, [getToken])
+    return response.json();
+  };
 
-  const handleSelection = (value: string) => {
+  const { data, error, isLoading } = useSWR<TopicsResponse>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/topics`,
+    fetcher
+  );
+
+  const options = data?.topics.map((topic: Topic) => ({
+    value: topic.id,
+    label: topic.topic_name,
+  })) ?? [];
+
+  const handleSelection = (value: string): void => {
     const selectedOption = options.find(opt => opt.value === value);
     if (selectedOption) {
       onSelectionChange(value, selectedOption.label);
     }
-  }
+  };
 
   return (
     <Select onValueChange={handleSelection} value={selectedTopic}>
       <SelectTrigger className="w-[400px] border rounded-[12px] py-6 bg-[#FFFFFF] p-6 dark:bg-transparent">
-        <SelectValue placeholder={loading ? "Loading ..." : "Select a syllabus"}>
-          {selectedTopicName || (loading ? "Loading ..." : "Select a syllabus")}
+        <SelectValue placeholder={isLoading ? "Loading ..." : "Select a syllabus"}>
+          {selectedTopicName || (isLoading ? "Loading ..." : "Select a syllabus")}
         </SelectValue>
       </SelectTrigger>
       <SelectContent className="border rounded-[10px] bg-[#FFFFFF] dark:bg-[#020526]">
         <SelectGroup className="mt-2 mb-2 ml-2 mr-2">
-          {loading ? (
+          {isLoading ? (
             <div className="p-4">Loading...</div>
           ) : error ? (
-            <div className="p-4 text-red-500">{error}</div>
+            <div className="p-4 text-red-500">{error.message}</div>
           ) : options.length > 0 ? (
             options.map((option) => (
               <SelectItem key={option.value} value={option.value}>
@@ -92,7 +89,7 @@ const Topics = ({ onSelectionChange, selectedTopic, selectedTopicName }: TopicsP
         </SelectGroup>
       </SelectContent>
     </Select>
-  )
-}
+  );
+};
 
-export default Topics
+export default Topics;

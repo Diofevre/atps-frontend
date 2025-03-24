@@ -5,7 +5,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { contactInfo, features, mainFeatures } from '@/lib/marketing_page/constant';
-import { ArrowRight, ArrowUpRight, Users } from 'lucide-react';
+import { Users } from 'lucide-react';
 import { useUser } from '@clerk/nextjs';
 
 const Heroes = () => {
@@ -34,7 +34,7 @@ const Heroes = () => {
         <div className="relative pt-40 pb-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl space-y-8">
-              <div className="inline-flex items-center px-4 py-2 rounded-[12px] bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-sm">
+              <div className="inline-flex items-center px-4 py-2 rounded-[24px] bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-sm">
                 <span className="animate-pulse mr-2 h-2 w-2 rounded-full bg-[#EECE84]"></span>
                 Start Your Aviation Journey Today
               </div>
@@ -78,11 +78,13 @@ const Heroes = () => {
                 <Button 
                   onClick={() => router.push('/dashboard')}
                   size="lg" 
-                  className="relative group bg-[#EECE84] hover:bg-[#EECE84]/90 text-slate-900 rounded-[12px] px-8 h-12 transition-all duration-300 overflow-hidden"
+                  className="relative group bg-[#EECE84] hover:bg-[#EECE84]/90 text-slate-900 rounded-[24px] px-8 h-12 transition-all duration-300 overflow-hidden"
                 >
                   <span className="relative z-10 flex items-center font-medium">
                     {user ? "Dashboard" : "TRY FOR FREE"}
-                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
+                      ⟶
+                    </span>
                   </span>
                   <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                 </Button>
@@ -169,11 +171,13 @@ const Heroes = () => {
               <Button 
                 onClick={() => router.push('questions-bank/community')}
                 size="lg"
-                className="group bg-white/10 hover:bg-white/20 text-white rounded-[12px] px-6 h-12 text-sm transition-all duration-300"
+                className="group bg-white/10 hover:bg-white/20 text-white rounded-[24px] px-6 h-12 text-sm transition-all duration-300"
               >
                 <span className="flex items-center">
                   Join Our Community
-                  <ArrowUpRight className="ml-2 h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
+                    ⟶
+                  </span>
                 </span>
               </Button>
             </div>

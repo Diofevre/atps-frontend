@@ -9,7 +9,7 @@ export const Loader = () => {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-slate-900/90 backdrop-blur-xl rounded-[12px] p-10 shadow-2xl"
+        className="bg-white/50 backdrop-blur-xl rounded-[12px] p-10 shadow-2xl"
         style={{
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
@@ -25,7 +25,7 @@ export const Loader = () => {
             }}
             className="mb-8"
           >
-            <Loader2 className="h-14 w-14 text-white animate-spin" />
+            <Loader2 className="h-14 w-14 animate-spin" />
           </motion.div>
           
           <motion.div
@@ -38,7 +38,7 @@ export const Loader = () => {
             }}
             className="text-center"
           >
-            <h2 className="text-xl font-semibold text-white mb-2">Loading</h2>
+            <h2 className="text-xl font-semibold mb-2">Loading</h2>
             <div className="flex space-x-1 justify-center items-center">
               <motion.div
                 initial={{ opacity: 0 }}
@@ -49,7 +49,7 @@ export const Loader = () => {
                   ease: "easeInOut",
                   repeatDelay: 0.2,
                 }}
-                className="w-2 h-2 bg-white rounded-full"
+                className="w-2 h-2 rounded-full bg-black"
               />
               <motion.div
                 initial={{ opacity: 0 }}
@@ -61,7 +61,7 @@ export const Loader = () => {
                   delay: 0.2,
                   repeatDelay: 0.2,
                 }}
-                className="w-2 h-2 bg-white rounded-full"
+                className="w-2 h-2 rounded-full bg-black"
               />
               <motion.div
                 initial={{ opacity: 0 }}
@@ -73,7 +73,7 @@ export const Loader = () => {
                   delay: 0.4,
                   repeatDelay: 0.2,
                 }}
-                className="w-2 h-2 bg-white rounded-full"
+                className="w-2 h-2 rounded-full bg-black"
               />
             </div>
           </motion.div>
@@ -86,7 +86,7 @@ export const Loader = () => {
               duration: 0.5,
               ease: "easeOut",
             }}
-            className="mt-8 text-sm text-slate-300"
+            className="mt-8 text-sm"
           >
             Please wait while we set things up for you.
           </motion.div>

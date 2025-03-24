@@ -1,9 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
-import { Loader } from '@/components/ui/loader';
+import React from 'react';
 import { Globe } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import useSWR from 'swr';  // Corrected import!
+import { useRouter } from 'next/navigation';
+
 
 interface Article {
   id: number;
@@ -12,27 +14,32 @@ interface Article {
   title_text: string;
 }
 
-function App() {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(true);
+const fetcher = (...args: Parameters<typeof fetch>) =>
+  fetch(...args).then(res => res.json());
 
-  useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/articles`)
-      .then(response => response.json())
-      .then(data => {
-        setArticles(data);
-        setLoading(false);
-      });
-  }, []);
+const Blog = () => {
+  const router = useRouter();
+  const { data: articles, error, isLoading } = useSWR<Article[]>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/articles`,
+    fetcher
+  );
 
   const navigateToArticle = (id: number) => {
-    window.location.href = `/articles/${id}`;
+    router.push(`/articles/${id}`);
   };
 
-  if (loading) {
+  if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader />
+        <div className="text-red-500">Failed to load articles</div>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#EECE84]"></div>
       </div>
     );
   }
@@ -49,7 +56,7 @@ function App() {
               Aviation Knowledge Hub
             </span>
           </div>
-          <h1 className="text-5xl font-bold mb-6">
+          <h1 className="text-5xl font-bold mb-6 text-white">
             Explore Aviation Articles
           </h1>
           <p className="text-xl text-white/50 max-w-2xl">
@@ -61,7 +68,7 @@ function App() {
       {/* Articles Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {articles.map((article) => (
+          {articles?.map((article) => (
             <div
               key={article.id}
               className="group cursor-pointer"
@@ -109,4 +116,4 @@ function App() {
   );
 }
 
-export default App;
+export default Blog;

@@ -1,9 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
-import React, { useEffect, useState, useCallback } from 'react';
-import { Calendar, Clock, Globe, ArrowLeft } from 'lucide-react';
+import React, { useCallback } from 'react';
+import { Calendar, Clock, Globe } from 'lucide-react';
 import { Loader } from '@/components/ui/loader';
+import useSWR from 'swr';
 
 interface Article {
   title: string;
@@ -18,65 +19,41 @@ interface NewsData {
   recentArticles: Article[];
 }
 
+const fetcher = (...args: Parameters<typeof fetch>) =>
+  fetch(...args).then(res => res.json());
+
 const LatestNews = () => {
-  const [newsData, setNewsData] = useState<NewsData | null>(null);
-  const [initialArticle, setInitialArticle] = useState<Article | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [expandedContent, setExpandedContent] = useState(false);
-  const [currentArticleLink, setCurrentArticleLink] = useState<string | null>(null);
-
-  const fetchNewsData = useCallback(async () => {
-    try {
-      setLoading(true);
-      const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/api/latest-news`;
-
-      const response = await fetch(endpoint);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data: NewsData = await response.json();
-      setNewsData(data);
-      setInitialArticle(data.article); // Store the initial article
-      setCurrentArticleLink(data.article.link);
-    } catch (error) {
-      console.error('Error fetching articles:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchNewsData();
-  }, [fetchNewsData]);
+  const { data: newsData, error, isLoading, mutate } = useSWR<NewsData>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/latest-news`,
+    fetcher
+  );
 
   const handleArticleClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, link: string, clickedArticle: Article) => {
     e.preventDefault();
 
-    setNewsData((prevData) => {
-      if (!prevData) return null;
+    mutate(prevData => {
+      if (!prevData) return undefined;
       return {
         ...prevData,
         article: clickedArticle,
       };
-    });
+    }, false);
 
-    setCurrentArticleLink(link);
     setExpandedContent(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
+  }, [mutate]);
 
   const handleReturnToMain = useCallback(() => {
-    if (!initialArticle || !newsData) return;
-
-    setNewsData({
-      ...newsData,
-      article: initialArticle,
-    });
-    setCurrentArticleLink(initialArticle.link);
+    mutate(prevData => {
+      if (!prevData) return undefined;
+      return {
+        ...prevData,
+        article: initialArticleRef.current!,
+      };
+    }, false);
     setExpandedContent(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [initialArticle, newsData]);
+  }, [mutate]);
 
   const formatDate = useCallback((dateString: string) => {
     const date = new Date(dateString);
@@ -95,7 +72,16 @@ const LatestNews = () => {
     });
   }, []);
 
-  if (loading || !newsData) {
+  const [expandedContent, setExpandedContent] = React.useState(false);
+  const initialArticleRef = React.useRef<Article | null>(newsData?.article || null);
+
+  React.useEffect(() => {
+    initialArticleRef.current = newsData?.article || null;
+  }, [newsData?.article]);
+
+
+
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader />
@@ -103,7 +89,16 @@ const LatestNews = () => {
     );
   }
 
-  const isNotMainArticle = initialArticle && newsData.article.link !== initialArticle.link;
+  if (error || !newsData) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-red-500">
+        Error loading news.
+      </div>
+    );
+  }
+
+  const isNotMainArticle = initialArticleRef.current && newsData.article.link !== initialArticleRef.current.link;
+
 
   return (
     <div className="min-h-screen">
@@ -131,9 +126,11 @@ const LatestNews = () => {
             {isNotMainArticle && (
               <button
                 onClick={handleReturnToMain}
-                className="mb-6 flex items-center gap-2 px-4 py-2 bg-[#EECE84] text-black/80 rounded-[12px] text-sm hover:bg-[#EECE84]/60 transition-colors duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-[#EECE84] focus:ring-offset-2"
+                className="mb-6 flex items-center gap-2 px-4 py-2 bg-[#EECE84] text-black/80 rounded-[24px] text-sm hover:bg-[#EECE84]/60 transition-colors duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-[#EECE84] focus:ring-offset-2"
               >
-                <ArrowLeft size={16} />
+                <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
+                  ←
+                </span>
                 Retour à l&apos;article principal
               </button>
             )}
@@ -199,7 +196,7 @@ const LatestNews = () => {
                 <article
                   key={article.link}
                   className={`bg-white rounded-lg shadow-md overflow-hidden transform hover:translate-y-[-2px] transition-all duration-200 ${
-                    article.link === currentArticleLink ? 'ring-2 ring-[#EECE84]' : ''
+                    article.link === newsData.article.link ? 'ring-2 ring-[#EECE84]' : ''
                   }`}
                 >
                   <img
@@ -218,7 +215,7 @@ const LatestNews = () => {
                         href="#"
                         onClick={(e) => handleArticleClick(e, article.link, article)}
                         className={`hover:text-[#EECE84] transition-colors ${
-                          article.link === currentArticleLink ? 'text-[#EECE84]' : ''
+                          article.link === newsData.article.link ? 'text-[#EECE84]' : ''
                         }`}
                       >
                         {article.title}

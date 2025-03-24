@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React from "react"
 import {
   Select,
   SelectContent,
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select"
 import { useAuth } from "@clerk/nextjs"
 import { BookOpen } from "lucide-react"
+import useSWR from "swr"
 
 interface Topic {
   id: string
@@ -30,42 +31,36 @@ interface TopicsExamProps {
   onSelectionChange: (topicInfo: TopicInfo) => void
 }
 
+interface TopicsResponse {
+  topics: Topic[]
+}
+
 const TopicsExam = ({ onSelectionChange }: TopicsExamProps) => {
   const { getToken } = useAuth()
-  const [options, setOptions] = useState<Topic[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    const fetchTopics = async () => {
-      const token = await getToken()
+  const fetcher = async (url: string) => {
+    const token = await getToken()
+    if (!token) throw new Error("Authentication token not available")
 
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/topics`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        })
-        if (!response.ok) {
-          throw new Error(`Failed to fetch topics: ${response.statusText}`)
-        }
-        const data = await response.json()
-        if (data.topics && Array.isArray(data.topics)) {
-          setOptions(data.topics)
-          setError(null)
-        } else {
-          throw new Error("Unexpected API response format")
-        }
-      } catch (error) {
-        console.error("Error fetching topics:", error)
-        setError("Failed to load topics")
-      } finally {
-        setLoading(false)
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${token}`
       }
+    })
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch topics: ${response.statusText}`)
     }
 
-    fetchTopics()
-  }, [getToken])
+    return response.json()
+  }
+
+  const { data, error, isLoading } = useSWR<TopicsResponse>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/topics`,
+    fetcher
+  )
+
+  const options = data?.topics ?? []
 
   const handleSelection = (value: string) => {
     const selectedTopic = options.find(topic => topic.id === value)
@@ -89,7 +84,7 @@ const TopicsExam = ({ onSelectionChange }: TopicsExamProps) => {
           className="w-full pl-10 pr-4 h-14 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm hover:border-primary/80 focus:ring-1 focus:ring-primary/20 transition-all duration-200"
         >
           <SelectValue 
-            placeholder={loading ? "Loading syllabuses..." : "Choose your syllabus"} 
+            placeholder={isLoading ? "Loading syllabuses..." : "Choose your syllabus"} 
             className="text-gray-600 dark:text-gray-300"
           />
         </SelectTrigger>
@@ -97,13 +92,13 @@ const TopicsExam = ({ onSelectionChange }: TopicsExamProps) => {
           className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg"
         >
           <SelectGroup className="py-2">
-            {loading ? (
+            {isLoading ? (
               <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                 Loading syllabuses...
               </div>
             ) : error ? (
               <div className="px-4 py-3 text-sm text-red-500">
-                {error}
+                {error.message}
               </div>
             ) : options.length > 0 ? (
               options.map((topic) => (
@@ -127,4 +122,4 @@ const TopicsExam = ({ onSelectionChange }: TopicsExamProps) => {
   )
 }
 
-export default TopicsExam;
+export default TopicsExam

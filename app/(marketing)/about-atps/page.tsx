@@ -20,7 +20,7 @@ const AboutATPS = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-24">
               {/* Text */}
               <div className="space-y-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-[12px] bg-blue-500/10 border border-blue-500/20 text-blue-400">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-[24px] bg-blue-500/10 border border-blue-500/20 text-blue-400">
                   <Shield className="w-4 h-4" />
                   <span className="text-sm font-medium">Trusted Since 2024</span>
                 </div>

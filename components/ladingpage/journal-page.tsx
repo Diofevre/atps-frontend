@@ -2,7 +2,7 @@
 'use client'
 
 import React from 'react';
-import { Newspaper, TrendingUp, AlertTriangle, BookOpen, ExternalLink } from 'lucide-react';
+import { Newspaper, TrendingUp, AlertTriangle, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const journalCategories = [
@@ -33,7 +33,7 @@ function App() {
       <section className="relative py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-4 max-w-3xl mx-auto">
-            <div className="inline-flex items-center px-4 py-2 rounded-[12px] bg-[#EECE84]/10 text-[#EECE84] text-sm border border-[#EECE84]/20">
+            <div className="inline-flex items-center px-4 py-2 rounded-[24px] bg-[#EECE84]/10 text-[#EECE84] text-sm border border-[#EECE84]/20">
               <Newspaper className="w-4 h-4 mr-2" />
               Aviation Industry Insights
             </div>
@@ -140,14 +140,16 @@ function App() {
                   </ul>
                 </div>
               </div>
-
+              
               <Button 
                 size="lg"
-                className="group bg-[#EECE84] hover:bg-[#EECE84]/90 text-gray-900 rounded-[12px] px-8 h-12 text-sm transition-all duration-300"
+                className="group bg-white/10 hover:bg-white/20 text-white rounded-[24px] px-6 h-12 text-sm transition-all duration-300"
               >
                 <span className="flex items-center">
                   Read the ATPS Aviation Journal
-                  <ExternalLink className="ml-2 h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
+                    ⟶
+                  </span>
                 </span>
               </Button>
             </div>

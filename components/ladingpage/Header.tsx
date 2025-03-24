@@ -7,6 +7,7 @@ import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
+import { Button } from '../ui/button';
 
 const Header = () => {
   const pathname = usePathname();
@@ -117,12 +118,18 @@ const Header = () => {
                   </button>
                 </SignInButton>
                 <SignInButton mode="modal">
-                  <button className="group relative px-6 py-2.5 bg-[#EECE84] text-black rounded-[12px] overflow-hidden transition-all duration-300">
-                    <div className="relative z-10 flex items-center text-sm font-medium">
+                  <Button
+                    size="lg" 
+                    className="relative group bg-[#EECE84] hover:bg-[#EECE84]/90 text-slate-900 rounded-[24px] px-4 h-12 transition-all duration-300 overflow-hidden"
+                  >
+                    <span className="relative z-10 flex items-center font-medium">
                       Join ATPS
-                    </div>
+                      <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
+                        ⟶
+                      </span>
+                    </span>
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                  </button>
+                  </Button>
                 </SignInButton>
               </div>
             </SignedOut>
@@ -142,10 +149,13 @@ const Header = () => {
             </SignedIn>
             <SignedOut>
               <SignInButton mode="modal">
-                <button className="group relative px-4 py-2 bg-[#EECE84] text-black rounded-[12px] overflow-hidden transition-all duration-300">
-                  <div className="relative z-10 flex items-center text-sm font-medium">
+                <button className="group relative px-4 py-2 bg-[#EECE84] text-black rounded-[24px] overflow-hidden transition-all duration-300">
+                  <span className="relative z-10 flex items-center font-medium text-sm">
                     Sign in
-                  </div>
+                    <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
+                      ⟶
+                    </span>
+                  </span>
                   <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                 </button>
               </SignInButton>
@@ -200,9 +210,12 @@ const Header = () => {
               </SignedIn>
               <SignedOut>
                 <SignInButton mode="modal">
-                  <button className="w-full group relative px-6 py-3 bg-[#EECE84] text-black rounded-[12px] overflow-hidden transition-all duration-300">
+                  <button className="w-full group relative px-6 py-4 bg-[#EECE84] text-black rounded-[24px] overflow-hidden transition-all duration-300">
                     <div className="relative z-10 flex items-center justify-center text-sm font-medium">
                       Join ATPS
+                      <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
+                        ⟶
+                      </span>
                     </div>
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                   </button>

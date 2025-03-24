@@ -7,7 +7,6 @@ import {
   BookOpen, 
   HelpCircle, 
   MonitorPlay,
-  ArrowRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -58,7 +57,7 @@ const MarketingSlider = () => {
       <section className="relative py-28 overflow-hidden">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center px-4 py-2 rounded-[12px] bg-[#EECE84]/10 border border-[#EECE84]/20 text-[#EECE84] text-sm mb-6">
+            <div className="inline-flex items-center px-4 py-2 rounded-[24px] bg-[#EECE84]/10 border border-[#EECE84]/20 text-[#EECE84] text-sm mb-6">
               <span className="animate-pulse mr-2 h-2 w-2 rounded-full bg-[#EECE84]"></span>
               Why Choose Us
             </div>
@@ -113,11 +112,13 @@ const MarketingSlider = () => {
                       <CardFooter className="relative">
                         <Button 
                           size="sm"
-                          className="w-full group h-10 bg-gradient-to-r from-[#EECE84] to-amber-400 hover:from-[#EECE84]/90 hover:to-amber-400/90 text-black rounded-[12px] transition-all duration-300"
+                          className="w-full group h-12 bg-gradient-to-r from-[#EECE84] to-amber-400 hover:from-[#EECE84]/90 hover:to-amber-400/90 text-black rounded-[24px] transition-all duration-300"
                         >
                           <span className="flex items-center justify-center">
                             TRY IT NOW
-                            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                          </span>
+                          <span className="ml-2 h-5 w-5 mt-1 group-hover:translate-x-1 transition-transform">
+                            ⟶
                           </span>
                         </Button>
                       </CardFooter>

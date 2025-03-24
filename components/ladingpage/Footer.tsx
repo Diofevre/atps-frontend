@@ -122,7 +122,7 @@ const Footer = () => {
           {/* Contact Information */}
           <div className="space-y-12">
             <div>
-              <div className="inline-flex items-center px-4 py-2 rounded-[12px] bg-[#EECE84]/10 text-[#EECE84] text-sm">
+              <div className="inline-flex items-center px-4 py-2 rounded-[24px] bg-[#EECE84]/10 text-[#EECE84] text-sm">
                 Contact Us
               </div>
               <h2 className="text-3xl font-bold text-white mt-6 mb-4">
@@ -260,7 +260,7 @@ const Footer = () => {
                 <div className="flex justify-end">
                   <Button 
                     type="submit"
-                    className="bg-[#EECE84] hover:bg-[#EECE84]/90 text-black rounded-[12px] py-5"
+                    className="bg-[#EECE84] hover:bg-[#EECE84]/90 text-black rounded-[24px] h-12"
                     disabled={isLoading}
                   >
                     <span className="flex items-center justify-center">
@@ -281,7 +281,7 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="lg:col-span-4">
             <div className="space-y-6">
-              <div className="inline-flex items-center px-4 py-2 rounded-[12px] bg-white/5 backdrop-blur-xl border border-[#EECE84]/20">
+              <div className="inline-flex items-center px-4 py-2 rounded-[24px] bg-white/5 backdrop-blur-xl border border-[#EECE84]/20">
                 <span className="text-[#EECE84] font-semibold">ATPS Aviation</span>
               </div>
               <p className="text-gray-400 leading-relaxed">

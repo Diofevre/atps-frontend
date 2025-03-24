@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { 
-  BookOpen, 
-  Award, 
-  Plane, 
+import {
+  BookOpen,
+  Award,
+  Plane,
   Target,
   ChevronRight,
   Eye,
@@ -18,6 +18,7 @@ import { Card, UserButton } from './_components/ui';
 import { format } from "date-fns";
 import { useRouter } from 'next/navigation';
 import { Loader } from '@/components/ui/loader';
+import useSWR from 'swr';
 
 interface DashboardData {
   user: {
@@ -54,40 +55,47 @@ interface DashboardData {
   };
 }
 
-function App() {
+const fetcher = async (url: string, token: string) => {
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  if (!response.ok) {
+    throw new Error('Failed to fetch data');
+  }
+  return response.json();
+};
+
+const Dashboard = () => {
   const router = useRouter();
   const { getToken } = useAuth();
-  const [data, setData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dashboard`, {
-          headers: {
-            Authorization: `Bearer ${await getToken()}`
-          }
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch dashboard data');
-        }
-        const jsonData = await response.json();
-        setData(jsonData);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-      } finally {
-        setLoading(false);
+  const { data, error, isLoading } = useSWR<DashboardData>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard`,
+    async (url: string) => {
+      const token = await getToken();
+      if (!token) {
+        throw new Error('Token is null');
       }
-    };
+      return fetcher(url, token);
+    },
+  );
 
-    fetchDashboardData();
-  }, [getToken]);
-
-  if (loading || !data) {
+  if (isLoading || !getToken) {
     return (
       <div className="flex h-full w-full items-center justify-center p-8">
         <Loader />
+      </div>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center">
+        <div className="bg-white p-8 rounded-xl shadow-xl">
+          <h2 className="text-2xl font-bold text-red-600 mb-4">Error</h2>
+          <p className="text-gray-600">{error}</p>
+        </div>
       </div>
     );
   }
@@ -96,7 +104,7 @@ function App() {
     .filter(topic => topic.topic_name !== null)
     .filter(topic => {
       const topicName = topic.topic_name as string;
-      return !topicName.toLowerCase().includes('test') && 
+      return !topicName.toLowerCase().includes('test') &&
         topicName !== 'Removed' &&
         !topicName.match(/^[0-9]+$/);
     });
@@ -107,6 +115,13 @@ function App() {
       y: 0,
       opacity: 1
     }
+  };
+
+  const getScoreColor = (score: number) => {
+    if (score >= 0.8) return 'text-green-600 bg-green-50';
+    if (score >= 0.6) return 'text-blue-600 bg-blue-50';
+    if (score >= 0.4) return 'text-yellow-600 bg-yellow-50';
+    return 'text-red-600 bg-red-50';
   };
 
   return (
@@ -120,8 +135,8 @@ function App() {
               <h1 className="ml-3 text-xl font-semibold text-slate-900">ATPS DASHBOARD</h1>
             </div>
             <div className="flex items-center gap-4">
-              <UserButton 
-                username={data.user.username || "Unknown User"} 
+              <UserButton
+                username={data.user.username || "Unknown User"}
                 className="cursor-pointer"
               />
             </div>
@@ -239,27 +254,17 @@ function App() {
                   transition={{ delay: index * 0.05 }}
                   className="group flex items-center justify-between p-4 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer"
                 >
-                  <div className="flex items-center space-x-3 w-full">
+                  <div className="flex items-center space-x-3 flex-1">
                     <div className="flex-shrink-0 w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                       <span className="text-sm font-medium text-blue-600">
                         {String(topic.topic_id).padStart(2, '0')}
                       </span>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-slate-900 truncate">
-                        {topic.topic_name}
-                      </p>
-                      <div className="mt-1 flex items-center">
-                        <div className="flex-1 bg-slate-200 rounded-full h-1.5">
-                          <div
-                            className="bg-blue-600 h-1.5 rounded-full"
-                            style={{ width: `${topic.score * 100}%` }}
-                          />
-                        </div>
-                        <span className="ml-2 text-xs text-slate-500">
-                          {(topic.score * 100).toFixed(0)}%
-                        </span>
-                      </div>
+                    <span className="text-sm font-medium text-slate-900 flex-1">
+                      {topic.topic_name}
+                    </span>
+                    <div className={`px-3 py-1 rounded-full text-sm font-medium ${getScoreColor(topic.score)}`}>
+                      {(topic.score * 100).toFixed(0)}%
                     </div>
                     <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-slate-600" />
                   </div>
@@ -279,8 +284,8 @@ function App() {
                 </div>
                 <div className="space-y-4">
                   <div className="relative h-48 rounded-lg overflow-hidden">
-                    <img 
-                      src={data.latestArticle.image} 
+                    <img
+                      src={data.latestArticle.image}
                       alt={data.latestArticle.title}
                       className="object-cover w-full h-full"
                     />
@@ -291,9 +296,9 @@ function App() {
                       <span>{format(new Date(data.latestArticle.pubDate), 'PPP')}</span>
                     </div>
                     <h4 className="text-lg font-semibold text-[#1a1a2e] mb-4">{data.latestArticle.title}</h4>
-                    <div 
+                    <div
                       className="prose prose-sm max-w-none text-gray-600 overflow-y-auto max-h-[400px] pr-4"
-                      dangerouslySetInnerHTML={{ 
+                      dangerouslySetInnerHTML={{
                         __html: data.latestArticle.content
                       }}
                     />
@@ -315,4 +320,4 @@ function App() {
   );
 }
 
-export default App;
+export default Dashboard;

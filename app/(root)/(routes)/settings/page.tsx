@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@clerk/nextjs';
@@ -15,6 +15,7 @@ import {
 import { AlertTriangle, BookOpen, CheckCircle2, CreditCard, Sparkles, X } from 'lucide-react';
 import { subscriptionService } from '@/lib/subscription/service/subscription-service';
 import { Loader } from '@/components/ui/loader';
+import useSWR from 'swr';
 
 interface UserSubscription {
   id: string;
@@ -143,8 +144,6 @@ const billingCycles = [
 const SubscriptionPage = () => {
   const { getToken } = useAuth();
   const router = useRouter();
-  const [userSubscription, setUserSubscription] = useState<UserSubscription | null>(null);
-  const [, setSelectedPlan] = useState<string | null>(null);
   const [selectedCycle, setSelectedCycle] = useState<number>(12);
   const [isLoading, setIsLoading] = useState(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
@@ -157,35 +156,33 @@ const SubscriptionPage = () => {
     onConfirm: () => void;
   } | null>(null);
 
-  const fetchUserSubscription = useCallback(async () => {
-    try {
-      const token = await getToken();
-      if (!token) {
-        router.push('/login');
-        return;
-      }
+  const fetcher = async (url: string) => {
+    const token = await getToken();
+    if (!token) {
+      router.push('/login');
+      throw new Error('No token available');
+    }
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch subscription data');
+    }
+    return response.json();
+  };
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUserSubscription(data);
-        setSelectedPlan(data.subscription_plan);
+  const { data: userSubscription, error, mutate } = useSWR<UserSubscription>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/users/me`,
+    fetcher,
+    {
+      onSuccess: (data) => {
+        // Set the initial selected cycle to match the user's current billing cycle
         setSelectedCycle(data.billing_cycle);
       }
-    } catch (error) {
-      console.error('Error fetching subscription:', error);
-      showNotification('error', 'Failed to load subscription details');
     }
-  }, [getToken, router]);
-
-  useEffect(() => {
-    fetchUserSubscription();
-  }, [fetchUserSubscription]);
+  );
 
   const showNotification = (type: 'success' | 'error', message: string) => {
     setNotification({ type, message });
@@ -265,7 +262,7 @@ const SubscriptionPage = () => {
       }
 
       showNotification('success', response.message);
-      fetchUserSubscription();
+      mutate(); // Refresh the subscription data
     } catch (error) {
       console.error('Action error:', error);
       showNotification('error', 'Failed to process your request');
@@ -295,6 +292,17 @@ const SubscriptionPage = () => {
       onConfirm: () => handleSubscriptionAction('resume')
     });
   };
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center">
+        <div className="bg-white p-8 rounded-xl shadow-xl">
+          <h2 className="text-2xl font-bold text-red-600 mb-4">Error</h2>
+          <p className="text-gray-600">{error.message}</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!userSubscription) {
     return (
@@ -506,6 +514,7 @@ const SubscriptionPage = () => {
             <button
               onClick={() => setNotification(null)}
               className="ml-auto hover:text-gray-600"
+              title='Close'
             >
               <X className="h-5 w-5" />
             </button>

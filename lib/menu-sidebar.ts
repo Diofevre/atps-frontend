@@ -2,9 +2,7 @@ import { LuLayoutGrid } from 'react-icons/lu';
 import { SiFiles } from 'react-icons/si';
 import { BsFillQuestionSquareFill } from 'react-icons/bs';
 import { FaSearch } from "react-icons/fa";
-
 import { FaUser } from 'react-icons/fa';
-import { Settings } from 'lucide-react';
 
 export const MenuSidebar = [
   { title: 'Dashboard', path: '/dashboard', icon: LuLayoutGrid },
@@ -12,7 +10,6 @@ export const MenuSidebar = [
   { title: 'Question Bank', path: '/questions-bank', icon: BsFillQuestionSquareFill },
   { title: 'Search', path: '/search', icon: FaSearch },
   { title: 'Account', path: '/user-profile', icon: FaUser },
-  { title: 'Settings', path: '/settings', icon: Settings },
 ];
 
 export const LandingMenues = [

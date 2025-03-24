@@ -49,7 +49,7 @@ export default function ExamPage() {
   return (
     <div className="min-h-screen">
       {/* Hero Banner */}
-      <div className="relative border-b border-primary/10 bg-gradient-to-b from-background via-background to-secondary/10">
+      <div className="relative bg-gradient-to-b from-background via-background to-secondary/10">
         <div className="container mx-auto px-4 py-12 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <motion.div 
@@ -59,7 +59,7 @@ export default function ExamPage() {
               className="inline-flex items-center justify-center p-1.5 bg-primary/10 rounded-full mb-6"
             >
               <div className="p-2.5 bg-[#EECE84] rounded-full">
-                <Airplane className="w-7 h-7 text-primary-foreground" />
+                <Airplane className="w-7 h-7 text-black/80" />
               </div>
             </motion.div>
             
