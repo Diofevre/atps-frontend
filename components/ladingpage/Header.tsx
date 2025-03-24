@@ -93,9 +93,12 @@ const Header = () => {
             <SignedIn>
               <div className="flex items-center gap-4">
                 <Link href="/dashboard">
-                  <button className="group relative px-6 py-2.5 bg-[#EECE84] text-black rounded-[12px] overflow-hidden transition-all duration-300">
+                  <button className="group relative px-6 py-2.5 bg-[#EECE84] text-black rounded-[24px] overflow-hidden transition-all duration-300">
                     <div className="relative z-10 flex items-center text-sm font-medium">
                       Dashboard
+                      <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
+                        ⟶
+                      </span>
                     </div>
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                   </button>
