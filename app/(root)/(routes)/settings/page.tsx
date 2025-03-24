@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dialog';
 import { AlertTriangle, BookOpen, CheckCircle2, CreditCard, Sparkles, X } from 'lucide-react';
 import { subscriptionService } from '@/lib/subscription/service/subscription-service';
-import { Loader } from '@/components/ui/loader';
+import { Skeleton } from '@/components/ui/skeleton';
 import useSWR from 'swr';
 
 interface UserSubscription {
@@ -87,6 +87,91 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+};
+
+const SubscriptionSkeleton = () => {
+  return (
+    <div className="min-h-screen pt-4 pb-16">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header Skeleton */}
+        <div className="mb-8">
+          <Skeleton className="h-8 w-64 mb-2" />
+          <Skeleton className="h-5 w-96" />
+        </div>
+
+        {/* Current Subscription Status Skeleton */}
+        <div className="bg-white rounded-2xl border border-white shadow-md p-8 mb-12">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <Skeleton className="h-12 w-12 rounded-full" />
+              <div>
+                <Skeleton className="h-6 w-48 mb-2" />
+                <Skeleton className="h-4 w-36" />
+              </div>
+            </div>
+            <Skeleton className="h-10 w-32" />
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                <Skeleton className="h-4 w-20 mb-2" />
+                <Skeleton className="h-6 w-32" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Plans Section Skeleton */}
+        <div className="grid gap-8">
+          <div className="text-start">
+            <Skeleton className="h-8 w-48 mb-2" />
+            <Skeleton className="h-5 w-96" />
+          </div>
+
+          {/* Billing Cycle Selector Skeleton */}
+          <div className="bg-white rounded-xl border border-white shadow-sm p-6">
+            <Skeleton className="h-6 w-48 mb-4" />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[...Array(4)].map((_, i) => (
+                <Skeleton key={i} className="h-20 w-full rounded-lg" />
+              ))}
+            </div>
+          </div>
+
+          {/* Plans Grid Skeleton */}
+          <div className="grid md:grid-cols-2 gap-8">
+            {[...Array(2)].map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl border border-white shadow-md p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <Skeleton className="h-6 w-6" />
+                  <Skeleton className="h-8 w-32" />
+                </div>
+
+                <div className="mb-6">
+                  <Skeleton className="h-10 w-32 mb-2" />
+                  <Skeleton className="h-4 w-24" />
+                </div>
+
+                <Skeleton className="h-4 w-full mb-6" />
+
+                <div className="space-y-4 mb-8">
+                  {[...Array(4)].map((_, j) => (
+                    <div key={j} className="flex items-center gap-3">
+                      <Skeleton className="h-5 w-5" />
+                      <Skeleton className="h-4 w-48" />
+                    </div>
+                  ))}
+                </div>
+
+                <Skeleton className="h-12 w-full rounded-xl" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -178,7 +263,6 @@ const SubscriptionPage = () => {
     fetcher,
     {
       onSuccess: (data) => {
-        // Set the initial selected cycle to match the user's current billing cycle
         setSelectedCycle(data.billing_cycle);
       }
     }
@@ -262,7 +346,7 @@ const SubscriptionPage = () => {
       }
 
       showNotification('success', response.message);
-      mutate(); // Refresh the subscription data
+      mutate();
     } catch (error) {
       console.error('Action error:', error);
       showNotification('error', 'Failed to process your request');
@@ -305,11 +389,7 @@ const SubscriptionPage = () => {
   }
 
   if (!userSubscription) {
-    return (
-      <div className="flex h-full w-full items-center justify-center min-h-screen">
-        <Loader />
-      </div>
-    );
+    return <SubscriptionSkeleton />;
   }
 
   return (

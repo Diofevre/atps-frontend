@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Settings, Mail, MapPin, Globe, Calendar, X, Save, AlertTriangle, Crown, Search, Loader2 } from 'lucide-react';
 import { useAuth, useClerk, UserProfile } from '@clerk/nextjs';
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { cn, COUNTRIES_ACCOUNT, LANGUAGES, Option } from "@/lib/utils";
+import useSWR from 'swr';
 
 // Types
 interface UserProfile {
@@ -145,10 +146,47 @@ const FormField = ({
   </div>
 );
 
+const ProfileSkeleton = () => (
+  <div className="min-h-screen">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-1">
+          <div className="bg-[#f7f7f7] rounded-2xl shadow-lg border border-primary/10 overflow-hidden animate-pulse">
+            <div className="h-32 bg-gray-200"></div>
+            <div className="p-6">
+              <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto -mt-16"></div>
+              <div className="h-6 bg-gray-200 rounded w-3/4 mx-auto mt-4"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto mt-2"></div>
+              <div className="space-y-3 mt-6">
+                <div className="h-10 bg-gray-200 rounded"></div>
+                <div className="h-10 bg-gray-200 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="lg:col-span-2">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+            <div className="space-y-6">
+              <div className="h-6 bg-gray-200 rounded w-1/4"></div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="space-y-2">
+                    <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                    <div className="h-10 bg-gray-200 rounded"></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const Page = () => {
   const { user } = useClerk();
   const { getToken } = useAuth();
-  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [editForm, setEditForm] = useState({
@@ -160,8 +198,35 @@ const Page = () => {
     language: ''
   });
   const [formErrors, setFormErrors] = useState<FormErrors>({});
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  const fetcher = async (url: string) => {
+    const token = await getToken();
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    if (!response.ok) throw new Error('Failed to fetch profile');
+    return response.json();
+  };
+
+  const { data: profile, error: fetchError, mutate } = useSWR<UserProfile>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/users/me`,
+    fetcher,
+    {
+      onSuccess: (data) => {
+        setEditForm({
+          name: data.name || '',
+          username: data.username || '',
+          email: data.email || '',
+          picture: data.picture || '',
+          country: data.country || '',
+          language: data.language || ''
+        });
+      }
+    }
+  );
 
   const validateForm = () => {
     const errors: FormErrors = {};
@@ -194,38 +259,6 @@ const Page = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const fetchProfile = useCallback(async () => {
-    const token = await getToken();
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (!response.ok) throw new Error('Failed to fetch profile');
-      const data = await response.json();
-
-      setProfile(data);
-      setEditForm({
-        name: data.name || '',
-        username: data.username || '',
-        email: data.email || '',
-        picture: data.picture || '',
-        country: data.country || '',
-        language: data.language || ''
-      });
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-      setError('Failed to load profile');
-    } finally {
-      setLoading(false);
-    }
-  }, [getToken]);
-
-  useEffect(() => {
-    fetchProfile();
-  }, [fetchProfile]);
-
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -236,8 +269,8 @@ const Page = () => {
     setIsSaving(true);
     setError('');
     
-    const token = await getToken();
     try {
+      const token = await getToken();
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me`, {
         method: 'PUT',
         headers: {
@@ -248,11 +281,9 @@ const Page = () => {
       });
 
       if (!response.ok) throw new Error('Failed to update profile');
-      const updatedProfile = await response.json();
-      setProfile(updatedProfile);
+      
+      await mutate();
       setIsEditing(false);
-
-      fetchProfile();
     } catch (error) {
       console.error("Failed to update your profile", error);
       setError('Failed to update profile');
@@ -265,12 +296,19 @@ const Page = () => {
     window.location.href = '/upgrade';
   };
 
-  if (loading) {
+  if (fetchError) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#EECE84]"></div>
+      <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center">
+        <div className="bg-white p-8 rounded-xl shadow-xl">
+          <h2 className="text-2xl font-bold text-red-600 mb-4">Error</h2>
+          <p className="text-gray-600">{fetchError.message}</p>
+        </div>
       </div>
     );
+  }
+
+  if (!profile) {
+    return <ProfileSkeleton />;
   }
 
   return (
@@ -292,17 +330,17 @@ const Page = () => {
               <div className="relative">
                 <div className="h-32 bg-[#EECE84]"></div>
                 <div className="absolute -bottom-12 inset-x-0 flex justify-center">
-                <img
-                  src={user?.imageUrl || "/default-avatar.png"}
-                  alt="Photo de profil"
-                  className="w-16 h-16 rounded-full"
-                />
+                  <img
+                    src={user?.imageUrl || "/default-avatar.png"}
+                    alt="Photo de profil"
+                    className="w-24 h-24 rounded-full border-4 border-white"
+                  />
                 </div>
               </div>
               
               <div className="pt-16 pb-8 px-6 text-center">
-                <h2 className="text-2xl font-bold text-gray-900">{profile?.name}</h2>
-                <p className="text-gray-500 mt-1">@{user?.username}</p>
+                <h2 className="text-2xl font-bold text-gray-900">{profile.name}</h2>
+                <p className="text-gray-500 mt-1">@{profile.username}</p>
                 
                 <div className="mt-6 space-y-4">
                   {!isEditing && (
@@ -333,24 +371,24 @@ const Page = () => {
                 <div className="space-y-3">
                   <div className="flex items-center text-gray-600">
                     <Mail className="h-5 w-5 text-[#EECE84] mr-3" />
-                    <span className="text-sm">{user?.primaryEmailAddress?.emailAddress}</span>
+                    <span className="text-sm">{profile.email}</span>
                   </div>
                   <div className="flex items-center text-gray-600">
                     <MapPin className="h-5 w-5 text-[#EECE84] mr-3" />
                     <span className="text-sm">
-                      {COUNTRIES_ACCOUNT.find(country => country.value === profile?.country)?.label || "Non disponible"}
+                      {COUNTRIES_ACCOUNT.find(country => country.value === profile.country)?.label || "Not available"}
                     </span>
                   </div>
                   <div className="flex items-center text-gray-600">
                     <Globe className="h-5 w-5 text-[#EECE84] mr-3" />
                     <span className="text-sm">
-                      {LANGUAGES.find(language => language.value === profile?.language)?.label || "Non disponible"}
+                      {LANGUAGES.find(language => language.value === profile.language)?.label || "Not available"}
                     </span>
                   </div>
                   <div className="flex items-center text-gray-600">
                     <Calendar className="h-5 w-5 text-[#EECE84] mr-3" />
                     <span className="text-sm">
-                      Joined {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "Non disponible"}
+                      Joined {new Date(profile.createdAt).toLocaleDateString()}
                     </span>
                   </div>
                 </div>
@@ -401,7 +439,7 @@ const Page = () => {
                         disabled={isSaving}
                         className='rounded-[20px]'
                       >
-                        <X className="h-4 w-4" />
+                        <X className="h-4 w-4 mr-2" />
                         Cancel
                       </Button>
                       <Button 
@@ -412,17 +450,15 @@ const Page = () => {
                         {isSaving ? (
                           <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                         ) : (
-                          <Save className="h-4 w-4" />
+                          <Save className="h-4 w-4 mr-2" />
                         )}
-                        {isSaving ? 'Saving...' : 'Save'}
+                        {isSaving ? 'Saving...' : 'Save Changes'}
                       </Button>
                     </div>
                   </form>
                 </>
               ) : (
-                <>
-                  <UserProfile />
-                </>
+                <UserProfile />
               )}
             </div>
           </div>
