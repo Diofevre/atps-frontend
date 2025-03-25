@@ -459,7 +459,7 @@ const Study = () => {
             {/* Start button */}
             <div className="flex justify-center py-4">
               <button
-                className={`bg-[#EECE84] text-black rounded-xl hover:bg-[#EECE84]/90 px-6 h-10 text-sm gap-1 flex items-center ${
+                className={`bg-[#EECE84] text-black rounded-xl hover:bg-[#EECE84]/90 px-6 h-12 text-sm gap-1 flex items-center ${
                   startQuizLoading ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 onClick={handleStartQuiz}
@@ -482,4 +482,4 @@ const Study = () => {
   )
 }
 
-export default Study
+export default Study;

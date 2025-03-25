@@ -1,3 +1,4 @@
+import { UserButton } from '@clerk/nextjs';
 import { HTMLAttributes } from 'react';
 
 // Card Component
@@ -38,24 +39,17 @@ export function Progress({ value, className = '', style }: ProgressProps) {
 }
 
 // UserButton Component
-interface UserButtonProps {
+interface UserButtonsProps {
   username: string;
   className?: string;
 }
 
-export function UserButton({ username, className = '' }: UserButtonProps) {
-  const initials = username
-    .split(' ')
-    .map(n => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
-
+export function UserButtons({ username, className = '' }: UserButtonsProps) {
   return (
     <div className={`flex items-center space-x-3 ${className}`}>
       <div className="relative">
-        <div className="w-10 h-10 rounded-full bg-[#EECE84] flex items-center justify-center">
-          <span className="text-[#1a1a2e] font-medium text-sm">{initials}</span>
+        <div className="w-10 h-10 rounded-full bg-gray-50 border flex items-center justify-center">
+          <UserButton  afterSwitchSessionUrl='/' />
         </div>
         <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full" />
       </div>

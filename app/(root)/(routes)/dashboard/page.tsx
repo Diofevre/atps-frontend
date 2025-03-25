@@ -14,7 +14,7 @@ import {
   Newspaper,
 } from 'lucide-react';
 import { useAuth } from '@clerk/nextjs';
-import { Card, UserButton } from './_components/ui';
+import { Card, UserButtons } from './_components/ui';
 import { format } from "date-fns";
 import { useRouter } from 'next/navigation';
 import { Skeleton } from "@/components/ui/skeleton";
@@ -201,7 +201,7 @@ const Dashboard = () => {
               <h1 className="ml-3 text-xl font-semibold text-slate-900">ATPS DASHBOARD</h1>
             </div>
             <div className="flex items-center gap-4">
-              <UserButton
+              <UserButtons
                 username={data?.user.username || "Unknown User"}
                 className="cursor-pointer"
               />
