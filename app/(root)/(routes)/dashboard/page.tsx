@@ -19,6 +19,7 @@ import { format } from "date-fns";
 import { useRouter } from 'next/navigation';
 import { Skeleton } from "@/components/ui/skeleton";
 import useSWR from 'swr';
+import ErrorHandler from '@/components/error';
 
 interface DashboardData {
   user: {
@@ -168,16 +169,11 @@ const Dashboard = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white p-8 rounded-xl shadow-xl"
-        >
-          <h2 className="text-2xl font-bold text-red-600 mb-4">Error</h2>
-          <p className="text-gray-600">{error.message}</p>
-        </motion.div>
-      </div>
+      <ErrorHandler 
+        title='Dashboard Data'
+        link=''
+        link_title='Homepage'
+      />
     );
   }
 

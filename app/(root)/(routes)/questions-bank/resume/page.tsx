@@ -1,13 +1,16 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Clock, Target, CheckCircle2, XCircle } from 'lucide-react';
+import { Clock, Target, CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth, useUser } from '@clerk/nextjs';
 import { Card } from "@/components/ui/card";
 import { useRouter } from 'next/navigation';
-import { Loader } from '@/components/ui/loader';
+import { Skeleton } from "@/components/ui/skeleton";
+import useSWR from 'swr';
+import { motion } from "framer-motion";
+import ErrorHandler from '@/components/error';
 
 interface Question {
   id: number;
@@ -23,41 +26,96 @@ interface TestResume {
   questions: Question[];
 }
 
+interface StatCardProps {
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  title: string;
+  value: string | number;
+  subtitle: string;
+  delay: number;
+}
+
+const fetcher = async (url: string, token: string) => {
+  const response = await fetch(url, {
+    headers: { 
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Failed to fetch test data.');
+  }
+  return response.json();
+};
+
+const StatCard = ({ icon: Icon, title, value, subtitle, delay }: StatCardProps) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay }}
+  >
+    <Card className="overflow-hidden group hover:shadow-xl transition-all duration-500">
+      <div className="p-8 bg-gradient-to-br from-[#EECE84]/5 to-white">
+        <Icon className="w-10 h-10 text-[#EECE84] mb-4 group-hover:scale-110 transition-transform duration-500" />
+        <h3 className="text-base font-medium text-gray-500">{title}</h3>
+        <p className="text-4xl font-semibold text-gray-800 mt-2 group-hover:scale-105 transition-transform">
+          {value}
+        </p>
+        <p className="text-sm text-gray-500 mt-2">
+          {subtitle}
+        </p>
+      </div>
+    </Card>
+  </motion.div>
+);
+
+const LoadingSkeleton = () => (
+  <div className="min-h-screen bg-gradient-to-br from-[#EECE84]/5 via-white to-[#EECE84]/10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="flex items-center mb-8">
+        <Skeleton className="h-8 w-32" />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {[1, 2, 3].map((i) => (
+          <Card key={i} className="p-8">
+            <Skeleton className="h-10 w-10 mb-4" />
+            <Skeleton className="h-4 w-24 mb-2" />
+            <Skeleton className="h-8 w-16 mb-2" />
+            <Skeleton className="h-4 w-32" />
+          </Card>
+        ))}
+      </div>
+      <div className="flex justify-center mb-12">
+        <Skeleton className="h-14 w-48" />
+      </div>
+      <Skeleton className="h-8 w-48 mb-6" />
+      <div className="space-y-4">
+        {[1, 2, 3].map((i) => (
+          <Card key={i} className="p-6">
+            <div className="flex gap-4">
+              <Skeleton className="h-6 w-6 rounded-full" />
+              <div className="flex-1">
+                <Skeleton className="h-4 w-full mb-2" />
+                <Skeleton className="h-6 w-24" />
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
 const Resume = () => {
   const { user } = useUser();
   const router = useRouter();
   const { getToken } = useAuth();
-  const [testData, setTestData] = useState<TestResume | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const userId = user?.id;
-    if (!userId) return;
-
-    const fetchLastTest = async () => {
+  
+  const { data: testData, error } = useSWR<TestResume>(
+    user?.id ? [`${process.env.NEXT_PUBLIC_API_URL}/api/tests/resumeTest`, user.id] : null,
+    async () => {
       const token = await getToken();
-      setLoading(true);
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tests/resumeTest`, {
-          headers: { 
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch test data.');
-        }
-        const data: TestResume = await response.json();
-        setTestData(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An unexpected error occurred');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchLastTest();
-  }, [getToken, user]);
+      return fetcher(`${process.env.NEXT_PUBLIC_API_URL}/api/tests/resumeTest`, token as string);
+    }
+  );
 
   const handleContinueTest = () => {
     if (testData?.test_id) {
@@ -68,36 +126,17 @@ const Resume = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader />
-      </div>
-    );
+  if (!testData && !error) {
+    return <LoadingSkeleton />;
   }
 
   if (error || !testData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#EECE84]/10 via-white to-[#EECE84]/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex justify-between items-center mb-8">
-            <Link href="/questions-bank" className="group flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-              <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-              <span className="text-2xl font-semibold uppercase">Resume Test</span>
-            </Link>
-          </div>
-          <Card className="p-12 text-center bg-white/50 backdrop-blur-sm">
-            <p className="text-red-500 mb-6 text-lg">{error || 'No test available to resume'}</p>
-            <Button
-              onClick={() => router.push('/questions-bank')}
-              variant="default"
-              className="bg-[#EECE84] hover:bg-[#EECE84]/90 text-black font-medium px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all"
-            >
-              Start New Test
-            </Button>
-          </Card>
-        </div>
-      </div>
+      <ErrorHandler 
+        title='Test Data'
+        link='questions-bank'
+        link_title='Questions Bank'
+      />
     );
   }
 
@@ -106,97 +145,106 @@ const Resume = () => {
   const accuracy = Math.round((correctAnswers / testData.questions.length) * 100) || 0;
 
   return (
-    <div className="min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1">
-        <div className="flex justify-between items-center mb-8">
-          <Link href="/questions-bank" className="group flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-            <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            <span className="text-2xl font-semibold uppercase">Resume Test</span>
+    <div className="min-h-screen bg-gradient-to-br from-[#EECE84]/5 via-white to-[#EECE84]/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="flex justify-between items-center mb-12"
+        >
+          <Link 
+            href="/questions-bank" 
+            className="group inline-flex items-center text-xl font-medium text-gray-600 hover:text-gray-900"
+          >
+            <span className="mr-2 text-2xl leading-none select-none">⟵</span>
+            Questions Bank
           </Link>
-        </div>
+        </motion.div>
 
-        <div className="space-y-8">  
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="overflow-hidden group hover:shadow-lg transition-all duration-300">
-              <div className="p-6 bg-gradient-to-br from-[#EECE84]/20 to-[#EECE84]/5">
-                <Clock className="w-8 h-8 text-[#EECE84] mb-3" />
-                <h3 className="text-sm font-medium text-gray-500">Time Spent</h3>
-                <p className="text-3xl font-medium text-gray-800 mt-1 group-hover:scale-105 transition-transform">
-                  {testData.timespent}
-                </p>
-                <p className="text-sm text-gray-500 mt-1">
-                  Try to do your best
-                </p>
-              </div>
-            </Card>
+        <div className="space-y-16">  
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <StatCard
+              icon={Clock}
+              title="Time Spent"
+              value={testData.timespent}
+              subtitle="Try to do your best"
+              delay={0.1}
+            />
             
-            <Card className="overflow-hidden group hover:shadow-lg transition-all duration-300">
-              <div className="p-6 bg-gradient-to-br from-[#EECE84]/20 to-[#EECE84]/5">
-                <Target className="w-8 h-8 text-[#EECE84] mb-3" />
-                <h3 className="text-sm font-medium text-gray-500">Completion</h3>
-                <p className="text-3xl font-medium text-gray-800 mt-1 group-hover:scale-105 transition-transform">
-                  {completionRate}%
-                </p>
-                <p className="text-sm text-gray-500 mt-1">
-                  {testData.questions.length} of {testData.total_question} questions
-                </p>
-              </div>
-            </Card>
+            <StatCard
+              icon={Target}
+              title="Completion"
+              value={`${completionRate}%`}
+              subtitle={`${testData.questions.length} of ${testData.total_question} questions`}
+              delay={0.2}
+            />
             
-            <Card className="overflow-hidden group hover:shadow-lg transition-all duration-300">
-              <div className="p-6 bg-gradient-to-br from-[#EECE84]/20 to-[#EECE84]/5">
-                <CheckCircle2 className="w-8 h-8 text-[#EECE84] mb-3" />
-                <h3 className="text-sm font-medium text-gray-500">Current Accuracy</h3>
-                <p className="text-3xl font-medium text-gray-800 mt-1 group-hover:scale-105 transition-transform">
-                  {accuracy}%
-                </p>
-                <p className="text-sm text-gray-500 mt-1">
-                  {correctAnswers} correct of {testData.questions.length} answered
-                </p>
-              </div>
-            </Card>
+            <StatCard
+              icon={CheckCircle2}
+              title="Current Accuracy"
+              value={`${accuracy}%`}
+              subtitle={`${correctAnswers} correct of ${testData.questions.length} answered`}
+              delay={0.3}
+            />
           </div>
 
-          <div className="flex justify-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="flex justify-center"
+          >
             <Button
               onClick={handleContinueTest}
-              className="bg-[#EECE84] hover:bg-[#EECE84]/90 text-black/90 px-10 py-6 rounded-full text-lg font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+              className="bg-[#EECE84] hover:bg-[#EECE84]/90 text-black/90 px-12 py-7 rounded-full text-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 group"
             >
               Continue Test
+              <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform" />
             </Button>
-          </div>
+          </motion.div>
 
-          <div className="mt-12">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Questions Answered</h2>
-            <div className="space-y-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <h2 className="text-3xl font-bold text-gray-800 mb-8">Questions Answered</h2>
+            <div className="space-y-6">
               {testData.questions.map((question, index) => (
-                <Card key={question.id} className="group hover:shadow-lg transition-all duration-300 overflow-hidden">
-                  <div className="p-6 bg-white">
-                    <div className="flex items-start gap-4">
-                      {question.is_correct ? (
-                        <CheckCircle2 className="w-6 h-6 text-green-500 flex-shrink-0 group-hover:scale-110 transition-transform" />
-                      ) : (
-                        <XCircle className="w-6 h-6 text-red-500 flex-shrink-0 group-hover:scale-110 transition-transform" />
-                      )}
-                      <div className="flex-grow">
-                        <p className="text-gray-800 font-medium mb-2">{question.question_text}</p>
-                        <div className={`inline-block px-3 py-1.5 rounded-full text-sm font-medium ${
-                          question.is_correct 
-                            ? 'bg-green-100 text-green-500' 
-                            : 'bg-red-100 text-red-500'
-                        }`}>
-                          {question.user_answer}
+                <motion.div
+                  key={question.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 * index }}
+                >
+                  <Card className="group hover:shadow-lg transition-all duration-300">
+                    <div className="p-8">
+                      <div className="flex items-start gap-6">
+                        {question.is_correct ? (
+                          <CheckCircle2 className="w-8 h-8 text-green-500 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                        ) : (
+                          <XCircle className="w-8 h-8 text-red-500 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                        )}
+                        <div className="flex-grow">
+                          <p className="text-gray-800 text-lg font-medium mb-3">{question.question_text}</p>
+                          <div className={`inline-block px-5 py-2.5 rounded-full text-base font-medium transition-all duration-300 ${
+                            question.is_correct 
+                              ? 'bg-green-100 text-green-700 group-hover:bg-green-200' 
+                              : 'bg-red-100 text-red-700 group-hover:bg-red-200'
+                          }`}>
+                            {question.user_answer}
+                          </div>
                         </div>
+                        <span className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-base font-medium text-gray-600 group-hover:bg-[#EECE84]/20 transition-colors">
+                          {index + 1}
+                        </span>
                       </div>
-                      <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-sm font-medium text-gray-600">
-                        {index + 1}
-                      </span>
                     </div>
-                  </div>
-                </Card>
+                  </Card>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>

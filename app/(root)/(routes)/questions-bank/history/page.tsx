@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ChevronLeft, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth, useUser } from '@clerk/nextjs';
 import { Loader } from '@/components/ui/loader';
@@ -21,6 +21,8 @@ import {
 import ActionDropdown from '../_components/SelectHistory';
 import { useRouter } from 'next/navigation';
 import { toast } from "sonner";
+import useSWR from 'swr';
+import Image from 'next/image';
 
 interface RawTest {
   topic: string;
@@ -45,74 +47,74 @@ interface TestHistory {
 type FilterType = 'all' | 'saved' | 'validated';
 
 const History = () => {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const router = useRouter();
   const { getToken } = useAuth();
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [historyData, setHistoryData] = useState<TestHistory[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const [selectedTests, setSelectedTests] = useState<number[]>([]);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
   const rowsPerPage = 20;
 
-  useEffect(() => {
-    const userId = user?.id;
-    if (!userId) return;
+  const userId = user?.id;
 
-    const fetchHistory = async () => {
-      const token = await getToken();
-      setLoading(true);
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tests/list/${userId}`, {
-          headers: { 
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch history data.');
-        }
-        const data: { unfinishedTests: RawTest[] } = await response.json();
-        const transformedData: TestHistory[] = data.unfinishedTests.map((test) => ({
-          topic: test.topic || 'Unknown Topic',
-          date: new Date(test.created_at).toLocaleDateString('fr-FR'),
-          timeSpent: test.timespent || 'N/A',
-          totalQuestions: test.total_question,
-          score: test.score,
-          testId: test.test_id,
-          isFinished: test.is_finished,
-        }));
-
-        setHistoryData(transformedData);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An unexpected error occurred');
-      } finally {
-        setLoading(false);
+  const fetcher = async (url: string) => {
+    const token = await getToken();
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      interface FetchError extends Error {
+        status?: number;
       }
-    };
 
-    fetchHistory();
-  }, [getToken, user]);
+      const error: FetchError = new Error('Failed to fetch history data.');
+      error.status = response.status;
+      throw error;
+    }
+    return response.json();
+  };
+
+  const { data, error, isLoading, mutate } = useSWR<{ unfinishedTests: RawTest[] }>(
+    isLoaded && user ? `${process.env.NEXT_PUBLIC_API_URL}/api/tests/list/${userId}` : null,
+    fetcher
+  );
+
+  const historyData: TestHistory[] = React.useMemo(() => {
+    if (!data?.unfinishedTests) return [];
+
+    return data.unfinishedTests.map((test) => ({
+      topic: test.topic || 'Unknown Topic',
+      date: new Date(test.created_at).toLocaleDateString('fr-FR'),
+      timeSpent: test.timespent || 'N/A',
+      totalQuestions: test.total_question,
+      score: test.score,
+      testId: test.test_id,
+      isFinished: test.is_finished,
+    }));
+  }, [data]);
+
 
   const handleSelectTest = (testId: number, event: React.MouseEvent | boolean) => {
     if (typeof event === 'boolean') {
-      setSelectedTests(prev => 
-        prev.includes(testId) 
+      setSelectedTests(prev =>
+        prev.includes(testId)
           ? prev.filter(id => id !== testId)
           : [...prev, testId]
       );
       return;
     }
 
-    if ((event.target as HTMLElement).closest('button') || 
-        (event.target as HTMLElement).closest('[role="menuitem"]')) {
+    if ((event.target as HTMLElement).closest('button') ||
+      (event.target as HTMLElement).closest('[role="menuitem"]')) {
       return;
     }
 
-    setSelectedTests(prev => 
-      prev.includes(testId) 
+    setSelectedTests(prev =>
+      prev.includes(testId)
         ? prev.filter(id => id !== testId)
         : [...prev, testId]
     );
@@ -129,11 +131,11 @@ const History = () => {
 
   const handleDeleteTests = async () => {
     if (selectedTests.length === 0) return;
-    
+
     setIsDeleting(true);
     const token = await getToken();
-    
-    try {  
+
+    try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tests/supprimeTest`, {
         method: 'DELETE',
         headers: {
@@ -147,12 +149,20 @@ const History = () => {
         throw new Error('Failed to delete tests');
       }
 
-      setHistoryData(prev => prev.filter(test => !selectedTests.includes(test.testId)));
+      // Optimistically update the data using mutate
+      mutate(async oldData => {
+        if (!oldData?.unfinishedTests) return oldData;
+
+        const updatedUnfinishedTests = oldData.unfinishedTests.filter(test => !selectedTests.includes(test.test_id));
+        return { ...oldData, unfinishedTests: updatedUnfinishedTests };
+      }, false); // Do not revalidate immediately, as we have optimistically updated the data
+
       setSelectedTests([]);
       toast.success('Tests deleted successfully');
-    } catch (error) {
-      console.error('Error deleting tests:', error);
+    } catch (err) {
+      console.error('Error deleting tests:', err);
       toast.error('Failed to delete tests');
+      mutate(); // Revalidate to rollback optimistic update in case of error
     } finally {
       setIsDeleting(false);
       setIsDeleteDialogOpen(false);
@@ -160,20 +170,28 @@ const History = () => {
   };
 
   const handleTestDelete = (deletedTestId: number) => {
-    setHistoryData(prev => prev.filter(test => test.testId !== deletedTestId));
+    // Optimistically update the data using mutate
+    mutate(async oldData => {
+      if (!oldData?.unfinishedTests) return oldData;
+
+      const updatedUnfinishedTests = oldData.unfinishedTests.filter(test => test.test_id !== deletedTestId);
+      return { ...oldData, unfinishedTests: updatedUnfinishedTests };
+    }, false); // Do not revalidate immediately, as we have optimistically updated the data
+
     setSelectedTests(prev => prev.filter(id => id !== deletedTestId));
   };
+
 
   const handleResumeTest = (testId: number) => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('timeSpents', '0');
     }
-  
+
     if (!testId) {
       console.error('testId is missing. Cannot resume the quiz.');
       return;
     }
-  
+
     router.push(`/questions-bank/study/quizz?testId=${testId}&fromHistory=true`);
   }
 
@@ -206,7 +224,7 @@ const History = () => {
   const generatePaginationNumbers = () => {
     const pages = [];
     const maxVisiblePages = 5;
-    
+
     if (totalPages <= maxVisiblePages) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
@@ -231,7 +249,7 @@ const History = () => {
     return pages;
   };
 
-  if (loading) {
+  if (isLoading || !isLoaded) {
     return (
       <div className="flex h-full w-full items-center justify-center min-h-screen">
         <Loader />
@@ -242,27 +260,65 @@ const History = () => {
   if (error) {
     return (
       <div className="flex h-full w-full items-center justify-center min-h-screen text-red-500">
-        <p>An error occurred:</p>
-        <p>{error}</p>
-      </div>
+      <p>An error occurred:</p>
+      <p>{error.message}</p>
+    </div>
     );
   }
 
   return (
-    <div>
+    <>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-        {/* Header */}
-        <div className="mt-4">
+        {/* Header with inline filters */}
+        <div className="mt-4 p-1.5">
           <div className="flex justify-between items-center">
-            <Link href="/questions-bank" className="flex items-center gap-0.5 text-foreground hover:text-muted-foreground transition-colors">
-              <ChevronLeft className="w-5 h-5 mt-0.5" />
-              <span className="text-xl">History</span>
-            </Link>
+            <div className="flex items-center gap-6">
+              <Link href="/questions-bank" className="flex items-center text-foreground hover:text-muted-foreground transition-colors">
+                <span className="h-5 w-5 group-hover:translate-x-1 transition-transform">
+                  ⟵
+                </span>
+              </Link>
+              <div className="flex gap-6">
+                <button
+                  onClick={() => {
+                    setActiveFilter('all');
+                    setCurrentPage(1);
+                  }}
+                  className={`text-black hover:text-gray-600 transition-colors ${
+                    activeFilter === 'all' ? 'underline underline-offset-8 decoration-[#000] decoration-2' : ''
+                  }`}
+                >
+                  All ({historyData.length})
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveFilter('saved');
+                    setCurrentPage(1);
+                  }}
+                  className={`text-black hover:text-gray-600 transition-colors ${
+                    activeFilter === 'saved' ? 'underline underline-offset-8 decoration-[#000] decoration-2' : ''
+                  }`}
+                >
+                  Saved ({historyData.filter(test => !test.isFinished).length})
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveFilter('validated');
+                    setCurrentPage(1);
+                  }}
+                  className={`text-black hover:text-gray-600 transition-colors ${
+                    activeFilter === 'validated' ? 'underline underline-offset-8 decoration-[#000] decoration-2' : ''
+                  }`}
+                >
+                  Validated ({historyData.filter(test => test.isFinished).length})
+                </button>
+              </div>
+            </div>
             {selectedTests.length > 0 && (
               <Button
                 variant="destructive"
                 onClick={() => setIsDeleteDialogOpen(true)}
-                className="flex items-center gap-2 rounded-[12px]"
+                className="flex items-center gap-2 rounded-[24px]"
                 size="sm"
               >
                 <Trash2 className="w-4 h-4" />
@@ -272,60 +328,26 @@ const History = () => {
           </div>
         </div>
 
-        {/* Filter Buttons */}
-        <div className="p-1.5">
-          <div className="flex items-center justify-between">
-            <div className="flex gap-2">
-              <Button
-                variant={activeFilter === 'all' ? 'default' : 'outline'}
-                onClick={() => {
-                  setActiveFilter('all');
-                  setCurrentPage(1);
-                }}
-                className={`${activeFilter === 'all' ? 'bg-[#EECE84] hover:bg-[#EECE84]' : 'hover:bg-[#EECE84]/80'} rounded-[12px] text-black`}
-              >
-                All ({historyData.length})
-              </Button>
-              <Button
-                variant={activeFilter === 'saved' ? 'default' : 'outline'}
-                onClick={() => {
-                  setActiveFilter('saved');
-                  setCurrentPage(1);
-                }}
-                className={`${activeFilter === 'saved' ? 'bg-[#EECE84] hover:bg-[#EECE84]' : 'hover:bg-[#EECE84]/80'} rounded-[12px] text-black`}
-              >
-                Saved ({historyData.filter(test => !test.isFinished).length})
-              </Button>
-              <Button
-                variant={activeFilter === 'validated' ? 'default' : 'outline'}
-                onClick={() => {
-                  setActiveFilter('validated');
-                  setCurrentPage(1);
-                }}
-                className={`${activeFilter === 'validated' ? 'bg-[#EECE84] hover:bg-[#EECE84]' : 'hover:bg-[#EECE84]/80'} rounded-[12px] text-black`}
-              >
-                Validated ({historyData.filter(test => test.isFinished).length})
-              </Button>
+        {/* Select All Checkbox */}
+        {paginatedData.length > 0 && (
+          <div className="p-1.5 flex justify-end">
+            <div className="flex items-center gap-2">
+              <Checkbox
+                checked={paginatedData.length > 0 && paginatedData.every(test => selectedTests.includes(test.testId))}
+                onCheckedChange={() => handleSelectAll(paginatedData)}
+                className="h-4 w-4"
+              />
+              <span className="text-sm text-gray-600">Select All</span>
             </div>
-            {paginatedData.length > 0 && (
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  checked={paginatedData.length > 0 && paginatedData.every(test => selectedTests.includes(test.testId))}
-                  onCheckedChange={() => handleSelectAll(paginatedData)}
-                  className="h-4 w-4"
-                />
-                <span className="text-sm text-gray-600">Select All</span>
-              </div>
-            )}
           </div>
-        </div>
+        )}
 
         {/* Tests Grid */}
         {paginatedData.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-1.5">
             {paginatedData.map((item, index) => (
-              <Card 
-                key={index} 
+              <Card
+                key={index}
                 onClick={(e) => handleSelectTest(item.testId, e)}
                 className={`group relative bg-white overflow-hidden transition-all duration-200 cursor-pointer
                   ${selectedTests.includes(item.testId)
@@ -373,7 +395,7 @@ const History = () => {
 
                   <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
                     {!item.isFinished && (
-                      <Button 
+                      <Button
                         onClick={() => handleResumeTest(item.testId)}
                         variant="secondary"
                         size="sm"
@@ -396,8 +418,15 @@ const History = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-500">No tests found for the selected filter.</p>
+          <div className="flex flex-col items-center justify-center py-12">
+            <Image
+              src="/empty.svg"
+              alt="No Data"
+              width={200}
+              height={200}
+              className="mb-4"
+            />
+            <p className="text-gray-500 text-center">No tests found for the selected filter.</p>
           </div>
         )}
 
@@ -414,7 +443,7 @@ const History = () => {
               >
                 Previous
               </Button>
-              
+
               <div className="flex items-center gap-1">
                 {generatePaginationNumbers().map((page, index) => (
                   <React.Fragment key={index}>
@@ -426,7 +455,7 @@ const History = () => {
                         onClick={() => typeof page === 'number' && setCurrentPage(page)}
                         size="sm"
                         className={`h-8 w-8 p-0 text-sm ${
-                          currentPage === page 
+                          currentPage === page
                             ? 'bg-[#EECE84] hover:bg-[#EECE84]/80 text-black'
                             : 'text-black hover:bg-[#EECE84]/50'
                         }`}
@@ -472,7 +501,7 @@ const History = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+    </>
   );
 };
 

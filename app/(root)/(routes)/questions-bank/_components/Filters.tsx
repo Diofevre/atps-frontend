@@ -4,6 +4,7 @@ import { Circle, Eye, EyeOff, RotateCw, X } from "lucide-react";
 import { ExaminingAuthorityCard } from "./ExaminingAuthorityCard";
 import { FilterTag } from "./FilterTag";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import Link from "next/link";
 
 interface FiltersProps {
   filters: {
@@ -27,7 +28,12 @@ export const Filters = ({ filters, onFilterChange, onClearFilters }: FiltersProp
 
   return (
     <div className="flex flex-col space-y-4">
-      <h2 className="text-2xl font-semibold">Filters</h2>
+      <Link href='/questions-bank' className="text-2xl font-semibold">
+        <span className="mr-2 text-xl leading-none select-none">
+          ⟵
+        </span>
+        Filters
+      </Link>
       
       <div className="p-4 border border-primary/20 rounded-2xl">
         <div className="flex flex-col gap-6">

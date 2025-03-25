@@ -390,11 +390,16 @@ const Study = () => {
                     </div>
                     <div className="flex items-center gap-1 ml-2">
                       <span className="text-xs sm:text-sm text-gray-500">{chapter.chapterQuestionCount}</span>
-                      <ChevronDown
-                        className={`w-4 h-4 sm:w-6 sm:h-6 transform transition-transform ${
-                          openDropdown === chapter.id ? 'rotate-180' : ''
-                        }`}
-                      />
+                      {chapter.subChapters.some(subChapter =>
+                        subChapter.sub_chapter_text.trim() !== "" &&
+                        subChapter.sub_chapter_text.toLowerCase() !== "pas de nom"
+                      ) && (
+                        <ChevronDown
+                          className={`w-4 h-4 sm:w-6 sm:h-6 transform transition-transform ${
+                            openDropdown === chapter.id ? 'rotate-180' : ''
+                          }`}
+                        />
+                      )}
                     </div>
                   </div>
 
@@ -406,18 +411,20 @@ const Study = () => {
                   >
                     <div className="pl-2 sm:pl-4 mt-2 space-y-2">
                       {chapter.subChapters.map((subChapter) => (
-                        <div key={subChapter.id} className="flex justify-between items-center p-2 sm:p-3 border rounded-lg">
-                          <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                            <Input
-                              type="checkbox"
-                              className="h-4 w-4 flex-shrink-0"
-                              checked={selectedSubChapters.has(subChapter.id)}
-                              onChange={() => handleSubChapterSelect(chapter.id, subChapter.id)}
-                            />
-                            <span className="text-sm truncate">{subChapter.sub_chapter_text}</span>
-                          </div>
-                          <span className="text-xs sm:text-sm text-gray-500 ml-2">{subChapter.questionCount}</span>
-                        </div>
+                        subChapter.sub_chapter_text.trim() !== "" && subChapter.sub_chapter_text.toLowerCase() !== "pas de nom" ? (
+                            <div key={subChapter.id} className="flex justify-between items-center p-2 sm:p-3 border rounded-lg">
+                                <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                                    <Input
+                                        type="checkbox"
+                                        className="h-4 w-4 flex-shrink-0"
+                                        checked={selectedSubChapters.has(subChapter.id)}
+                                        onChange={() => handleSubChapterSelect(chapter.id, subChapter.id)}
+                                    />
+                                    <span className="text-sm truncate">{subChapter.sub_chapter_text}</span>
+                                </div>
+                                <span className="text-xs sm:text-sm text-gray-500 ml-2">{subChapter.questionCount}</span>
+                            </div>
+                        ) : null
                       ))}
                     </div>
                   </motion.div>
