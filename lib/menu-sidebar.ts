@@ -17,7 +17,7 @@ export const LandingMenues = [
   { title: 'Blog', path: '/blog'},
   { title: 'FAQs', path: '/faqs'},
   { title: 'Pricing', path: '/pricing'},
-  { title: 'Community', path: '/questions-bank/community'},
+  { title: 'Community', path: '/community'},
   { title: 'Latest News', path: '/latest_news'},
 ];
 
