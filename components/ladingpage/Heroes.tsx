@@ -4,7 +4,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { contactInfo, features, mainFeatures } from '@/lib/marketing_page/constant';
+import { features, mainFeatures } from '@/lib/marketing_page/constant';
 import { Users } from 'lucide-react';
 import { useUser } from '@clerk/nextjs';
 
@@ -90,26 +90,6 @@ const Heroes = () => {
                 </Button>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Contact Info Section */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-            {contactInfo.map((item, index) => (
-              <div key={index} className="group relative p-6 rounded-2xl bg-white/5 hover:bg-white/10 transition-all duration-500 border border-white/10 hover:border-[#EECE84]/30 backdrop-blur-xl">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#EECE84]/0 to-[#EECE84]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="relative flex items-start gap-4">
-                  <div className="p-3 rounded-xl bg-[#EECE84]/10 group-hover:bg-[#EECE84]/20 transition-all duration-300">
-                    <item.icon className="w-5 h-5 text-[#EECE84]" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-400 mb-1">{item.label}</h3>
-                    <p className="text-white group-hover:text-[#EECE84] transition-colors">{item.value}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
