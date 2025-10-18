@@ -6,11 +6,14 @@ import Image from "next/image";
 import { GiUpgrade } from "react-icons/gi";
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { AdvancedThemeSwitch } from '@/components/advanced-theme-switch';
+import { useTheme } from 'next-themes';
 
 const Sidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   return (
     <div
@@ -61,6 +64,27 @@ const Sidebar = () => {
           </Link>
         ))}
       </ul>
+
+      {/* Theme Toggle Section */}
+      <div className={`mb-4 ${isOpen ? 'px-2' : 'px-2'}`}>
+        <div className={`flex items-center transition-all duration-300 ${
+          isOpen ? 'opacity-100 w-auto' : 'opacity-100 w-auto justify-center'
+        }`}>
+          {isOpen ? (
+            <AdvancedThemeSwitch />
+          ) : (
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="p-2 rounded-lg hover:bg-primary/5 transition-colors duration-200"
+              title="Toggle theme"
+            >
+              <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+              </svg>
+            </button>
+          )}
+        </div>
+      </div>
 
       {/* Bottom Mode Section */}
       <div 

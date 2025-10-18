@@ -15,6 +15,7 @@ import SidebarCard from './Sidebar';
 import FooterState from './Footer';
 import QuestionOptions from './QuestionOptionsQuizz';
 import AIChat from './AIChats';
+import FlyComputer from './FlyComputer';
 
 interface QuizData {
   topic_name?: string;
@@ -111,6 +112,7 @@ const QuizzComponents = () => {
   const [pinnedQuestions, setPinnedQuestions] = useState<Record<number, string[]>>({});
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [topicName, setTopicName] = useState<string>('');
+  const [isFlyComputerOpen, setIsFlyComputerOpen] = useState(false);
 
   const animationVariants = {
     enter: { opacity: 0, x: -100 },
@@ -357,6 +359,10 @@ const QuizzComponents = () => {
 
   const handleContentChange = (index: number): void => {
     setSelectedContent(index);
+  };
+
+  const handleFlyComputerToggle = (): void => {
+    setIsFlyComputerOpen(!isFlyComputerOpen);
   };
 
   const handleAnswer = (questionId: number, userAnswer: string) => {
@@ -631,7 +637,7 @@ const QuizzComponents = () => {
 
                       {/* Countries */}
                       <div className="flex flex-wrap gap-2 mb-6 max-w-[620px] mx-auto">
-                        {Object.entries(currentQuestion.countries).map(([country, years]) => (
+                        {currentQuestion.countries && Object.entries(currentQuestion.countries).map(([country, years]) => (
                           <div key={country} className="group relative">
                             <div className="px-4 py-2 rounded-full bg-[#EECE84]/50 text-sm font-medium text-black border border-[#EECE84]/40 hover:bg-[#EECE84]/20 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md">
                               <span className="flex items-center gap-2 text-xs">
@@ -646,21 +652,43 @@ const QuizzComponents = () => {
                                 <div className="font-medium text-gray-900 mb-2 pb-2 border-b">
                                   {country} Exam Sessions
                                 </div>
-                                {Object.entries(years).map(([year, dates]) => (
-                                  <div key={year} className="mb-2">
-                                    <span className="font-medium text-[#EECE84]">{year}:</span>
-                                    <div className="mt-1 text-gray-600 flex flex-wrap gap-1">
-                                      {dates.map((date, index) => (
-                                        <span
-                                          key={index}
-                                          className="px-2 py-1 rounded-md bg-gray-50 text-xs"
-                                        >
-                                          {date}
-                                        </span>
-                                      ))}
-                                    </div>
+                                {!years ? (
+                                  <div className="text-gray-500 text-sm">No exam data available</div>
+                                ) : Array.isArray(years) ? (
+                                  <div className="mt-1 text-gray-600 flex flex-wrap gap-1">
+                                    {years.map((date, index) => (
+                                      <span
+                                        key={index}
+                                        className="px-2 py-1 rounded-md bg-gray-50 text-xs"
+                                      >
+                                        {date}
+                                      </span>
+                                    ))}
                                   </div>
-                                ))}
+                                ) : (
+                                  Object.entries(years).map(([year, dates]) => (
+                                    <div key={year} className="mb-2">
+                                      <span className="font-medium text-[#EECE84]">{year}:</span>
+                                      <div className="mt-1 text-gray-600 flex flex-wrap gap-1">
+                                        {Array.isArray(dates) ? dates.map((date, index) => (
+                                          <span
+                                            key={index}
+                                            className="px-2 py-1 rounded-md bg-gray-50 text-xs"
+                                          >
+                                            {date}
+                                          </span>
+                                        )) : Object.values(dates).flat().map((date: any, index: number) => (
+                                          <span
+                                            key={index}
+                                            className="px-2 py-1 rounded-md bg-gray-50 text-xs"
+                                          >
+                                            {date}
+                                          </span>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  ))
+                                )}
                               </div>
                             </div>
                           </div>
@@ -702,7 +730,15 @@ const QuizzComponents = () => {
       {/* Footer - Fixed at bottom */}
       <FooterState 
         onContentChange={handleContentChange} 
+        onFlyComputerToggle={handleFlyComputerToggle}
         topicName={topicName}
+        isFlyComputerOpen={isFlyComputerOpen}
+      />
+
+      {/* Fly Computer Modal */}
+      <FlyComputer 
+        isVisible={isFlyComputerOpen} 
+        onClose={() => setIsFlyComputerOpen(false)}
       />
     </div>
   );

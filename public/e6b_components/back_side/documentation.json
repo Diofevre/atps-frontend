@@ -1,0 +1,125 @@
+{
+  "back_side_elements": {
+    "main_svg": {
+      "file": "e6b_back_real.svg",
+      "description": "SVG complet de la face arrière avec tous les éléments",
+      "total_elements": 606,
+      "element_ids": [
+        "back-side-main",
+        "tas-base",
+        "Base",
+        "Outline",
+        "Tick_Marks_-_Outer_Ring",
+        "_Line_",
+        "_Line_-2",
+        "_Line_-3",
+        "_Line_-4",
+        "_Line_-5",
+        "_Line_-6",
+        "_Line_-7",
+        "_Line_-8",
+        "_Line_-9",
+        "_Line_-10",
+        "_Line_-11",
+        "_Line_-12",
+        "_Line_-13",
+        "_Line_-14",
+        "_Line_-15"
+      ],
+      "key_elements": [
+        "tas-base",
+        "Mach_No._Index",
+        "Mach_No._Index_Arrow",
+        "Flight_Computer",
+        "Mach_No._Index",
+        "Mach_No._Index_Arrow"
+      ]
+    },
+    "interactive_svgs": {
+      "svg_1": {
+        "file": "back_interactive_1.svg",
+        "main_element": "TAS Base (base de vitesse vraie)",
+        "total_elements": 578,
+        "element_ids": [
+          "tas-base",
+          "Base",
+          "Outline",
+          "Tick_Marks_-_Outer_Ring",
+          "_Line_",
+          "_Line_-2",
+          "_Line_-3",
+          "_Line_-4",
+          "_Line_-5",
+          "_Line_-6",
+          "_Line_-7",
+          "_Line_-8",
+          "_Line_-9",
+          "_Line_-10",
+          "_Line_-11"
+        ],
+        "description": "SVG interactif 1 à paramétrer"
+      },
+      "svg_2": {
+        "file": "back_interactive_2.svg",
+        "main_element": "Mach Index (indice de Mach)",
+        "total_elements": 27,
+        "element_ids": [
+          "Mach_No._Index",
+          "Tick_Marks",
+          "_Line_-228",
+          "_Line_-229",
+          "_Line_-230",
+          "_Line_-231",
+          "_Line_-232",
+          "_Line_-233",
+          "_Line_-234",
+          "_Line_-235",
+          "_Line_-236",
+          "_Line_-237",
+          "_Line_-238",
+          "_Line_-239",
+          "_Line_-240"
+        ],
+        "description": "SVG interactif 2 à paramétrer"
+      }
+    },
+    "static_elements": {},
+    "interactive_elements": {}
+  },
+  "parametrization_guide": {
+    "svg_interactive_1": {
+      "main_element": "TAS Base",
+      "description": "Base circulaire pour les calculs de vitesse vraie (TAS)",
+      "interactive_elements": [
+        "Base",
+        "Outline",
+        "Tick_Marks_-_Outer_Ring"
+      ],
+      "potential_interactions": [
+        "Rotation du cadran principal",
+        "Sélection de valeurs sur les échelles",
+        "Alignement avec d'autres échelles"
+      ]
+    },
+    "svg_interactive_2": {
+      "main_element": "Mach Index",
+      "description": "Indice de Mach pour les calculs de vitesse",
+      "interactive_elements": [
+        "Mach_No._Index",
+        "Tick_Marks"
+      ],
+      "potential_interactions": [
+        "Rotation de l'indice",
+        "Alignement avec l'échelle de Mach",
+        "Calcul automatique des conversions"
+      ]
+    }
+  },
+  "next_steps": {
+    "1": "Identifier les éléments rotatifs dans chaque SVG",
+    "2": "Implémenter les interactions de rotation",
+    "3": "Connecter les échelles pour les calculs automatiques",
+    "4": "Ajouter les effets visuels (hover, sélection)",
+    "5": "Intégrer avec la face avant pour les calculs complets"
+  }
+}

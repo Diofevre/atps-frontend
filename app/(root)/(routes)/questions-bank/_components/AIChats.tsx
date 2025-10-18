@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useState, useRef, useMemo, memo } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Send, Loader2, MessageSquareText, Pencil, Check, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -49,6 +49,197 @@ interface ChatLog {
 interface ChatPageProps {
   questionId: number;
 }
+
+// Composant mémorisé pour les messages
+const ChatMessage = memo(({ 
+  message, 
+  user, 
+  userInitial, 
+  editingMessageId, 
+  editContent, 
+  setEditContent, 
+  handleEditStart, 
+  handleEditSave, 
+  handleEditCancel 
+}: {
+  message: Message;
+  user: any;
+  userInitial: string;
+  editingMessageId: number | null;
+  editContent: string;
+  setEditContent: (content: string) => void;
+  handleEditStart: (message: Message) => void;
+  handleEditSave: () => void;
+  handleEditCancel: () => void;
+}) => {
+  const formattedContent = useMemo(() => formatMarkdown(message.content), [message.content]);
+
+  return (
+    <div className="flex items-start gap-3 group chat-message-container mr-auto" style={{ maxWidth: '60%' }}>
+      <Avatar className={cn(
+        "w-8 h-8",
+        message.role === 'assistant' 
+          ? "bg-white p-1" 
+          : "bg-gray-700"
+      )}>
+        {message.role === 'assistant' ? (
+          <Image src="/ai.png" alt="ATPS" className="w-full h-full object-contain" width={24} height={24} />
+        ) : (
+          <AvatarImage src={user?.imageUrl || undefined} alt={user?.firstName || 'User'} />
+        )}
+        <AvatarFallback className="text-white">
+          {message.role === 'assistant' ? '' : userInitial}
+        </AvatarFallback>
+      </Avatar>
+      <div className="flex-1 relative group message-container">
+        {editingMessageId === message.id ? (
+          <div className="flex flex-col gap-2">
+            <Textarea
+              value={editContent}
+              onChange={(e) => setEditContent(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleEditSave();
+                } else if (e.key === 'Escape') {
+                  handleEditCancel();
+                }
+              }}
+              className="min-h-[60px] resize-none rounded-xl border-gray-200"
+            />
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={handleEditCancel}
+                className="h-8 px-2"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+              <Button
+                size="sm"
+                onClick={handleEditSave}
+                className="h-8 px-2 bg-[#EECE84] hover:bg-[#EECE84]/90"
+              >
+                <Check className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <>
+            {message.role === 'user' && message.id && (
+              <div className="absolute left-0 -ml-8 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => handleEditStart(message)}
+                  className="h-6 w-6 p-0"
+                >
+                  <Pencil className="h-3 w-3" />
+                </Button>
+              </div>
+            )}
+            <div className={cn(
+              "rounded-2xl px-4 py-3 w-full",
+              message.role === 'assistant' 
+                ? "bg-white shadow-sm rounded-bl-none" 
+                : "bg-[#EECE84] text-white rounded-br-none"
+            )}>
+              <div className="text-[15px] leading-relaxed break-words">
+                {message.role === 'assistant' ? (
+                  <div className="max-w-full overflow-hidden">
+                    <div 
+                      className="prose prose-sm max-w-none break-words overflow-wrap-anywhere"
+                      dangerouslySetInnerHTML={{ 
+                        __html: formattedContent
+                      }}
+                    />
+                    {message.diagrams && message.diagrams.length > 0 && (
+                      <div className="mt-4 space-y-3">
+                        {message.diagrams.map((diagram, index) => (
+                          <div key={index} className="bg-gray-50 rounded-lg p-3">
+                            <div 
+                              className="max-w-full overflow-x-auto"
+                              dangerouslySetInnerHTML={{ __html: diagram.svg }}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {message.images && message.images.length > 0 && (
+                      <div className="mt-4 space-y-3">
+                        <h4 className="text-sm font-medium text-gray-700">Images:</h4>
+                        {message.images.map((image, index) => (
+                          <div key={index} className="bg-gray-50 rounded-lg p-3">
+                            <div className="flex items-start gap-3">
+                              <img 
+                                src={`${process.env.NEXT_PUBLIC_API_URL}${image.thumbnail}`}
+                                alt={image.title}
+                                className="w-24 h-24 object-cover rounded-lg"
+                                onError={(e) => {
+                                  e.currentTarget.src = '/placeholder-image.png';
+                                }}
+                              />
+                              <div className="flex-1">
+                                <h5 className="font-medium text-sm text-gray-900">{image.title}</h5>
+                                <p className="text-xs text-gray-600 mt-1">
+                                  Source: {image.source}
+                                </p>
+                                <p className="text-xs text-gray-500 mt-1">
+                                  License: {image.license}
+                                </p>
+                                {!image.approved && (
+                                  <span className="inline-block px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded mt-1">
+                                    Pending Approval
+                                  </span>
+                                )}
+                                <div className="mt-2 flex gap-2">
+                                  <a 
+                                    href={image.url} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="text-xs text-blue-600 hover:text-blue-800 underline"
+                                  >
+                                    View Original
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {message.citations && message.citations.length > 0 && (
+                      <div className="mt-4 space-y-2">
+                        <h4 className="text-sm font-medium text-gray-700">Citations:</h4>
+                        {message.citations.map((citation, index) => (
+                          <div key={index} className="bg-blue-50 rounded-lg p-3">
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                                {citation.type}
+                              </span>
+                              <span className="text-xs text-blue-600">
+                                Score: {citation.score}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-white break-words">
+                    {message.content}
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+});
 
 export default function ChatPage({ questionId }: ChatPageProps) {
   const { user } = useUser();
@@ -121,13 +312,16 @@ export default function ChatPage({ questionId }: ChatPageProps) {
   // Effet pour remplacer les conteneurs aviation par des composants React
   useEffect(() => {
     const replaceAviationThumbnails = () => {
-      const containers = document.querySelectorAll('.aviation-thumbnail-container');
+      const containers = document.querySelectorAll('.aviation-thumbnail-container:not(.processed)');
       containers.forEach((container) => {
         const src = container.getAttribute('data-src');
         const alt = container.getAttribute('data-alt');
         const assetId = container.getAttribute('data-asset-id');
         
         if (src && alt && assetId) {
+          // Marquer comme traité pour éviter les re-traitements
+          container.classList.add('processed');
+          
           // Créer un élément React pour le thumbnail
           const thumbnailElement = document.createElement('div');
           thumbnailElement.className = 'aviation-thumbnail-wrapper';
@@ -148,13 +342,13 @@ export default function ChatPage({ questionId }: ChatPageProps) {
       });
     };
 
-    // Exécuter après chaque mise à jour des messages
-    const timeoutId = setTimeout(replaceAviationThumbnails, 100);
+    // Exécuter après chaque mise à jour des messages avec un délai plus long
+    const timeoutId = setTimeout(replaceAviationThumbnails, 300);
     
     return () => clearTimeout(timeoutId);
   }, [messages]);
 
-  const updateMessage = async (logId: number, newMessage: string) => {
+  const updateMessage = useCallback(async (logId: number, newMessage: string) => {
     try {
       const token = await getToken();
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat/logs/${logId}`, {
@@ -203,27 +397,27 @@ export default function ChatPage({ questionId }: ChatPageProps) {
     } catch (error) {
       console.error('Error updating message:', error);
     }
-  };
+  }, [getToken, setMessages]);
 
-  const handleEditStart = (message: Message) => {
+  const handleEditStart = useCallback((message: Message) => {
     if (message.id) {
       setEditingMessageId(message.id);
       setEditContent(message.content);
     }
-  };
+  }, []);
 
-  const handleEditSave = async () => {
+  const handleEditSave = useCallback(async () => {
     if (editingMessageId && editContent.trim()) {
       await updateMessage(editingMessageId, editContent);
       setEditingMessageId(null);
       setEditContent('');
     }
-  };
+  }, [editingMessageId, editContent, updateMessage]);
 
-  const handleEditCancel = () => {
+  const handleEditCancel = useCallback(() => {
     setEditingMessageId(null);
     setEditContent('');
-  };
+  }, []);
 
   const sendMessage = async () => {
     const token = await getToken();
@@ -359,166 +553,18 @@ export default function ChatPage({ questionId }: ChatPageProps) {
           ) : (
             <div className="flex-1 flex flex-col justify-end space-y-6 max-w-full overflow-x-hidden">
               {messages.map((message, index) => (
-                <div
-                  key={index}
-                  className="flex items-start gap-3 group chat-message-container mr-auto"
-                  style={{ maxWidth: '60%' }}
-                >
-                  <Avatar className={cn(
-                    "w-8 h-8",
-                    message.role === 'assistant' 
-                      ? "bg-white p-1" 
-                      : "bg-gray-700"
-                  )}>
-                    {message.role === 'assistant' ? (
-                      <Image src="/ai.png" alt="ATPS" className="w-full h-full object-contain" width={24} height={24} />
-                    ) : (
-                      <AvatarImage src={user?.imageUrl || undefined} alt={user?.firstName || 'User'} />
-                    )}
-                    <AvatarFallback className="text-white">
-                      {message.role === 'assistant' ? '' : userInitial}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 relative group message-container">
-                    {editingMessageId === message.id ? (
-                      <div className="flex flex-col gap-2">
-                        <Textarea
-                          value={editContent}
-                          onChange={(e) => setEditContent(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter' && !e.shiftKey) {
-                              e.preventDefault();
-                              handleEditSave();
-                            } else if (e.key === 'Escape') {
-                              handleEditCancel();
-                            }
-                          }}
-                          className="min-h-[60px] resize-none rounded-xl border-gray-200"
-                        />
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={handleEditCancel}
-                            className="h-8 px-2"
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            onClick={handleEditSave}
-                            className="h-8 px-2 bg-[#EECE84] hover:bg-[#EECE84]/90"
-                          >
-                            <Check className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        {message.role === 'user' && message.id && (
-                          <div className="absolute left-0 -ml-8 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              onClick={() => handleEditStart(message)}
-                              className="h-6 w-6 p-0"
-                            >
-                              <Pencil className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        )}
-                        <div className={cn(
-                          "rounded-2xl px-4 py-3 w-full",
-                          message.role === 'assistant' 
-                            ? "bg-white shadow-sm rounded-bl-none" 
-                            : "bg-[#EECE84] text-white rounded-br-none"
-                        )}>
-                          <div className="text-[15px] leading-relaxed break-words">
-                            {message.role === 'assistant' ? (
-                              <div className="max-w-full overflow-hidden">
-                                <div 
-                                  className="prose prose-sm max-w-none break-words overflow-wrap-anywhere"
-                                  dangerouslySetInnerHTML={{ 
-                                    __html: formatMarkdown(message.content) 
-                                  }}
-                                />
-                                {message.diagrams && message.diagrams.length > 0 && (
-                                  <div className="mt-4 space-y-3">
-                                    {message.diagrams.map((diagram, index) => (
-                                      <div key={index} className="bg-gray-50 rounded-lg p-3">
-                                        <div 
-                                          className="max-w-full overflow-x-auto"
-                                          dangerouslySetInnerHTML={{ __html: diagram.svg }}
-                                        />
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
-                                {message.images && message.images.length > 0 && (
-                                  <div className="mt-4 space-y-3">
-                                    <h4 className="text-sm font-medium text-gray-700">Images:</h4>
-                                    {message.images.map((image, index) => (
-                                      <div key={index} className="bg-gray-50 rounded-lg p-3">
-                                        <div className="flex items-start gap-3">
-                                          <img 
-                                            src={`${process.env.NEXT_PUBLIC_API_URL}${image.thumbnail}`}
-                                            alt={image.title}
-                                            className="w-24 h-24 object-cover rounded-lg"
-                                            onError={(e) => {
-                                              e.currentTarget.src = '/placeholder-image.png';
-                                            }}
-                                          />
-                                          <div className="flex-1">
-                                            <h5 className="font-medium text-sm text-gray-900">{image.title}</h5>
-                                            <p className="text-xs text-gray-600 mt-1">
-                                              Source: {image.source}
-                                            </p>
-                                            <p className="text-xs text-gray-500 mt-1">
-                                              License: {image.license}
-                                            </p>
-                                            {!image.approved && (
-                                              <span className="inline-block px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded mt-1">
-                                                Pending Approval
-                                              </span>
-                                            )}
-                                            <div className="mt-2 flex gap-2">
-                                              <a 
-                                                href={image.url} 
-                                                target="_blank" 
-                                                rel="noopener noreferrer"
-                                                className="text-xs text-blue-600 hover:text-blue-800 underline"
-                                              >
-                                                View Original
-                                              </a>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
-                                {message.citations && message.citations.length > 0 && (
-                                  <div className="mt-3 pt-3 border-t border-gray-200">
-                                    <div className="text-xs text-gray-500 mb-2">
-                                      Sources: {message.citations.map(c => c.id).join(', ')}
-                                    </div>
-                                    {message.intent && (
-                                      <div className="text-xs text-gray-400">
-                                        Intent: {message.intent}
-                                      </div>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-                            ) : (
-                              <p className="whitespace-pre-wrap">{message.content}</p>
-                            )}
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
+                <ChatMessage
+                  key={message.id || `${message.role}-${index}-${message.content.slice(0, 50)}`}
+                  message={message}
+                  user={user}
+                  userInitial={userInitial}
+                  editingMessageId={editingMessageId}
+                  editContent={editContent}
+                  setEditContent={setEditContent}
+                  handleEditStart={handleEditStart}
+                  handleEditSave={handleEditSave}
+                  handleEditCancel={handleEditCancel}
+                />
               ))}
               {isLoading && (
                 <div className="flex items-start gap-3 mr-auto chat-message-container" style={{ maxWidth: '60%' }}>
@@ -581,13 +627,13 @@ function formatMarkdown(text: string): string {
   html = html.replace(
     /^(\|.*\|)\n(\|[-:\s|]+\|)\n((?:\|.*\|\n?)*)/gm,
     (match, header, separator, rows) => {
-      const headerCells = header.split('|').slice(1, -1).map(cell => 
+      const headerCells = header.split('|').slice(1, -1).map((cell: string) => 
         `<th class="px-3 py-2 text-left font-medium text-gray-900 bg-gray-50 border-b break-words min-w-0 max-w-none">${cell.trim()}</th>`
       ).join('');
       
-      const rowLines = rows.trim().split('\n').filter(line => line.trim());
-      const tableRows = rowLines.map(row => {
-        const cells = row.split('|').slice(1, -1).map(cell => {
+      const rowLines = rows.trim().split('\n').filter((line: string) => line.trim());
+      const tableRows = rowLines.map((row: string) => {
+        const cells = row.split('|').slice(1, -1).map((cell: string) => {
           const cellContent = cell.trim();
           // Si le contenu est très long, ajouter des styles spéciaux
           const isLongContent = cellContent.length > 50;

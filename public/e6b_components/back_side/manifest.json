@@ -1,0 +1,34 @@
+{
+  "back_side_assets": {
+    "images": [
+      {
+        "filename": "back_static_1.png",
+        "type": "static",
+        "description": "Image statique de la face arrière"
+      }
+    ],
+    "interactive_svgs": [
+      {
+        "filename": "back_interactive_1.svg",
+        "type": "interactive",
+        "description": "SVG interactif 1 à paramétrer"
+      },
+      {
+        "filename": "back_interactive_2.svg",
+        "type": "interactive",
+        "description": "SVG interactif 2 à paramétrer"
+      }
+    ],
+    "main_svg": {
+      "filename": "e6b_back_real.svg",
+      "type": "complete",
+      "description": "SVG complet de la face arrière"
+    }
+  },
+  "extraction_info": {
+    "source_file": "/Users/isaaclamare/Desktop/flight computor 2.json",
+    "images_found": 1,
+    "svg_groups_found": 37,
+    "extraction_date": "2024-12-26"
+  }
+}

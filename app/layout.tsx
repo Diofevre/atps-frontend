@@ -4,6 +4,7 @@ import { Urbanist } from "next/font/google"
 import { Toaster } from "@/components/ui/sonner";
 import { ClerkProvider } from '@/lib/mock-clerk'
 import TopLoader from "@/components/shared/TopLoader";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 const font = Urbanist({ 
   subsets: ['latin'], 
@@ -25,13 +26,20 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body
           className={`${font.className} antialiased`}
         >
-          <Toaster />
-          <TopLoader/>
-          {children}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Toaster />
+            <TopLoader/>
+            {children}
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
