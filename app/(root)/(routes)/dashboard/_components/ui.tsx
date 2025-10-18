@@ -1,4 +1,4 @@
-import { UserButton } from '@clerk/nextjs';
+import { UserButton } from '@/lib/mock-clerk';
 import { HTMLAttributes } from 'react';
 
 // Card Component

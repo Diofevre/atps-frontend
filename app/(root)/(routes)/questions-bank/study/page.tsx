@@ -10,7 +10,7 @@ import { Slider } from '@/components/ui/slider';
 import { Loader } from '@/components/ui/loader';
 import { motion } from 'framer-motion';
 import { FaPlayCircle } from "react-icons/fa";
-import { useAuth } from '@clerk/nextjs';
+import { useAuth } from '@/lib/mock-clerk';
 
 interface SubChapter {
   id: string;
@@ -349,6 +349,7 @@ const Study = () => {
       <div className="flex h-full items-center justify-center w-full">
         <Topics onSelectionChange={handleSyllabusChange} />
       </div>
+
 
       {loading ? (
         <div className="flex h-full w-full items-center justify-center p-8">

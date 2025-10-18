@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, X, Lock, Star, XCircle, ZoomIn, ZoomOut } from 'lucide-react';
+import ImageViewer from '@/components/shared/ImageViewer';
 
 interface QuestionOptionsProps {
   options: Record<string, string>;
@@ -33,6 +34,10 @@ const QuestionOptions: React.FC<QuestionOptionsProps> = ({
   const [isImageEnlarged, setIsImageEnlarged] = useState(false);
   const [scale, setScale] = useState(1);
   const modalContentRef = useRef<HTMLDivElement>(null);
+
+  // Advanced Image Viewer states
+  const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   // Enable body scrolling when modal is open
   useEffect(() => {
@@ -94,6 +99,40 @@ const QuestionOptions: React.FC<QuestionOptionsProps> = ({
   // Check if this question has been answered
   const questionAnswered = answeredQuestions.some(q => q.questionId === questionId);
 
+  // Helper function to build complete image URLs
+  const getImageUrls = () => {
+    if (!currentQuestion.question_images) {
+      return [];
+    }
+    
+    let imageArray: string[] = [];
+    
+    if (Array.isArray(currentQuestion.question_images)) {
+      imageArray = currentQuestion.question_images;
+    } else if (typeof currentQuestion.question_images === 'string') {
+      if (currentQuestion.question_images.includes(',')) {
+        imageArray = currentQuestion.question_images.split(',').map(img => img.trim());
+      } else {
+        imageArray = [currentQuestion.question_images];
+      }
+    }
+    
+    const urls = imageArray.map(imageName => {
+      // If it's already a complete URL, return as is
+      if (imageName.startsWith('http')) {
+        return imageName;
+      }
+      // If it starts with /questions/, use it as is (relative URL)
+      if (imageName.startsWith('/questions/')) {
+        return imageName;
+      }
+      // Otherwise, assume it's just a filename and add the relative path
+      return `/questions/${imageName}`;
+    });
+    
+    return urls;
+  };
+
   const renderQualityStars = (score: string | null | undefined) => {
     if (!score) {
       return (
@@ -152,113 +191,56 @@ const QuestionOptions: React.FC<QuestionOptionsProps> = ({
         {renderQualityStars(currentQuestion.quality_score)}
       </div>
       
-      {/* Question Image */}
+      {/* Question Images - Display ALL images */}
       {currentQuestion.question_images && (
         <>
-          <div className="mb-6 flex justify-start">
-            <motion.div
-              className="relative cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setIsImageEnlarged(true)}
-              style={{ maxWidth: '135px' }}
-            >
-              <img
-                src={currentQuestion.question_images}
-                alt=""
-                className="w-full h-auto object-cover rounded-lg"
-              />
-              <div className="absolute inset-0 bg-black/5 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                <div className="bg-black/70 text-white text-xs px-2 py-1 rounded-md">
-                  Click to enlarge
+          <div className="mb-6 flex flex-wrap gap-2 justify-start">
+            {getImageUrls().map((imageUrl, index) => (
+              <motion.div
+                key={index}
+                className="relative cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all duration-300 bg-gray-100"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => {
+                  setSelectedImageIndex(index);
+                  setIsImageViewerOpen(true);
+                }}
+                style={{ 
+                  width: '120px', 
+                  height: '80px',
+                  userSelect: 'none' // Empêche la sélection de texte
+                }}
+              >
+                <img
+                  src={imageUrl}
+                  alt={`Question image ${index + 1}`}
+                  className="w-full h-full object-contain rounded-lg"
+                  style={{ 
+                    imageRendering: 'crisp-edges' as any,
+                    userSelect: 'none', // Empêche la sélection de texte
+                    pointerEvents: 'none', // Empêche les événements de souris sur l'image
+                    WebkitUserSelect: 'none' as any,
+                    MozUserSelect: 'none' as any,
+                    msUserSelect: 'none' as any
+                  }}
+                  onLoad={(e) => {
+                    console.log('✅ Thumbnail loaded successfully:', imageUrl);
+                  }}
+                  onError={(e) => {
+                    console.error('❌ Failed to load thumbnail:', imageUrl);
+                    e.currentTarget.style.display = 'none';
+                  }}
+                  draggable={false} // Empêche le drag
+                />
+                <div className="absolute inset-0 bg-black/5 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                  <div className="bg-black/70 text-white text-xs px-2 py-1 rounded-md">
+                    Click to enlarge
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            ))}
           </div>
 
-          {/* Portal for Modal to ensure it's at the root level */}
-          <AnimatePresence>
-            {isImageEnlarged && (
-              <div className="fixed inset-0 overflow-auto" style={{ zIndex: 9999 }}>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="fixed inset-0 flex items-center justify-center bg-black/80 p-4"
-                  onClick={() => {
-                    setIsImageEnlarged(false);
-                    setScale(1);
-                  }}
-                >
-                  <motion.div
-                    initial={{ scale: 0.9 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0.9 }}
-                    className="relative max-w-4xl max-h-[80vh] flex items-center justify-center"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <div 
-                      ref={modalContentRef}
-                      className="overflow-auto p-4 flex items-center justify-center"
-                      style={{ 
-                        width: '100%', 
-                        height: '100%',
-                        maxHeight: '80vh'
-                      }}
-                    >
-                      <div className="flex items-center justify-center">
-                        <img
-                          src={currentQuestion.question_images}
-                          alt=""
-                          className="object-contain rounded-lg transition-transform duration-200"
-                          style={{ 
-                            transform: `scale(${scale})`, 
-                            transformOrigin: 'center center',
-                            maxWidth: '100%',
-                            maxHeight: '100%'
-                          }}
-                        />
-                      </div>
-                    </div>
-                    
-                    {/* Controls */}
-                    <div className="absolute top-4 right-4 flex space-x-2">
-                      <button
-                        onClick={handleZoomIn}
-                        className="bg-black/70 text-white p-2 rounded-full hover:bg-black transition-colors duration-200"
-                        aria-label="Zoom in"
-                      >
-                        <ZoomIn className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={handleZoomOut}
-                        className="bg-black/70 text-white p-2 rounded-full hover:bg-black transition-colors duration-200"
-                        aria-label="Zoom out"
-                      >
-                        <ZoomOut className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setIsImageEnlarged(false);
-                          setScale(1);
-                        }}
-                        className="bg-black/70 text-white p-2 rounded-full hover:bg-black transition-colors duration-200"
-                        aria-label="Close"
-                      >
-                        <XCircle className="w-5 h-5" />
-                      </button>
-                    </div>
-                    
-                    {/* Zoom indicator */}
-                    <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
-                      {Math.round(scale * 100)}%
-                    </div>
-                  </motion.div>
-                </motion.div>
-              </div>
-            )}
-          </AnimatePresence>
         </>
       )}
       
@@ -346,6 +328,14 @@ const QuestionOptions: React.FC<QuestionOptionsProps> = ({
           </motion.div>
         );
       })}
+
+      {/* Advanced Image Viewer */}
+      <ImageViewer
+        images={getImageUrls()}
+        isOpen={isImageViewerOpen}
+        onClose={() => setIsImageViewerOpen(false)}
+        initialIndex={selectedImageIndex}
+      />
     </div>
   );
 };

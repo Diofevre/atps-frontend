@@ -13,7 +13,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
-import { useAuth } from '@clerk/nextjs';
+import { useAuth } from '@/lib/mock-clerk';
 
 interface FilterState {
   wrong_answer: boolean;

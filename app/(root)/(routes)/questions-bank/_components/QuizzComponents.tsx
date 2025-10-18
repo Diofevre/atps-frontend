@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
-import { useAuth, useUser } from '@clerk/nextjs';
+import { useAuth, useUser } from '@/lib/mock-clerk';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -92,12 +92,18 @@ const QuizzComponents = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(() => {
-    const savedIndex = localStorage.getItem('currentQuestionIndex');
-    return savedIndex ? parseInt(savedIndex, 10) : 0;
+    if (typeof window !== 'undefined') {
+      const savedIndex = localStorage.getItem('currentQuestionIndex');
+      return savedIndex ? parseInt(savedIndex, 10) : 0;
+    }
+    return 0;
   });
   const [answeredQuestions, setAnsweredQuestions] = useState<AnsweredQuestion[]>(() => {
-    const savedAnswers = localStorage.getItem('answeredQuestions');
-    return savedAnswers ? JSON.parse(savedAnswers) : [];
+    if (typeof window !== 'undefined') {
+      const savedAnswers = localStorage.getItem('answeredQuestions');
+      return savedAnswers ? JSON.parse(savedAnswers) : [];
+    }
+    return [];
   });
   const [selectedContent, setSelectedContent] = useState(0);
   const [timeSpents, setTimeSpents] = useState(0);
@@ -126,7 +132,9 @@ const QuizzComponents = () => {
       const interval = setInterval(() => {
         setTimeSpents((prev) => {
           const newTime = prev + 1;
-          localStorage.setItem('timeSpents', newTime.toString());
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('timeSpents', newTime.toString());
+          }
           return newTime;
         });
       }, 1000);
@@ -171,7 +179,9 @@ const QuizzComponents = () => {
           // Handle saved timespent
           if (responseData.timespent) {
             const savedSeconds = timeStringToSeconds(responseData.timespent);
-            localStorage.setItem('timeSpents', savedSeconds.toString());
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('timeSpents', savedSeconds.toString());
+            }
             setTimeSpents(savedSeconds);
           }
 
@@ -184,9 +194,13 @@ const QuizzComponents = () => {
               explanation: question.explanation,
               subChapterId: question.sub_chapter_id,
               countries: question.countries,
+              question_images: question.question_images,
+              explanation_images: question.explanation_images,
+              quality_score: question.quality_score,
+              chatExplanations: question.chatExplanations,
             })
           );
-  
+
           setQuestions(formattedQuestions);
           
           if (responseData.questions) {
@@ -283,7 +297,9 @@ const QuizzComponents = () => {
   }, [getToken, searchParams, user]);
 
   useEffect(() => {
-    localStorage.setItem('currentQuestionIndex', currentQuestionIndex.toString());
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('currentQuestionIndex', currentQuestionIndex.toString());
+    }
   }, [currentQuestionIndex]);
 
   const goToPreviousQuestion = useCallback(() => {
@@ -308,7 +324,9 @@ const QuizzComponents = () => {
   }, [goToNextQuestion, goToPreviousQuestion]);
 
   useEffect(() => {
-    localStorage.setItem('answeredQuestions', JSON.stringify(answeredQuestions));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('answeredQuestions', JSON.stringify(answeredQuestions));
+    }
   }, [answeredQuestions]);
 
   if (!user) {
@@ -352,7 +370,9 @@ const QuizzComponents = () => {
           correctAnswer: questions.find(q => q.id === questionId)?.answer || ''
         }
       ];
-      localStorage.setItem('answeredQuestions', JSON.stringify(newAnswers));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('answeredQuestions', JSON.stringify(newAnswers));
+      }
       return newAnswers;
     });
 
@@ -363,8 +383,10 @@ const QuizzComponents = () => {
     const token = await getToken();
   
     try {
-      localStorage.removeItem('currentQuestionIndex');
-      localStorage.removeItem('answeredQuestions');
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('currentQuestionIndex');
+        localStorage.removeItem('answeredQuestions');
+      }
     
       const validationData = {
         testId: testId,
@@ -393,7 +415,9 @@ const QuizzComponents = () => {
       const validationResponse = await response.json();
       
       // Store validation data in localStorage to avoid duplicate API call
-      localStorage.setItem('validationData', JSON.stringify(validationResponse));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('validationData', JSON.stringify(validationResponse));
+      }
       
       toast.success('Test submitted successfully.')
       router.push(`/questions-bank/study/review?testId=${validationResponse.testId}`);
@@ -472,8 +496,10 @@ const QuizzComponents = () => {
     const token = await getToken();
 
     try {
-      localStorage.removeItem('currentQuestionIndex');
-      localStorage.removeItem('answeredQuestions');
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('currentQuestionIndex');
+        localStorage.removeItem('answeredQuestions');
+      }
     
       const saveData = {
         testId: testId,

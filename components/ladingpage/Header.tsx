@@ -2,7 +2,7 @@
 'use client';
 
 import { LandingMenues } from '@/lib/menu-sidebar';
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs';
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@/lib/mock-clerk';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';

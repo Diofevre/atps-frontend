@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { useAuth } from "@clerk/nextjs"
+import { useAuth } from "@/lib/mock-clerk"
 import { BookOpen } from "lucide-react"
 import useSWR from "swr"
 

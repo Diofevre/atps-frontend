@@ -2,7 +2,7 @@
 
 import { Textarea } from '@/components/ui/textarea';
 import { formatDate } from '@/lib/utils';
-import { useAuth, UserButton, useUser } from '@clerk/nextjs';
+import { useAuth, UserButton, useUser } from '@/lib/mock-clerk';
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, ThumbsUp, ThumbsDown, Send, Pencil, Trash2, Flag, Loader2 } from 'lucide-react';

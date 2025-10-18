@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useAuth, useUser } from '@clerk/nextjs';
+import { useAuth, useUser } from '@/lib/mock-clerk';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState, useRef } from 'react'; // Import useRef
 import { Loader } from '@/components/ui/loader';

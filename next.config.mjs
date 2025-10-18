@@ -16,6 +16,14 @@ const nextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/questions/:path*',
+        destination: 'http://localhost:8000/questions/:path*',
+      },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -1,26 +1,18 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { NextResponse } from 'next/server'
 
-const isPublicRoute = createRouteMatcher([
-  '/', 
-  '/sign-in(.*)', 
-  '/sign-up(.*)', 
-  '/reset(.*)', 
-  '/api/webhooks(.*)',
-  '/features(.*)',
-  '/blog(.*)',
-  '/faqs(.*)',
-  '/pricing(.*)',
-  '/about-atps(.*)',
-  '/latest_news(.*)',
-  '/articles(.*)',
-  '/login(.*)',
-])
-
-export default clerkMiddleware(async (auth, request) => {
-  if (!isPublicRoute(request)) {
-    await auth.protect()
-  }
-})
+// Mock middleware - allows all routes for development
+export function middleware(request: any) {
+  // Add mock user headers for development
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-mock-user-id', 'mock-user-dev-123')
+  requestHeaders.set('x-mock-user-email', 'test@atps.com')
+  
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  })
+}
 
 export const config = {
   matcher: [

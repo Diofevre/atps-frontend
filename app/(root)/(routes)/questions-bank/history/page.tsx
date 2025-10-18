@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Trash2 } from 'lucide-react';
 import Link from 'next/link';
-import { useAuth, useUser } from '@clerk/nextjs';
+import { useAuth, useUser } from '@/lib/mock-clerk';
 import { Loader } from '@/components/ui/loader';
 import { Card } from "@/components/ui/card";
 import {

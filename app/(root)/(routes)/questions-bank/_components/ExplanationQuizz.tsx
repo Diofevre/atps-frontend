@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2, Sparkles, ZoomIn, ZoomOut, XCircle } from 'lucide-react';
-import { useAuth } from '@clerk/nextjs';
+import { useAuth } from '@/lib/mock-clerk';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
@@ -13,6 +13,7 @@ import rehypeRaw from 'rehype-raw';
 import 'katex/dist/katex.min.css';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import ImageViewer from '@/components/shared/ImageViewer';
 
 interface ChatExplanation {
   id: number;
@@ -44,6 +45,10 @@ const Explanation: React.FC<ExplanationProps> = ({ explanation, questionId, chat
   const [isImageEnlarged, setIsImageEnlarged] = useState(false);
   const [scale, setScale] = useState(1);
   const modalContentRef = useRef<HTMLDivElement>(null);
+
+  // Advanced Image Viewer states
+  const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   // Enable body scrolling when modal is open
   useEffect(() => {
@@ -80,6 +85,36 @@ const Explanation: React.FC<ExplanationProps> = ({ explanation, questionId, chat
     e.stopPropagation();
     setScale(prev => Math.max(prev - 0.25, 0.5));
   };
+
+  // Helper function to build complete image URLs
+  const getImageUrls = useCallback(() => {
+    if (!explanation_images) return [];
+    
+    let imageArray: string[] = [];
+    
+    if (Array.isArray(explanation_images)) {
+      imageArray = explanation_images;
+    } else if (typeof explanation_images === 'string') {
+      if (explanation_images.includes(',')) {
+        imageArray = explanation_images.split(',').map(img => img.trim());
+      } else {
+        imageArray = [explanation_images];
+      }
+    }
+    
+    return imageArray.map(imageName => {
+      // If it's already a complete URL, return as is
+      if (imageName.startsWith('http')) {
+        return imageName;
+      }
+      // If it starts with /questions/, use it as is (relative URL)
+      if (imageName.startsWith('/questions/')) {
+        return imageName;
+      }
+      // Otherwise, assume it's just a filename and add the relative path
+      return `/questions/${imageName}`;
+    });
+  }, [explanation_images]);
 
   const getCurrentExplanation = useCallback(() => {
     if (selectedExplanation === 'original') {
@@ -187,110 +222,53 @@ const Explanation: React.FC<ExplanationProps> = ({ explanation, questionId, chat
       <div className="prose prose-lg max-w-none dark:prose-invert">
         {explanation_images && (
           <>
-            <div className="mb-6">
-              <motion.div
-                className="relative cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setIsImageEnlarged(true)}
-                style={{ maxWidth: '30%' }}
-              >
-                <img
-                  src={explanation_images}
-                  alt=""
-                  className="w-full h-auto object-cover rounded-lg"
-                />
-                <div className="absolute inset-0 bg-black/5 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <div className="bg-black/70 text-white text-xs px-2 py-1 rounded-md">
-                    Click to enlarge
+            <div className="mb-6 flex flex-wrap gap-2">
+              {getImageUrls().map((imageUrl, index) => (
+                <motion.div
+                  key={index}
+                  className="relative cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all duration-300 bg-gray-100"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    setSelectedImageIndex(index);
+                    setIsImageViewerOpen(true);
+                  }}
+                  style={{ 
+                    width: '120px', 
+                    height: '80px',
+                    userSelect: 'none' // Empêche la sélection de texte
+                  }}
+                >
+                  <img
+                    src={imageUrl}
+                    alt={`Explanation image ${index + 1}`}
+                    className="w-full h-full object-contain rounded-lg"
+                    style={{ 
+                      imageRendering: 'crisp-edges' as any,
+                      userSelect: 'none', // Empêche la sélection de texte
+                      pointerEvents: 'none', // Empêche les événements de souris sur l'image
+                      WebkitUserSelect: 'none' as any,
+                      MozUserSelect: 'none' as any,
+                      msUserSelect: 'none' as any
+                    }}
+                    onLoad={(e) => {
+                      console.log('✅ Explanation thumbnail loaded successfully:', imageUrl);
+                    }}
+                    onError={(e) => {
+                      console.error('❌ Failed to load explanation thumbnail:', imageUrl);
+                      e.currentTarget.style.display = 'none';
+                    }}
+                    draggable={false} // Empêche le drag
+                  />
+                  <div className="absolute inset-0 bg-black/5 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                    <div className="bg-black/70 text-white text-xs px-2 py-1 rounded-md">
+                      Click to enlarge
+                    </div>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              ))}
             </div>
 
-            {/* Image Modal */}
-            <AnimatePresence>
-              {isImageEnlarged && (
-                <div className="fixed inset-0 overflow-auto" style={{ zIndex: 9999 }}>
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="fixed inset-0 flex items-center justify-center bg-black/80 p-4"
-                    onClick={() => {
-                      setIsImageEnlarged(false);
-                      setScale(1);
-                    }}
-                  >
-                    <motion.div
-                      initial={{ scale: 0.9 }}
-                      animate={{ scale: 1 }}
-                      exit={{ scale: 0.9 }}
-                      className="relative max-w-4xl max-h-[80vh] flex items-center justify-center"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div 
-                        ref={modalContentRef}
-                        className="overflow-auto p-4 flex items-center justify-center"
-                        style={{ 
-                          width: '100%', 
-                          height: '100%',
-                          maxHeight: '80vh'
-                        }}
-                      >
-                        <div className="flex items-center justify-center">
-                          <img
-                            src={explanation_images}
-                            alt=""
-                            className="object-contain rounded-lg transition-transform duration-200"
-                            style={{ 
-                              transform: `scale(${scale})`, 
-                              transformOrigin: 'center center',
-                              maxWidth: '100%',
-                              maxHeight: '100%'
-                            }}
-                          />
-                        </div>
-                      </div>
-                      
-                      {/* Controls */}
-                      <div className="absolute top-4 right-4 flex space-x-2">
-                        <button
-                          onClick={handleZoomIn}
-                          className="bg-black/70 text-white p-2 rounded-full hover:bg-black transition-colors duration-200"
-                          aria-label="Zoom in"
-                        >
-                          <ZoomIn className="w-5 h-5" />
-                        </button>
-                        <button
-                          onClick={handleZoomOut}
-                          className="bg-black/70 text-white p-2 rounded-full hover:bg-black transition-colors duration-200"
-                          aria-label="Zoom out"
-                        >
-                          <ZoomOut className="w-5 h-5" />
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setIsImageEnlarged(false);
-                            setScale(1);
-                          }}
-                          className="bg-black/70 text-white p-2 rounded-full hover:bg-black transition-colors duration-200"
-                          aria-label="Close"
-                        >
-                          <XCircle className="w-5 h-5" />
-                        </button>
-                      </div>
-                      
-                      {/* Zoom indicator */}
-                      <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
-                        {Math.round(scale * 100)}%
-                      </div>
-                    </motion.div>
-                  </motion.div>
-                </div>
-              )}
-            </AnimatePresence>
           </>
         )}
 
@@ -302,6 +280,14 @@ const Explanation: React.FC<ExplanationProps> = ({ explanation, questionId, chat
           {currentText}
         </ReactMarkdown>
       </div>
+
+      {/* Advanced Image Viewer */}
+      <ImageViewer
+        images={getImageUrls()}
+        isOpen={isImageViewerOpen}
+        onClose={() => setIsImageViewerOpen(false)}
+        initialIndex={selectedImageIndex}
+      />
     </div>
   );
 };

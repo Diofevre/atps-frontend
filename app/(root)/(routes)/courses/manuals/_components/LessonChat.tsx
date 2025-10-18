@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useState, useRef } from 'react';
+import ReactDOM from 'react-dom/client';
 import { Send, Loader2, MessageSquareText, Pencil, Check, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -9,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth, useUser } from '@clerk/nextjs';
 import Image from 'next/image';
+import AviationThumbnail from '@/components/AviationThumbnail';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -67,8 +69,17 @@ export default function LessonChat({ pageId }: LessonChatProps) {
       
       const data = await response.json();
       
+      console.log('Raw data from backend (LessonChat):', data);
+      
       const initialMessages: Message[] = [];
-      data.forEach((log: ChatLog) => {
+      
+      // Les logs sont déjà triés par le backend (plus récent en premier)
+      // On les inverse pour avoir l'ordre chronologique (plus ancien en premier)
+      const sortedLogs = data.reverse();
+      
+      console.log('Reversed logs (LessonChat):', sortedLogs);
+      
+      sortedLogs.forEach((log: ChatLog) => {
         if (log.user_question) {
           initialMessages.push({ role: 'user', content: log.user_question, id: log.id });
         }
@@ -85,6 +96,42 @@ export default function LessonChat({ pageId }: LessonChatProps) {
   useEffect(() => {
     fetchChatLogs();
   }, [pageId, fetchChatLogs]);
+
+  // Effet pour remplacer les conteneurs aviation par des composants React
+  useEffect(() => {
+    const replaceAviationThumbnails = () => {
+      const containers = document.querySelectorAll('.aviation-thumbnail-container');
+      containers.forEach((container) => {
+        const src = container.getAttribute('data-src');
+        const alt = container.getAttribute('data-alt');
+        const assetId = container.getAttribute('data-asset-id');
+        
+        if (src && alt && assetId) {
+          // Créer un élément React pour le thumbnail
+          const thumbnailElement = document.createElement('div');
+          thumbnailElement.className = 'aviation-thumbnail-wrapper';
+          
+          // Remplacer le conteneur par le wrapper
+          container.parentNode?.replaceChild(thumbnailElement, container);
+          
+          // Rendre le composant React dans le wrapper
+          const root = ReactDOM.createRoot(thumbnailElement);
+          root.render(
+            <AviationThumbnail 
+              src={src} 
+              alt={alt} 
+              title={alt}
+            />
+          );
+        }
+      });
+    };
+
+    // Exécuter après chaque mise à jour des messages
+    const timeoutId = setTimeout(replaceAviationThumbnails, 100);
+    
+    return () => clearTimeout(timeoutId);
+  }, [messages]);
 
   const updateMessage = async (logId: number, newMessage: string) => {
     try {
@@ -198,7 +245,56 @@ export default function LessonChat({ pageId }: LessonChatProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-gray-50 rounded-xl shadow-sm">
+    <div className="flex flex-col h-full bg-gray-50 rounded-xl shadow-sm chat-container">
+      <style jsx>{`
+        .prose {
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          hyphens: auto;
+        }
+        .prose table {
+          table-layout: auto;
+          width: 100%;
+          min-width: 100%;
+        }
+        .prose td, .prose th {
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          min-width: 0;
+          max-width: none;
+          white-space: normal;
+        }
+        .prose td {
+          vertical-align: top;
+        }
+        .message-container {
+          max-width: 100%;
+          overflow: hidden;
+        }
+        @media (max-width: 640px) {
+          .message-container {
+            max-width: 90%;
+          }
+        }
+        .chat-message-container {
+          max-width: 60% !important;
+          width: auto !important;
+        }
+        @media (max-width: 768px) {
+          .chat-message-container {
+            max-width: 70% !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .chat-message-container {
+            max-width: 80% !important;
+          }
+        }
+        .chat-container {
+          max-width: 100%;
+          overflow-x: hidden;
+        }
+      `}</style>
       {/* Chat Header */}
       <div className="px-4 py-3 border-b bg-white rounded-t-xl">
         <div className="flex items-center justify-between">
@@ -227,14 +323,12 @@ export default function LessonChat({ pageId }: LessonChatProps) {
               </div>
             </div>
           ) : (
-            <div className="flex-1 flex flex-col justify-end space-y-6">
+            <div className="flex-1 flex flex-col justify-end space-y-6 max-w-full overflow-x-hidden">
               {messages.map((message, index) => (
                 <div
                   key={index}
-                  className={cn(
-                    "flex items-start gap-3 max-w-[85%] group",
-                    message.role === 'assistant' ? "mr-auto" : "ml-auto flex-row-reverse"
-                  )}
+                  className="flex items-start gap-3 group chat-message-container mr-auto"
+                  style={{ maxWidth: '60%' }}
                 >
                   <Avatar className={cn(
                     "w-8 h-8",
@@ -251,7 +345,7 @@ export default function LessonChat({ pageId }: LessonChatProps) {
                       {message.role === 'assistant' ? '' : userInitial}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="flex-1 relative group">
+                  <div className="flex-1 relative group message-container">
                     {editingMessageId === message.id ? (
                       <div className="flex flex-col gap-2">
                         <Textarea
@@ -300,14 +394,17 @@ export default function LessonChat({ pageId }: LessonChatProps) {
                           </div>
                         )}
                         <div className={cn(
-                          "rounded-2xl px-4 py-3",
+                          "rounded-2xl px-4 py-3 w-full",
                           message.role === 'assistant' 
                             ? "bg-white shadow-sm rounded-bl-none" 
                             : "bg-[#EECE84] text-white rounded-br-none"
                         )}>
-                          <p className="text-[15px] leading-relaxed whitespace-pre-wrap">
-                            {message.content}
-                          </p>
+                          <div 
+                            className="text-[15px] leading-relaxed break-words overflow-wrap-anywhere"
+                            dangerouslySetInnerHTML={{ 
+                              __html: formatMarkdown(message.content) 
+                            }}
+                          />
                         </div>
                       </>
                     )}
@@ -315,7 +412,7 @@ export default function LessonChat({ pageId }: LessonChatProps) {
                 </div>
               ))}
               {isLoading && (
-                <div className="flex items-start gap-3 max-w-[85%] mr-auto">
+                <div className="flex items-start gap-3 mr-auto chat-message-container" style={{ maxWidth: '60%' }}>
                   <Avatar className="w-8 h-8 bg-white p-1">
                     <Image src="/ai.png" alt="AI" className="w-full h-full object-contain" width={32} height={32} />
                     <AvatarFallback></AvatarFallback>
@@ -363,4 +460,45 @@ export default function LessonChat({ pageId }: LessonChatProps) {
       </div>
     </div>
   );
+}
+
+// Fonction utilitaire pour formater le markdown avancé
+function formatMarkdown(text: string): string {
+  if (!text) return '';
+  
+  let html = text;
+  
+  // Images aviation (détecter les URLs d'assets aviation)
+  html = html.replace(
+    /!\[([^\]]*)\]\((http:\/\/localhost:8000\/api\/aviation-assets\/asset\/[^)]+)\)/g,
+    (match, alt, src) => {
+      const assetId = src.split('/').pop();
+      return `<div class="aviation-thumbnail-container inline-block my-2" data-src="${src}" data-alt="${alt}" data-asset-id="${assetId}"></div>`;
+    }
+  );
+
+  // Images markdown classiques
+  html = html.replace(
+    /!\[([^\]]*)\]\(([^)]+)\)/g,
+    '<img src="$2" alt="$1" class="max-w-full h-auto rounded-lg my-2" onerror="this.src=\'/placeholder-image.png\'" />'
+  );
+
+  // Liens
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-600 hover:text-blue-800 underline" target="_blank" rel="noopener noreferrer">$1</a>');
+
+  // Gras
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>');
+  
+  // Italique
+  html = html.replace(/\*(.*?)\*/g, '<em class="italic">$1</em>');
+
+  // Saut de ligne (convertir \n en <br> seulement si ce n'est pas déjà dans une balise HTML)
+  html = html.replace(/\n(?![^<]*>)/g, '<br>');
+
+  // Nettoyer les <br> en trop
+  html = html.replace(/(<br>\s*){3,}/g, '<br><br>');
+  html = html.replace(/<br>\s*(<\/[^>]+>)/g, '$1');
+  html = html.replace(/(<[^>]+>)\s*<br>/g, '$1');
+
+  return html;
 }

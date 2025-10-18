@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAuth } from '@clerk/nextjs';
+import { useAuth } from '@/lib/mock-clerk';
 import { toast } from 'sonner';
 import {
   AlertDialog,

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Flag, Send, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "@/lib/mock-clerk";
 import { toast } from "sonner";
 import { Slider } from "@/components/ui/slider";
 import { COUNTRIES } from "@/lib/utils";

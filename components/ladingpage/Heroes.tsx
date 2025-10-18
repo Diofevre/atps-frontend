@@ -6,11 +6,16 @@ import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { features, mainFeatures } from '@/lib/marketing_page/constant';
 import { Users } from 'lucide-react';
-import { useUser } from '@clerk/nextjs';
+import { useUser } from '@/lib/mock-clerk';
 
 const Heroes = () => {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const router = useRouter();
+  
+  // Éviter l'erreur d'hydratation en attendant que Clerk soit chargé
+  if (!isLoaded) {
+    return <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800" />;
+  }
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800">

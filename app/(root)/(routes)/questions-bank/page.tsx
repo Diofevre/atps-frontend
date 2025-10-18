@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { AlignLeft } from "lucide-react";
-import { useAuth } from '@clerk/nextjs';
+import { useAuth } from '@/lib/mock-clerk';
 
 const QuestionBank = () => {
   const { getToken } = useAuth();

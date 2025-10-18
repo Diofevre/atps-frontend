@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import { MessageCircle, Info, Eye, BookOpen, Lightbulb } from 'lucide-react';
-import { useAuth, useUser } from '@clerk/nextjs';
+import { useAuth, useUser } from '@/lib/mock-clerk';
 import { useState, useEffect } from 'react';
 import { Loader } from '@/components/ui/loader';
 import ReviewForm from '../../../_components/ReviewForm';

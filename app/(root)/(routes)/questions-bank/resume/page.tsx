@@ -4,7 +4,7 @@ import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Clock, Target, CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import { useAuth, useUser } from '@clerk/nextjs';
+import { useAuth, useUser } from '@/lib/mock-clerk';
 import { Card } from "@/components/ui/card";
 import { useRouter } from 'next/navigation';
 import { Skeleton } from "@/components/ui/skeleton";

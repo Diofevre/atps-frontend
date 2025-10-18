@@ -9,11 +9,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "@/lib/mock-clerk";
 import useSWR from "swr";
 
 interface Topic {
-  id: string;
+  id: number;
   topic_name: string;
 }
 
@@ -44,7 +44,8 @@ const Topics = ({ onSelectionChange, selectedTopic, selectedTopicName }: TopicsP
       throw new Error(`Failed to fetch topics: ${response.statusText}`);
     }
 
-    return response.json();
+    const data = await response.json();
+    return data;
   };
 
   const { data, error, isLoading } = useSWR<TopicsResponse>(
@@ -52,8 +53,9 @@ const Topics = ({ onSelectionChange, selectedTopic, selectedTopicName }: TopicsP
     fetcher
   );
 
+
   const options = data?.topics.map((topic: Topic) => ({
-    value: topic.id,
+    value: topic.id.toString(),
     label: topic.topic_name,
   })) ?? [];
 
