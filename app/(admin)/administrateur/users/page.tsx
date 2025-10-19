@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Trash2, Globe } from 'lucide-react';
 import { toast } from 'sonner';
 import { User } from '@/lib/type';
-import { useAuth } from '@clerk/nextjs';
+import { useAuth } from '@/lib/mock-clerk';
 
 function App() {
   const { getToken } =  useAuth();

@@ -8,7 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useAuth, useUser } from '@clerk/nextjs';
+import { useAuth, useUser } from '@/lib/mock-clerk';
 import Image from 'next/image';
 import AviationThumbnail from '@/components/AviationThumbnail';
 
@@ -339,7 +339,7 @@ export default function LessonChat({ pageId }: LessonChatProps) {
                     {message.role === 'assistant' ? (
                       <Image src="/ai.png" alt="AI" className="w-full h-full object-contain" width={32} height={32} />
                     ) : (
-                      <AvatarImage src={user?.imageUrl} alt={user?.firstName || 'User'} />
+                      <AvatarImage src={user?.imageUrl || undefined} alt={user?.firstName || 'User'} />
                     )}
                     <AvatarFallback className="text-white">
                       {message.role === 'assistant' ? '' : userInitial}

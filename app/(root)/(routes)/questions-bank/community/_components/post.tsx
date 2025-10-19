@@ -2,7 +2,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useAuth, useUser } from '@clerk/nextjs';
+import { useAuth, useUser } from '@/lib/mock-clerk';
 import { ThumbsUp, ThumbsDown, MessageCircle, Share2, X, User, MoreVertical, Edit2, Trash2, ImageIcon, XCircle, Link, Hash, Clock } from 'lucide-react';
 import type { ForumPost, ForumCategory, ForumComment } from '@/lib/forum';
 import { CommentList } from './comment-list';

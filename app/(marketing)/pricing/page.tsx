@@ -4,7 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { subscriptionService } from '@/lib/subscription/service/subscription-service';
-import { useAuth } from '@clerk/nextjs';
+import { useAuth } from '@/lib/mock-clerk';
 import { BookOpen, Plane, Sparkles, X } from 'lucide-react';
 import { features_pricing } from '@/lib/marketing_page/constant';
 

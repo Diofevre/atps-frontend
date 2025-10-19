@@ -6,6 +6,7 @@ import { Calendar, MapPin, School, AlertCircle, BookOpen, Search } from 'lucide-
 import { ExaminingAuthorityCard } from '../questions-bank/_components/ExaminingAuthorityCard';
 import Topics from '../questions-bank/_components/Topics';
 import QuestionSearchDialog from './_components/details-search-modal';
+import { highlightSearchTerms } from '@/lib/search-highlight';
 
 interface Question {
   id: number;
@@ -53,11 +54,19 @@ const SearchPage = () => {
     setError(null);
 
     try {
-      let url = `${process.env.NEXT_PUBLIC_API_URL}/api/tests/search/${encodeURIComponent(searchFilters.keyword)}`;
+      // Validation supplémentaire pour éviter les URLs malformées
+      const keyword = searchFilters.keyword.trim();
+      if (!keyword) {
+        setError('Please enter a search keyword');
+        return;
+      }
+
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/api/tests/search/${encodeURIComponent(keyword)}`;
       url += `/${searchFilters.country === null ? 'null' : encodeURIComponent(searchFilters.country)}`;
       url += `/${searchFilters.topicId === null ? 'null' : encodeURIComponent(searchFilters.topicId)}`;
       url += `/${searchFilters.lastExam === null ? 'null' : searchFilters.lastExam}`; //handle the null to null string
 
+      console.log('🔍 Search URL:', url); // Debug log
       const response = await fetch(url);
       if (!response.ok) throw new Error('Search failed');
 
@@ -85,6 +94,7 @@ const SearchPage = () => {
     setSearchFilters(prev => ({...prev, lastExam: value}))
   }
 
+
   const renderQuestionCard = (question: Question) => {
     const countryEntries = Object.entries(question.countries);
     const totalExams = countryEntries.reduce((acc, [, years]) => {
@@ -92,7 +102,7 @@ const SearchPage = () => {
     }, 0);
 
     return (
-      <QuestionSearchDialog key={question.id} questionId={question.id}>
+      <QuestionSearchDialog key={question.id} questionId={question.id} searchTerm={searchFilters.keyword}>
         <div className="group relative hover:cursor-pointer bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100">
           <div className="absolute inset-0 bg-gradient-to-r from-[#EECE84]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           <div className="relative p-6 space-y-4">
@@ -119,7 +129,7 @@ const SearchPage = () => {
 
             <div className="space-y-4">
               <div
-                dangerouslySetInnerHTML={{ __html: question.question_text }}
+                dangerouslySetInnerHTML={{ __html: highlightSearchTerms(question.question_text, searchFilters.keyword) }}
                 className="prose prose-sm max-w-none text-gray-700"
               />
 

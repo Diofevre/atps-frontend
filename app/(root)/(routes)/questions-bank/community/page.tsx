@@ -6,7 +6,7 @@ import { RightSidebar } from './_components/RightSidebar';
 import type { ForumPost, ForumCategory, ForumHashtag } from '@/lib/forum';
 import { Post } from './_components/post';
 import { CreatePostModal } from './_components/create-post-modal';
-import { useAuth } from '@clerk/nextjs';
+import { useAuth } from '@/lib/mock-clerk';
 import { MessageSquareOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 

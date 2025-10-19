@@ -10,6 +10,9 @@ interface ExamInfoProps {
 
 const ExamInfo = ({ examNumberQuestion, examDuration }: ExamInfoProps) => {
   const formatDuration = (duration: string) => {
+    if (!duration || typeof duration !== 'string') {
+      return 'N/A'
+    }
     const [hours, minutes] = duration.split(':')
     return `${parseInt(hours)}h ${parseInt(minutes)}min`
   }

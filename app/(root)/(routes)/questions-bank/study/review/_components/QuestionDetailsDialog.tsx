@@ -10,6 +10,115 @@ import { Loader } from '@/components/ui/loader';
 import ReviewForm from '../../../_components/ReviewForm';
 import CommentsQuizz from '../../../_components/CommentsQuizz';
 
+// Fonction utilitaire pour formater le markdown (copiée depuis AIChats.tsx)
+function formatMarkdown(text: string): string {
+  if (!text) return '';
+  
+  let html = text;
+  
+  // Tableaux (markdown simple)
+  html = html.replace(
+    /^(\|.*\|)\n(\|[-:\s|]+\|)\n((?:\|.*\|\n?)*)/gm,
+    (match, header, separator, rows) => {
+      const headerCells = header.split('|').slice(1, -1).map((cell: string) => 
+        `<th class="px-3 py-2 text-left font-medium text-gray-900 bg-gray-50 border-b break-words min-w-0 max-w-none">${cell.trim()}</th>`
+      ).join('');
+      
+      const rowLines = rows.trim().split('\n').filter((line: string) => line.trim());
+      const tableRows = rowLines.map((row: string) => {
+        const cells = row.split('|').slice(1, -1).map((cell: string) => {
+          const cellContent = cell.trim();
+          const isLongContent = cellContent.length > 50;
+          const cellClass = isLongContent 
+            ? "px-3 py-2 border-b break-words min-w-0 max-w-none whitespace-normal"
+            : "px-3 py-2 border-b break-words min-w-0";
+          return `<td class="${cellClass}">${cellContent}</td>`;
+        }).join('');
+        return `<tr>${cells}</tr>`;
+      }).join('');
+      
+      return `
+        <div class="overflow-x-auto my-4 max-w-full">
+          <table class="w-full border border-gray-200 rounded-lg break-words" style="table-layout: auto; min-width: 100%;">
+            <thead>
+              <tr>${headerCells}</tr>
+            </thead>
+            <tbody>
+              ${tableRows}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+  );
+
+  // Code blocks (```code```)
+  html = html.replace(
+    /```(\w+)?\n([\s\S]*?)```/g,
+    '<pre class="bg-gray-100 p-3 rounded-lg overflow-x-auto my-3 max-w-full break-words"><code class="text-sm break-words">$2</code></pre>'
+  );
+
+  // Code inline
+  html = html.replace(/`([^`]+)`/g, '<code class="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">$1</code>');
+
+  // Gras
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>');
+  
+  // Italique
+  html = html.replace(/\*(.*?)\*/g, '<em class="italic">$1</em>');
+
+  // Listes numérotées
+  html = html.replace(
+    /^(\d+\.\s.*(?:\n(?!(?:\d+\.|\n)).*)*)/gm,
+    (match) => {
+      const items = match.split('\n').map(line => {
+        const text = line.replace(/^\d+\.\s/, '').trim();
+        return text ? `<li class="mb-1">${text}</li>` : '';
+      }).filter(item => item).join('');
+      
+      return `<ol class="list-decimal list-inside my-3 space-y-1">${items}</ol>`;
+    }
+  );
+
+  // Listes à puces
+  html = html.replace(
+    /^([-\*\+]\s.*(?:\n(?![-\*\+\n]).*)*)/gm,
+    (match) => {
+      const items = match.split('\n').map(line => {
+        const text = line.replace(/^[-\*\+]\s/, '').trim();
+        return text ? `<li class="mb-1">${text}</li>` : '';
+      }).filter(item => item).join('');
+      
+      return `<ul class="list-disc list-inside my-3 space-y-1">${items}</ul>`;
+    }
+  );
+
+  // Titres
+  html = html.replace(/^### (.*$)/gim, '<h3 class="text-lg font-semibold mt-4 mb-2">$1</h3>');
+  html = html.replace(/^## (.*$)/gim, '<h2 class="text-xl font-semibold mt-5 mb-3">$1</h2>');
+  html = html.replace(/^# (.*$)/gim, '<h1 class="text-2xl font-bold mt-6 mb-4">$1</h1>');
+
+  // Citations/blockquotes
+  html = html.replace(/^> (.*$)/gim, '<blockquote class="border-l-4 border-gray-300 pl-4 italic my-3">$1</blockquote>');
+
+  // Images aviation (détecter les URLs d'assets aviation)
+  html = html.replace(
+    /!\[([^\]]*)\]\((http:\/\/localhost:8000\/api\/aviation-assets\/asset\/[^)]+)\)/g,
+    (match, alt, src) => {
+      const assetId = src.split('/').pop();
+      return `<div class="aviation-thumbnail-container inline-block my-2" data-src="${src}" data-alt="${alt}" data-asset-id="${assetId}"></div>`;
+    }
+  );
+
+  // Liens
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-600 hover:text-blue-800 underline" target="_blank" rel="noopener noreferrer">$1</a>');
+
+  // Retours à la ligne
+  html = html.replace(/\n/g, '<br>');
+
+  return html;
+}
+
 interface QuestionDetails {
   question_text: string;
   answer: string;
@@ -166,15 +275,17 @@ export default function QuestionDetailsDialog({
 
 function OverviewTab({ details }: { details: QuestionDetails }) {
   const countryList = Object.keys(details.countries);
+  const formattedQuestion = formatMarkdown(details.question_text);
 
   return (
     <Card className="p-6 max-h-[calc(80vh-8rem)] overflow-y-auto">
       <div className="mb-8">
         <div className="flex items-start gap-4">
           <div className="flex-1">
-            <h3 className="text-xl font-semibold leading-relaxed text-gray-900 dark:text-gray-100">
-              {details.question_text}
-            </h3>
+            <div 
+              className="text-xl font-semibold leading-relaxed text-gray-900 dark:text-gray-100 prose prose-lg max-w-none"
+              dangerouslySetInnerHTML={{ __html: formattedQuestion }}
+            />
             <div className="mt-2 space-y-2">
               {countryList.length > 0 ? (
                 <div className="flex flex-wrap gap-2 max-h-24 overflow-y-auto">
@@ -236,7 +347,10 @@ function OverviewTab({ details }: { details: QuestionDetails }) {
                   }`}>
                     {key}
                   </div>
-                  <span className="text-gray-900 dark:text-gray-100">{value}</span>
+                  <span 
+                    className="text-gray-900 dark:text-gray-100 prose max-w-none"
+                    dangerouslySetInnerHTML={{ __html: formatMarkdown(value) }}
+                  />
                 </div>
 
                 {(isUserAnswer || isCorrectAnswer) && (
@@ -265,6 +379,8 @@ function OverviewTab({ details }: { details: QuestionDetails }) {
 }
 
 function ExplanationTab({ explanation }: { explanation: string }) {
+  const formattedExplanation = formatMarkdown(explanation);
+
   return (
     <Card className="p-6 max-h-[calc(80vh-8rem)] overflow-hidden flex flex-col">
       <div className="space-y-6 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent">
@@ -280,9 +396,10 @@ function ExplanationTab({ explanation }: { explanation: string }) {
         <div className="relative">
           <div className="absolute top-0 left-4 w-px h-full bg-gradient-to-b from-blue-500/20 to-transparent" />
           <div className="pl-8 space-y-4">
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed break-words whitespace-pre-wrap">
-              {explanation}
-            </p>
+            <div 
+              className="text-gray-700 dark:text-gray-300 leading-relaxed break-words prose prose-lg max-w-none"
+              dangerouslySetInnerHTML={{ __html: formattedExplanation }}
+            />
 
             <div className="mt-6 pt-6 border-t dark:border-gray-800">
               <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">

@@ -39,8 +39,6 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
   const animationFrameRef = useRef<number | null>(null);
   const pendingRotationRef = useRef<number | null>(null);
   
-  // Pas besoin d'animation frame pour le déplacement - mise à jour immédiate
-  
   const svgRef = useRef<SVGSVGElement>(null);
 
   // Charger les SVG depuis le dossier public
@@ -225,13 +223,6 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
     });
   };
 
-  // Fonction de déplacement IMMÉDIAT et PRÉCIS du FlyComputer
-  const updateFlyComputerPosition = (newPosition: {x: number, y: number}) => {
-    // Mise à jour IMMÉDIATE pour une fluidité parfaite
-    setFlyComputerPosition(newPosition);
-    console.log('🎯 Position FlyComputer immédiate:', newPosition);
-  };
-
   // Fonction de rotation SIMPLE et STABLE (Face arrière)
   const updateBackDiscRotation = (newRotation: number) => {
     // Rotation simple : garder la valeur telle quelle
@@ -367,25 +358,14 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (isDraggingFlyComputer) {
-      // DÉPLACEMENT DIRECT ET PRÉCIS - suit parfaitement le curseur
+      // Déplacer tout le flycomputer
       const deltaX = e.clientX - dragStartFlyComputer.x;
       const deltaY = e.clientY - dragStartFlyComputer.y;
-      
-      // Mise à jour IMMÉDIATE et DIRECTE de la position
       setFlyComputerPosition(prev => ({
         x: prev.x + deltaX,
         y: prev.y + deltaY
       }));
-      
-      // Mise à jour IMMÉDIATE du point de référence
       setDragStartFlyComputer({ x: e.clientX, y: e.clientY });
-      
-      console.log('🎯 Déplacement FlyComputer DIRECT:', {
-        deltaX: deltaX.toFixed(1),
-        deltaY: deltaY.toFixed(1),
-        mousePos: { x: e.clientX, y: e.clientY },
-        dragStart: dragStartFlyComputer
-      });
       
     } else if (isPanning && zoomLevel > 1) {
       // Navigation lors du zoom
@@ -518,17 +498,13 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
   useEffect(() => {
     const handleGlobalMouseMove = (e: MouseEvent) => {
       if (isDraggingFlyComputer) {
-        // DÉPLACEMENT DIRECT ET PRÉCIS - suit parfaitement le curseur
+        // Déplacer tout le flycomputer
         const deltaX = e.clientX - dragStartFlyComputer.x;
         const deltaY = e.clientY - dragStartFlyComputer.y;
-        
-        // Mise à jour IMMÉDIATE et DIRECTE de la position
         setFlyComputerPosition(prev => ({
           x: prev.x + deltaX,
           y: prev.y + deltaY
         }));
-        
-        // Mise à jour IMMÉDIATE du point de référence
         setDragStartFlyComputer({ x: e.clientX, y: e.clientY });
         
       } else if (isDraggingCursor) {
@@ -601,10 +577,6 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
       if (isDraggingBackDisc) {
         setBackCumulativeAngle(backDiscRotation);
       }
-      if (isDraggingFlyComputer) {
-        // Pas de nettoyage nécessaire - mise à jour immédiate
-        console.log('🎯 Fin déplacement FlyComputer');
-      }
       setIsDraggingCursor(false);
       setIsDraggingDisc(false);
       setIsDraggingBackDisc(false);
@@ -624,7 +596,6 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
         cancelAnimationFrame(animationFrameRef.current);
         animationFrameRef.current = null;
       }
-      // Pas de nettoyage d'animation frame pour le déplacement
     };
   }, [isDraggingCursor, isDraggingDisc, isDraggingBackDisc, isDraggingFlyComputer, dragStart, dragStartFlyComputer, initialCursorPosition, initialAngle, cumulativeAngle, rotationCenter, backInitialAngle, backCumulativeAngle, backRotationCenter]);
 
@@ -636,18 +607,8 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
       <div 
         className="absolute w-2/3 h-full"
         style={{ 
-          transform: `translate3d(${flyComputerPosition.x}px, ${flyComputerPosition.y}px, 0)`,
-          cursor: isDraggingFlyComputer ? 'grabbing' : 'grab',
-          // Optimisations CSS pour la fluidité IMMÉDIATE
-          willChange: 'transform',
-          transition: 'none', // AUCUNE transition pour une fluidité parfaite
-          // Accélération GPU pour les performances
-          backfaceVisibility: 'hidden',
-          transformStyle: 'preserve-3d',
-          // Forcer l'accélération matérielle
-          transformOrigin: 'center center',
-          // Optimisations supplémentaires
-          contain: 'layout style paint'
+          transform: `translate(${flyComputerPosition.x}px, ${flyComputerPosition.y}px)`,
+          cursor: isDraggingFlyComputer ? 'grabbing' : 'grab'
         }}
         onMouseDown={(e) => handleMouseDown(e, 'flycomputer')}
       >

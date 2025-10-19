@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { Search, PlusCircle, Heart, Tag, X, MessageCircle, Share2, BookmarkPlus, Reply, Send, User } from 'lucide-react';
 import { useCategories, usePosts, usePopularHashtags, usePostComments, type Post, type Comment } from '@/lib/api';
-import { useClerk } from '@clerk/nextjs';
+import { useClerk } from '@/lib/mock-clerk';
 
 function CommentComponent({ comment, onReply }: { comment: Comment; onReply: (parentId: number) => void }) {
   const { user } = useClerk();

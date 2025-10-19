@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { Settings, Mail, MapPin, Globe, Calendar, X, Save, AlertTriangle, Crown, Search, Loader2 } from 'lucide-react';
-import { useAuth, useClerk, UserProfile } from '@clerk/nextjs';
+import { useAuth, useClerk, UserProfile } from '@/lib/mock-clerk';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -12,7 +12,7 @@ import { cn, COUNTRIES_ACCOUNT, LANGUAGES, Option } from "@/lib/utils";
 import useSWR from 'swr';
 
 // Types
-interface UserProfile {
+interface UserProfileData {
   id: string;
   clerkId: string;
   email: string;
@@ -211,7 +211,7 @@ const Page = () => {
     return response.json();
   };
 
-  const { data: profile, error: fetchError, mutate } = useSWR<UserProfile>(
+  const { data: profile, error: fetchError, mutate } = useSWR<UserProfileData>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/users/me`,
     fetcher,
     {

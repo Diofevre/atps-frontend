@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Play, Clock, User, ExternalLink, Film, Search } from 'lucide-react';
-import { useAuth } from '@clerk/nextjs';
+import { useAuth } from '@/lib/mock-clerk';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';

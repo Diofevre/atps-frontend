@@ -3,7 +3,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { User, ArrowLeft, MessageSquare, ThumbsUp } from 'lucide-react';
-import { useClerk, useAuth } from '@clerk/nextjs';
+import { useClerk, useAuth } from '@/lib/mock-clerk';
 import type { ForumPost, ForumCategory } from '@/lib/forum';
 import { Post } from '../_components/post';
 import { useRouter } from 'next/navigation';
@@ -193,9 +193,9 @@ const UserProfile = () => {
             )}
             <div className="flex-1">
               <h1 className="text-lg font-semibold text-gray-100">
-                {user?.fullName || user?.username}
+                 {user?.firstName} {user?.lastName}
               </h1>
-              <p className="text-sm text-gray-400">@{user?.username}</p>
+              <p className="text-sm text-gray-400">@{user?.firstName?.toLowerCase()}</p>
               <div className="mt-3 flex items-center gap-4">
                 <div className="flex items-center gap-1.5">
                   <MessageSquare className="w-4 h-4 text-[#EECE84]" />

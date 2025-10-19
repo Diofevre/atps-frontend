@@ -5,10 +5,11 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import { MessageCircle, Info, Eye, BookOpen, Lightbulb } from 'lucide-react';
-import { useAuth, useUser } from '@clerk/nextjs';
+import { useAuth, useUser } from '@/lib/mock-clerk';
 import { Loader } from '@/components/ui/loader';
 import ReviewForm from '../../questions-bank/_components/ReviewForm';
 import CommentsQuizz from '../../questions-bank/_components/CommentsQuizz';
+import { highlightSearchTerms } from '@/lib/search-highlight';
 
 interface QuestionDetails {
   question_text: string;
@@ -24,12 +25,14 @@ interface QuestionDetailsDialogProps {
   questionId: number;
   children: React.ReactNode;
   onClose?: () => void;
+  searchTerm?: string;
 }
 
 export default function QuestionSearchDialog({
   questionId,
   children,
-  onClose
+  onClose,
+  searchTerm = ''
 }: QuestionDetailsDialogProps) {
   const { getToken } = useAuth();
   const { user } = useUser();
@@ -37,6 +40,7 @@ export default function QuestionSearchDialog({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+
 
   const fetchQuestionDetails = useCallback(async () => {
     if (!open || !questionId) return;
@@ -129,7 +133,7 @@ export default function QuestionSearchDialog({
               </TabsContent>
 
               <TabsContent value="explanation" className="h-full">
-                <ExplanationTab explanation={details.explanation} />
+                <ExplanationTab explanation={details.explanation} searchTerm={searchTerm} />
               </TabsContent>
 
               <TabsContent value="comments" className="h-full">
@@ -172,9 +176,10 @@ function OverviewTab({ details }: { details: QuestionDetails }) {
       <div className="mb-8">
         <div className="flex items-start gap-4">
           <div className="flex-1">
-            <h3 className="text-xl font-semibold leading-relaxed text-gray-900 dark:text-gray-100">
-              {details.question_text}
-            </h3>
+            <h3 
+              className="text-xl font-semibold leading-relaxed text-gray-900 dark:text-gray-100"
+              dangerouslySetInnerHTML={{ __html: highlightSearchTerms(details.question_text, searchTerm) }}
+            />
             <div className="mt-2 space-y-2">
               {countryList.length > 0 ? (
                 <div className="flex flex-wrap gap-2 max-h-24 overflow-y-auto">
@@ -236,7 +241,10 @@ function OverviewTab({ details }: { details: QuestionDetails }) {
                   }`}>
                     {key}
                   </div>
-                  <span className="text-gray-900 dark:text-gray-100">{value}</span>
+                  <span 
+                    className="text-gray-900 dark:text-gray-100"
+                    dangerouslySetInnerHTML={{ __html: highlightSearchTerms(value, searchTerm) }}
+                  />
                 </div>
 
                 {(isUserAnswer || isCorrectAnswer) && (
@@ -264,7 +272,7 @@ function OverviewTab({ details }: { details: QuestionDetails }) {
   );
 }
 
-function ExplanationTab({ explanation }: { explanation: string }) {
+function ExplanationTab({ explanation, searchTerm = '' }: { explanation: string; searchTerm?: string }) {
   return (
     <Card className="p-6 max-h-[calc(80vh-8rem)] overflow-hidden flex flex-col">
       <div className="space-y-6 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent">
@@ -280,9 +288,10 @@ function ExplanationTab({ explanation }: { explanation: string }) {
         <div className="relative">
           <div className="absolute top-0 left-4 w-px h-full bg-gradient-to-b from-blue-500/20 to-transparent" />
           <div className="pl-8 space-y-4">
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed break-words whitespace-pre-wrap">
-              {explanation}
-            </p>
+            <p 
+              className="text-gray-700 dark:text-gray-300 leading-relaxed break-words whitespace-pre-wrap"
+              dangerouslySetInnerHTML={{ __html: highlightSearchTerms(explanation, searchTerm) }}
+            />
 
             <div className="mt-6 pt-6 border-t dark:border-gray-800">
               <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">

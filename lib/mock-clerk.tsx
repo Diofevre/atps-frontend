@@ -62,6 +62,8 @@ export function useAuth() {
   const context = useContext(MockClerkContext);
   return {
     isSignedIn: context.isSignedIn,
+    user: context.user,
+    userId: context.user?.id,
     getToken: context.getToken,
     signOut: context.signOut,
   };
@@ -70,6 +72,7 @@ export function useAuth() {
 export function useClerk() {
   const context = useContext(MockClerkContext);
   return {
+    user: context.user,
     signOut: context.signOut,
     openSignIn: () => {},
     openSignUp: () => {},
@@ -100,6 +103,28 @@ export function UserButton({ ...props }: any) {
         TU
       </div>
       <span className="text-sm">Test User</span>
+    </div>
+  );
+}
+
+export function UserProfile({ ...props }: any) {
+  return (
+    <div className="p-6">
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">User Profile</h3>
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Email</label>
+          <p className="mt-1 text-sm text-gray-900">test@atps.com</p>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Name</label>
+          <p className="mt-1 text-sm text-gray-900">Test User</p>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Member since</label>
+          <p className="mt-1 text-sm text-gray-900">{new Date().toLocaleDateString()}</p>
+        </div>
+      </div>
     </div>
   );
 }

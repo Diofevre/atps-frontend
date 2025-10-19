@@ -62,7 +62,7 @@ const QuizzComponents = () => {
     const duration = urlParams.get('duration');
     let initialTime = 3600; // Default duration
 
-    if (duration) {
+    if (duration && typeof duration === 'string') {
       const [hours, minutes, seconds] = duration.split(':').map(Number);
       initialTime = (hours * 3600) + (minutes * 60) + (seconds || 0);
     }
@@ -229,10 +229,9 @@ const QuizzComponents = () => {
         const duration = searchParams.get('duration');
         let initialTime = 3600; // Default duration
 
-        if (duration) {
+        if (duration && typeof duration === 'string') {
           const [hours, minutes, seconds] = duration.split(':').map(Number);
           initialTime = (hours * 3600) + (minutes * 60) + (seconds || 0);
-
         }
 
         // set time remaining if available in local storage

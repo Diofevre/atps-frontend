@@ -9,7 +9,7 @@ import Link from 'next/link';
 import type { ContentItem, LessonPage, ImageItem } from '@/lib/type';
 import { useSearchParams } from 'next/navigation';
 import LessonChat from '../../../_components/LessonChat';
-import { useAuth } from '@clerk/nextjs';
+import { useAuth } from '@/lib/mock-clerk';
 
 export default function LessonViewerPage({
 	params,

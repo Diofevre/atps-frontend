@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { Hash, Users, BookMarked, MessageCircle, User } from 'lucide-react';
-import { useClerk } from '@clerk/nextjs';
+import { useClerk } from '@/lib/mock-clerk';
 import Link from 'next/link';
 
 interface ForumHashtag {
@@ -44,7 +44,7 @@ export function RightSidebar({ myPosts, pinnedGroups, popularTags }: RightSideba
             </div>
             <div className="text-left">
               <h2 className="text-sm font-medium text-gray-100">
-                @{user?.username}
+                 @{user?.firstName} {user?.lastName}
               </h2>
               <p className="text-xs text-gray-400">View your profile</p>
             </div>

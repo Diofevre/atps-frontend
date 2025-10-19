@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth, useClerk } from '@clerk/nextjs';
+import { useAuth, useClerk } from '@/lib/mock-clerk';
 import { Edit2, Trash2, MessageCircle } from 'lucide-react';
 import { ForumComment } from '@/lib/forum';
 import { CommentForm } from './comment-for';
@@ -64,7 +64,7 @@ export function Comment({ comment, onDelete, onUpdate, onReply }: CommentProps) 
 						<>
 							<div className="mb-1">
 								<span className="font-semibold text-gray-900">
-									@ {user?.username}
+									@ {user?.firstName} {user?.lastName}
 								</span>
 							</div>
 							<p className="text-gray-700 whitespace-pre-wrap break-words">
