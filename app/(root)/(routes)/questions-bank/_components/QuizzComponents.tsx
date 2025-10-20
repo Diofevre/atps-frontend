@@ -569,9 +569,40 @@ const QuizzComponents = () => {
     ?.replace(/\n/g, "<br />")
     ?.replace(/\t/g, " ") || "";
 
-  const formattedExplanation = currentQuestion?.explanation
-    ?.replace(/\n/g, "<br />")
-    ?.replace(/\t/g, " ") || "";
+  // Function to clean and format explanation HTML - conservative approach
+  const cleanExplanationHTML = (explanation: string) => {
+    if (!explanation) return "";
+    
+    // Conservative cleaning - only keep essential HTML tags
+    let cleaned = explanation
+      // Fix incomplete strong tags
+      .replace(/<strong>([^<]*)$/g, '<strong>$1</strong>')
+      .replace(/^([^<]*)<\/strong>/g, '<strong>$1</strong>')
+      // Fix incomplete underline tags
+      .replace(/<u>([^<]*)$/g, '<u>$1</u>')
+      .replace(/^([^<]*)<\/u>/g, '<u>$1</u>')
+      // Remove excessive line breaks (more than 2 consecutive)
+      .replace(/\n{3,}/g, '\n\n')
+      // Clean up extra spaces around line breaks
+      .replace(/[ \t]+\n/g, '\n')
+      .replace(/\n[ \t]+/g, '\n')
+      // Remove empty paragraphs
+      .replace(/<p>\s*<\/p>/g, '')
+      // Clean up excessive whitespace (but keep single spaces)
+      .replace(/[ \t]{2,}/g, ' ')
+      .trim();
+    
+    // Convert line breaks to HTML breaks, but preserve existing HTML structure
+    cleaned = cleaned
+      .replace(/\n/g, '<br />')
+      .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+    
+    return cleaned;
+  };
+
+  const formattedExplanation = currentQuestion?.explanation 
+    ? cleanExplanationHTML(currentQuestion.explanation)
+    : "";
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -660,47 +691,45 @@ const QuizzComponents = () => {
 
                       {/* Countries */}
                       <div className="flex flex-wrap gap-2 mb-6 max-w-[620px] mx-auto">
-                        {currentQuestion.countries && Object.entries(currentQuestion.countries).map(([country, years]) => (
-                          <div key={country} className="group relative">
-                            <div className="px-4 py-2 rounded-full bg-[#EECE84]/50 text-sm font-medium text-black border border-[#EECE84]/40 hover:bg-[#EECE84]/20 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md">
-                              <span className="flex items-center gap-2 text-xs">
-                                {country}
-                                {/* <span className="text-xs text-gray-500">
-                                  ({Object.keys(years).length} sessions)
-                                </span> */}
-                              </span>
-                            </div>
-                            <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block z-50">
-                              <div className="bg-white rounded-lg shadow-xl p-4 text-sm min-w-[250px] border border-gray-200/50">
-                                <div className="font-medium text-gray-900 mb-2 pb-2 border-b">
-                                  {country} Exam Sessions
+                        {currentQuestion.countries && (
+                          Array.isArray(currentQuestion.countries) ? (
+                            // Handle array format: ["Spain", "Austro Control", ...]
+                            currentQuestion.countries.map((country, index) => (
+                              <div key={index} className="group relative">
+                                <div className="px-4 py-2 rounded-full bg-[#EECE84]/50 text-sm font-medium text-black border border-[#EECE84]/40 hover:bg-[#EECE84]/20 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md">
+                                  <span className="flex items-center gap-2 text-xs">
+                                    {country}
+                                  </span>
                                 </div>
-                                {!years ? (
-                                  <div className="text-gray-500 text-sm">No exam data available</div>
-                                ) : Array.isArray(years) ? (
-                                  <div className="mt-1 text-gray-600 flex flex-wrap gap-1">
-                                    {years.map((date, index) => (
-                                      <span
-                                        key={index}
-                                        className="px-2 py-1 rounded-md bg-gray-50 text-xs"
-                                      >
-                                        {date}
-                                      </span>
-                                    ))}
+                                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block z-50">
+                                  <div className="bg-white rounded-lg shadow-xl p-4 text-sm min-w-[250px] border border-gray-200/50">
+                                    <div className="font-medium text-gray-900 mb-2 pb-2 border-b">
+                                      {country} Exam Sessions
+                                    </div>
+                                    <div className="text-gray-500 text-sm">Available in this country</div>
                                   </div>
-                                ) : (
-                                  Object.entries(years).map(([year, dates]) => (
-                                    <div key={year} className="mb-2">
-                                      <span className="font-medium text-[#EECE84]">{year}:</span>
+                                </div>
+                              </div>
+                            ))
+                          ) : (
+                            // Handle object format: {country: {year: [dates]}}
+                            Object.entries(currentQuestion.countries).map(([country, years]) => (
+                              <div key={country} className="group relative">
+                                <div className="px-4 py-2 rounded-full bg-[#EECE84]/50 text-sm font-medium text-black border border-[#EECE84]/40 hover:bg-[#EECE84]/20 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md">
+                                  <span className="flex items-center gap-2 text-xs">
+                                    {country}
+                                  </span>
+                                </div>
+                                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block z-50">
+                                  <div className="bg-white rounded-lg shadow-xl p-4 text-sm min-w-[250px] border border-gray-200/50">
+                                    <div className="font-medium text-gray-900 mb-2 pb-2 border-b">
+                                      {country} Exam Sessions
+                                    </div>
+                                    {!years ? (
+                                      <div className="text-gray-500 text-sm">No exam data available</div>
+                                    ) : Array.isArray(years) ? (
                                       <div className="mt-1 text-gray-600 flex flex-wrap gap-1">
-                                        {Array.isArray(dates) ? dates.map((date, index) => (
-                                          <span
-                                            key={index}
-                                            className="px-2 py-1 rounded-md bg-gray-50 text-xs"
-                                          >
-                                            {date}
-                                          </span>
-                                        )) : Object.values(dates).flat().map((date: any, index: number) => (
+                                        {years.map((date, index) => (
                                           <span
                                             key={index}
                                             className="px-2 py-1 rounded-md bg-gray-50 text-xs"
@@ -709,13 +738,36 @@ const QuizzComponents = () => {
                                           </span>
                                         ))}
                                       </div>
-                                    </div>
-                                  ))
-                                )}
+                                    ) : (
+                                      Object.entries(years).map(([year, dates]) => (
+                                        <div key={year} className="mb-2">
+                                          <span className="font-medium text-[#EECE84]">{year}:</span>
+                                          <div className="mt-1 text-gray-600 flex flex-wrap gap-1">
+                                            {Array.isArray(dates) ? dates.map((date, index) => (
+                                              <span
+                                                key={index}
+                                                className="px-2 py-1 rounded-md bg-gray-50 text-xs"
+                                              >
+                                                {date}
+                                              </span>
+                                            )) : Object.values(dates).flat().map((date: any, index: number) => (
+                                              <span
+                                                key={index}
+                                                className="px-2 py-1 rounded-md bg-gray-50 text-xs"
+                                              >
+                                                {date}
+                                              </span>
+                                            ))}
+                                          </div>
+                                        </div>
+                                      ))
+                                    )}
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                          </div>
-                        ))}
+                            ))
+                          )
+                        )}
                       </div>
 
                       <ReviewForm

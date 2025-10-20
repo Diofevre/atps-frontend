@@ -192,8 +192,8 @@ export default function QuestionDetailsDialog({
     }
   };
 
-  const getCountryList = (countries: Record<string, Record<string, string[]>>) => {
-    return Object.keys(countries);
+  const getCountryList = (countries: Record<string, Record<string, string[]>> | string[]) => {
+    return Array.isArray(countries) ? countries : Object.keys(countries);
   };
 
   return (

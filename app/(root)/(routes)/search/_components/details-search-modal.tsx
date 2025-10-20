@@ -88,8 +88,8 @@ export default function QuestionSearchDialog({
     }
   };
 
-  const getCountryList = (countries: Record<string, Record<string, string[]>>) => {
-    return Object.keys(countries);
+  const getCountryList = (countries: Record<string, Record<string, string[]>> | string[]) => {
+    return Array.isArray(countries) ? countries : Object.keys(countries);
   };
 
   return (
@@ -275,6 +275,40 @@ function OverviewTab({ details, searchQuery }: { details: QuestionDetails; searc
 
 function ExplanationTab({ explanation, searchTerm = '' }: { explanation: string; searchTerm?: string }) {
   const searchQuery = searchTerm || '';
+  
+  // Function to clean and format explanation HTML - conservative approach
+  const cleanExplanationHTML = (explanation: string) => {
+    if (!explanation) return "";
+    
+    // Conservative cleaning - only keep essential HTML tags
+    let cleaned = explanation
+      // Fix incomplete strong tags
+      .replace(/<strong>([^<]*)$/g, '<strong>$1</strong>')
+      .replace(/^([^<]*)<\/strong>/g, '<strong>$1</strong>')
+      // Fix incomplete underline tags
+      .replace(/<u>([^<]*)$/g, '<u>$1</u>')
+      .replace(/^([^<]*)<\/u>/g, '<u>$1</u>')
+      // Remove excessive line breaks (more than 2 consecutive)
+      .replace(/\n{3,}/g, '\n\n')
+      // Clean up extra spaces around line breaks
+      .replace(/[ \t]+\n/g, '\n')
+      .replace(/\n[ \t]+/g, '\n')
+      // Remove empty paragraphs
+      .replace(/<p>\s*<\/p>/g, '')
+      // Clean up excessive whitespace (but keep single spaces)
+      .replace(/[ \t]{2,}/g, ' ')
+      .trim();
+    
+    // Convert line breaks to HTML breaks, but preserve existing HTML structure
+    cleaned = cleaned
+      .replace(/\n/g, '<br />')
+      .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+    
+    return cleaned;
+  };
+  
+  const cleanedExplanation = cleanExplanationHTML(explanation);
+  
   return (
     <Card className="p-6 max-h-[calc(80vh-8rem)] overflow-hidden flex flex-col">
       <div className="space-y-6 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent">
@@ -292,7 +326,7 @@ function ExplanationTab({ explanation, searchTerm = '' }: { explanation: string;
           <div className="pl-8 space-y-4">
             <p 
               className="text-gray-700 dark:text-gray-300 leading-relaxed break-words whitespace-pre-wrap"
-              dangerouslySetInnerHTML={{ __html: highlightSearchTerms(explanation, searchQuery) }}
+              dangerouslySetInnerHTML={{ __html: highlightSearchTerms(cleanedExplanation, searchQuery) }}
             />
 
             <div className="mt-6 pt-6 border-t dark:border-gray-800">

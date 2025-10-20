@@ -96,9 +96,13 @@ const SearchPage = () => {
 
 
   const renderQuestionCard = (question: Question) => {
-    const countryEntries = Object.entries(question.countries);
+    // Handle both array and object formats for countries
+    const countryEntries = Array.isArray(question.countries) 
+      ? question.countries.map(country => [country, {}])
+      : Object.entries(question.countries);
+    
     const totalExams = countryEntries.reduce((acc, [, years]) => {
-      return acc + Object.values(years).flat().length;
+      return acc + (Object.values(years).flat().length || 1);
     }, 0);
 
     return (
