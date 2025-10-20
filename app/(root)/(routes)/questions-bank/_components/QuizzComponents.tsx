@@ -569,18 +569,28 @@ const QuizzComponents = () => {
     ?.replace(/\n/g, "<br />")
     ?.replace(/\t/g, " ") || "";
 
-  // Function to clean and format explanation HTML - conservative approach
+  // Function to clean and format explanation HTML - enhanced for math
   const cleanExplanationHTML = (explanation: string) => {
     if (!explanation) return "";
     
-    // Conservative cleaning - only keep essential HTML tags
+    // Enhanced cleaning with math formatting
     let cleaned = explanation
+      // Fix math formatting - convert m\n2\n to m², etc.
+      .replace(/m\\n2\\n/g, 'm²')
+      .replace(/m\\n3\\n/g, 'm³')
+      .replace(/kg\/m\\n2\\n/g, 'kg/m²')
+      .replace(/kg\/m\\n3\\n/g, 'kg/m³')
+      .replace(/\\n2\\n/g, '²')
+      .replace(/\\n3\\n/g, '³')
       // Fix incomplete strong tags
       .replace(/<strong>([^<]*)$/g, '<strong>$1</strong>')
       .replace(/^([^<]*)<\/strong>/g, '<strong>$1</strong>')
       // Fix incomplete underline tags
       .replace(/<u>([^<]*)$/g, '<u>$1</u>')
       .replace(/^([^<]*)<\/u>/g, '<u>$1</u>')
+      // Fix math expressions with line breaks
+      .replace(/(\d+)\\n\\n(kg\/m²?)/g, '$1 $2')
+      .replace(/(\d+\.\d+)\\n\\n(kg\/m²?)/g, '$1 $2')
       // Remove excessive line breaks (more than 2 consecutive)
       .replace(/\n{3,}/g, '\n\n')
       // Clean up extra spaces around line breaks
@@ -660,7 +670,7 @@ const QuizzComponents = () => {
                 )}
 
                 {selectedContent === 1 && currentQuestion && (
-                  <div className="lg:pr-[300px]">
+                  <div className="lg:pr-[200px] max-w-4xl">
                     <Explanation 
                       explanation={formattedExplanation} 
                       questionId={currentQuestion.id}
