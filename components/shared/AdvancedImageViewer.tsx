@@ -252,7 +252,7 @@ const AdvancedImageViewer: React.FC<AdvancedImageViewerProps> = ({
 
     if (isDrawing && currentEllipse) {
       const coords = getImageCoordinates(e);
-      setCurrentEllipse(prev => prev ? {
+      setCurrentEllipse(prev => prev && prev.centerX !== undefined && prev.centerY !== undefined ? {
         ...prev,
         radiusX: Math.abs(coords.x - prev.centerX),
         radiusY: Math.abs(coords.y - prev.centerY)

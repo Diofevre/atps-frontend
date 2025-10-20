@@ -15,9 +15,8 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
   const [isDraggingDisc, setIsDraggingDisc] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [initialCursorPosition, setInitialCursorPosition] = useState(0);
-  const [rotationCenter, setRotationCenter] = useState({ cx: 0, cy: 0 });
-  const [initialAngle, setInitialAngle] = useState(0);
-  const [cumulativeAngle, setCumulativeAngle] = useState(0);
+  const [previousAngle, setPreviousAngle] = useState(0);
+  const [cumulativeRotation, setCumulativeRotation] = useState(0);
   const [hoveredElement, setHoveredElement] = useState<'none' | 'cursor' | 'disc'>('none');
   const [isDraggingFlyComputer, setIsDraggingFlyComputer] = useState(false);
   const [flyComputerPosition, setFlyComputerPosition] = useState({ x: 0, y: 0 });
@@ -78,43 +77,8 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
     loadSvgs();
   }, []);
 
-  // CENTRE DE ROTATION DYNAMIQUE - Se recalcule quand le SVG change
-  const calculateRotationCenter = useCallback(() => {
-    if (!svgRef.current) return { cx: 330, cy: 500 };
-    
-    const svg = svgRef.current;
-    const bbox = svg.getBBox();
-    
-    // Calculer le centre du SVG
-    const center = {
-      cx: bbox.x + bbox.width / 2,
-      cy: bbox.y + bbox.height / 2
-    };
-    
-    console.log('🎯 Centre de rotation DYNAMIQUE calculé (Face avant):', center);
-    return center;
-  }, []);
-
-  // Recalculer le centre de rotation quand le SVG est chargé ou redimensionné
-  useEffect(() => {
-    if (baseSvg && svgRef.current) {
-      const newCenter = calculateRotationCenter();
-      setRotationCenter(newCenter);
-    }
-  }, [baseSvg, calculateRotationCenter]);
-
-  // Recalculer le centre de rotation quand le FlyComputer est déplacé
-  useEffect(() => {
-    if (baseSvg && svgRef.current && flyComputerPosition.x !== 0 && flyComputerPosition.y !== 0) {
-      // Petit délai pour laisser le DOM se mettre à jour
-      const timer = setTimeout(() => {
-        const newCenter = calculateRotationCenter();
-        setRotationCenter(newCenter);
-      }, 50);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [flyComputerPosition, baseSvg, calculateRotationCenter]);
+  // CENTRE DE ROTATION FIXE ET SIMPLE
+  const rotationCenter = { cx: 330, cy: 500 };
 
   // MONITOR EN TEMPS RÉEL POUR LE DIAGNOSTIC
   useEffect(() => {
@@ -202,27 +166,6 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
     return result;
   }, [flyComputerPosition]);
 
-  // Fonction de rotation FLUIDE et PRÉCISE (Face avant)
-  const updateDiscRotation = (newRotation: number) => {
-    // Stocker la rotation en attente
-    pendingRotationRef.current = newRotation;
-    
-    // Annuler l'animation frame précédente si elle existe
-    if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current);
-    }
-    
-    // Programmer la mise à jour pour le prochain frame
-    animationFrameRef.current = requestAnimationFrame(() => {
-      if (pendingRotationRef.current !== null) {
-        setDiscRotation(pendingRotationRef.current);
-        console.log('🔄 Rotation fluide (Face avant):', pendingRotationRef.current.toFixed(1), '°');
-        pendingRotationRef.current = null;
-      }
-      animationFrameRef.current = null;
-    });
-  };
-
   // Fonction de rotation SIMPLE et STABLE (Face arrière)
   const updateBackDiscRotation = (newRotation: number) => {
     // Rotation simple : garder la valeur telle quelle
@@ -240,20 +183,29 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
     } else {
       e.stopPropagation(); // Empêcher la propagation
       
-      // CORRECTION : Toujours mettre à jour dragStart pour le mouvement vertical
+      // Toujours mettre à jour dragStart
       setDragStart({ x: e.clientX, y: e.clientY });
       
       if (type === 'disc') {
-        // Convertir les coordonnées en coordonnées SVG
-        const svgPoint = clientToSVG(e.clientX, e.clientY);
+        // ROTATION CIRCULAIRE CONTINUE : calculer l'angle initial de la souris
+        if (!svgRef.current) return;
         
-        // Calculer l'angle de départ par rapport au centre FIXE et STABLE
-        const angle = Math.atan2(svgPoint.y - rotationCenter.cy, svgPoint.x - rotationCenter.cx);
-        setInitialAngle(angle);
-        setCumulativeAngle(discRotation);
+        const svg = svgRef.current;
+        const rect = svg.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
         
+        // Calculer l'angle initial de la souris par rapport au centre
+        const initialAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+        
+        setPreviousAngle(initialAngle);
+        setCumulativeRotation(discRotation * Math.PI / 180); // Convertir en radians
         setIsDraggingDisc(true);
-        console.log('🎯 Début rotation (Face avant) avec centre STABLE:', rotationCenter, 'angle initial:', angle);
+        
+        console.log('🔄 Début rotation circulaire continue:', {
+          initialAngle: (initialAngle * 180 / Math.PI).toFixed(1),
+          cumulativeRotation: (cumulativeRotation * 180 / Math.PI).toFixed(1)
+        });
       } else if (type === 'backDisc') {
         // Convertir les coordonnées en coordonnées SVG
         const svgPoint = clientToSVG(e.clientX, e.clientY);
@@ -266,7 +218,7 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
         setIsDraggingBackDisc(true);
         console.log('🎯 Début rotation (Face arrière) avec centre STABLE:', backRotationCenter, 'angle initial:', angle);
       } else if (type === 'cursor') {
-        // CORRECTION : Mouvement vertical fluide et précis
+        // Mouvement vertical fluide et précis
         setInitialCursorPosition(cursorPosition);
         setIsDraggingCursor(true);
         console.log('📏 Début mouvement vertical fluide, position initiale:', cursorPosition);
@@ -276,8 +228,7 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
 
   const handleMouseUp = (e: React.MouseEvent) => {
     if (isDraggingDisc) {
-      setCumulativeAngle(discRotation);
-      console.log('🔄 Fin rotation (Face avant), angle final:', discRotation.toFixed(1));
+      console.log('🔄 Fin rotation simple, angle final:', discRotation.toFixed(1));
     }
     
     if (isDraggingBackDisc) {
@@ -386,81 +337,43 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
         clampedPosition: clampedPosition.toFixed(1)
       });
       
-    } else if (isDraggingDisc) {
-      // DIAGNOSTIC: Logs détaillés pour la rotation
-      console.log('🔍 DIAGNOSTIC ROTATION DÉTAILLÉ:', {
-        // Coordonnées de la souris
-        mouseClient: { x: e.clientX, y: e.clientY },
-        // Position du FlyComputer
-        flyComputerPos: flyComputerPosition,
-        // Position du SVG
-        svgRect: svgRef.current?.getBoundingClientRect(),
-        // Centre de rotation actuel
-        rotationCenter: rotationCenter,
-        // État de la rotation
-        isDraggingDisc: isDraggingDisc,
-        initialAngle: initialAngle,
-        cumulativeAngle: cumulativeAngle,
-        discRotation: discRotation
-      });
-      
-      // ROTATION FLUIDE et PRÉCISE - suit parfaitement la souris
-      const svgPoint = clientToSVG(e.clientX, e.clientY);
-      
-      // VÉRIFICATIONS DE SÉCURITÉ
-      if (rotationCenter.cx === 0 || rotationCenter.cy === 0) {
-        console.error('🚨 CENTRE DE ROTATION INVALIDE!', rotationCenter);
-        return;
-      }
-      
-      if (svgPoint.x === 0 && svgPoint.y === 0) {
-        console.error('🚨 CONVERSION SVG INVALIDE!', svgPoint);
-        return;
-      }
-      
-      // Calculer l'angle actuel par rapport au centre FIXE et STABLE
-      const currentAngle = Math.atan2(svgPoint.y - rotationCenter.cy, svgPoint.x - rotationCenter.cx);
-      
-      // VÉRIFIER SI L'ANGLE EST VALIDE
-      if (isNaN(currentAngle)) {
-        console.error('🚨 ANGLE INVALIDE!', {
-          svgPoint,
-          rotationCenter,
-          deltaX: svgPoint.x - rotationCenter.cx,
-          deltaY: svgPoint.y - rotationCenter.cy
-        });
-        return;
-      }
-      
-      // Calculer la différence d'angle avec normalisation fluide
-      let deltaAngle = currentAngle - initialAngle;
-      
-      // Normalisation pour éviter les sauts de 360°
-      if (deltaAngle > Math.PI) {
-        deltaAngle -= 2 * Math.PI;
-      } else if (deltaAngle < -Math.PI) {
-        deltaAngle += 2 * Math.PI;
-      }
-      
-      // Convertir en degrés avec sensibilité ajustée pour plus de fluidité
-      const deltaDegrees = (deltaAngle * 180 / Math.PI);
-      
-      // Appliquer la rotation cumulative avec sensibilité fine
-      const newRotation = cumulativeAngle + deltaDegrees;
-      updateDiscRotation(newRotation);
-      
-      console.log('✅ Rotation fluide (Face avant):', {
-        svgPoint: { x: svgPoint.x.toFixed(1), y: svgPoint.y.toFixed(1) },
-        rotationCenter: { cx: rotationCenter.cx.toFixed(1), cy: rotationCenter.cy.toFixed(1) },
-        currentAngle: (currentAngle * 180 / Math.PI).toFixed(1),
-        deltaAngle: (deltaAngle * 180 / Math.PI).toFixed(1),
-        deltaDegrees: deltaDegrees.toFixed(1),
-        newRotation: newRotation.toFixed(1),
-        // Vérifications
-        isCenterValid: rotationCenter.cx > 0 && rotationCenter.cy > 0,
-        isSvgPointValid: svgPoint.x > 0 && svgPoint.y > 0,
-        isAngleValid: !isNaN(currentAngle)
-      });
+     } else if (isDraggingDisc) {
+       // ROTATION CIRCULAIRE CONTINUE : suivre parfaitement la souris
+       if (!svgRef.current) return;
+       
+       const svg = svgRef.current;
+       const rect = svg.getBoundingClientRect();
+       const centerX = rect.left + rect.width / 2;
+       const centerY = rect.top + rect.height / 2;
+       
+       // Calculer l'angle actuel de la souris par rapport au centre
+       const currentAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+       
+       // Calculer la différence d'angle
+       let deltaAngle = currentAngle - previousAngle;
+       
+       // Corriger le wrap à 180° (éviter les sauts de 360°)
+       if (deltaAngle > Math.PI) {
+         deltaAngle -= 2 * Math.PI;
+       } else if (deltaAngle < -Math.PI) {
+         deltaAngle += 2 * Math.PI;
+       }
+       
+       // Ajouter à la rotation cumulative
+       const newCumulativeRotation = cumulativeRotation + deltaAngle;
+       setCumulativeRotation(newCumulativeRotation);
+       setPreviousAngle(currentAngle);
+       
+       // Convertir en degrés pour l'affichage
+       const degrees = newCumulativeRotation * (180 / Math.PI);
+       setDiscRotation(degrees);
+       
+       console.log('🔄 Rotation circulaire continue:', {
+         currentAngle: (currentAngle * 180 / Math.PI).toFixed(1),
+         deltaAngle: (deltaAngle * 180 / Math.PI).toFixed(1),
+         cumulativeRotation: (newCumulativeRotation * 180 / Math.PI).toFixed(1),
+         degrees: degrees.toFixed(1)
+       });
       
     } else if (isDraggingBackDisc) {
       // ROTATION FLUIDE et PRÉCISE - suit parfaitement la souris (Face arrière)
@@ -512,35 +425,42 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
         const deltaY = e.clientY - dragStart.y;
         const newPosition = initialCursorPosition + deltaY;
         setCursorPosition(Math.max(-250, Math.min(250, newPosition)));
-      } else if (isDraggingDisc) {
-        // ROTATION FLUIDE et PRÉCISE - suit parfaitement la souris (Face avant)
-        const svgPoint = clientToSVG(e.clientX, e.clientY);
-        
-        // Calculer l'angle actuel par rapport au centre FIXE et STABLE (Face avant)
-        const currentAngle = Math.atan2(svgPoint.y - rotationCenter.cy, svgPoint.x - rotationCenter.cx);
-        
-        // Calculer la différence d'angle avec normalisation fluide
-        let deltaAngle = currentAngle - initialAngle;
-        
-        // Normalisation pour éviter les sauts de 360°
-        if (deltaAngle > Math.PI) {
-          deltaAngle -= 2 * Math.PI;
-        } else if (deltaAngle < -Math.PI) {
-          deltaAngle += 2 * Math.PI;
-        }
-        
-        // Convertir en degrés avec sensibilité ajustée pour plus de fluidité
-        const deltaDegrees = (deltaAngle * 180 / Math.PI);
-        
-        // Appliquer la rotation cumulative avec sensibilité fine
-        const newRotation = cumulativeAngle + deltaDegrees;
-        updateDiscRotation(newRotation);
-        
-        console.log('🔄 Rotation fluide (Face avant):', {
-          currentAngle: (currentAngle * 180 / Math.PI).toFixed(1),
-          deltaDegrees: deltaDegrees.toFixed(1),
-          newRotation: newRotation.toFixed(1)
-        });
+       } else if (isDraggingDisc) {
+         // ROTATION CIRCULAIRE CONTINUE : suivre parfaitement la souris (global)
+         if (!svgRef.current) return;
+         
+         const svg = svgRef.current;
+         const rect = svg.getBoundingClientRect();
+         const centerX = rect.left + rect.width / 2;
+         const centerY = rect.top + rect.height / 2;
+         
+         // Calculer l'angle actuel de la souris par rapport au centre
+         const currentAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+         
+         // Calculer la différence d'angle
+         let deltaAngle = currentAngle - previousAngle;
+         
+         // Corriger le wrap à 180° (éviter les sauts de 360°)
+         if (deltaAngle > Math.PI) {
+           deltaAngle -= 2 * Math.PI;
+         } else if (deltaAngle < -Math.PI) {
+           deltaAngle += 2 * Math.PI;
+         }
+         
+         // Ajouter à la rotation cumulative
+         const newCumulativeRotation = cumulativeRotation + deltaAngle;
+         setCumulativeRotation(newCumulativeRotation);
+         setPreviousAngle(currentAngle);
+         
+         // Convertir en degrés pour l'affichage
+         const degrees = newCumulativeRotation * (180 / Math.PI);
+         setDiscRotation(degrees);
+         
+         console.log('🔄 Rotation circulaire continue (global):', {
+           currentAngle: (currentAngle * 180 / Math.PI).toFixed(1),
+           deltaAngle: (deltaAngle * 180 / Math.PI).toFixed(1),
+           degrees: degrees.toFixed(1)
+         });
         
       } else if (isDraggingBackDisc) {
         // Rotation basée sur le mouvement du pointeur (Face arrière)
@@ -560,28 +480,18 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
       }
     };
 
-    const handleGlobalMouseUp = (e: MouseEvent) => {
-      if (isDraggingDisc) {
-        setCumulativeAngle(discRotation);
-        // Nettoyer l'animation frame en attente
-        if (animationFrameRef.current) {
-          cancelAnimationFrame(animationFrameRef.current);
-          animationFrameRef.current = null;
-        }
-        if (pendingRotationRef.current !== null) {
-          // Appliquer immédiatement la dernière rotation en attente
-          setDiscRotation(pendingRotationRef.current);
-          pendingRotationRef.current = null;
-        }
-      }
-      if (isDraggingBackDisc) {
-        setBackCumulativeAngle(backDiscRotation);
-      }
-      setIsDraggingCursor(false);
-      setIsDraggingDisc(false);
-      setIsDraggingBackDisc(false);
-      setIsDraggingFlyComputer(false);
-    };
+     const handleGlobalMouseUp = (e: MouseEvent) => {
+       if (isDraggingDisc) {
+         console.log('🔄 Fin rotation simple (global), angle final:', discRotation.toFixed(1));
+       }
+       if (isDraggingBackDisc) {
+         setBackCumulativeAngle(backDiscRotation);
+       }
+       setIsDraggingCursor(false);
+       setIsDraggingDisc(false);
+       setIsDraggingBackDisc(false);
+       setIsDraggingFlyComputer(false);
+     };
 
     if (isDraggingCursor || isDraggingDisc || isDraggingBackDisc || isDraggingFlyComputer) {
       document.addEventListener('mousemove', handleGlobalMouseMove, { passive: false });
@@ -597,19 +507,20 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
         animationFrameRef.current = null;
       }
     };
-  }, [isDraggingCursor, isDraggingDisc, isDraggingBackDisc, isDraggingFlyComputer, dragStart, dragStartFlyComputer, initialCursorPosition, initialAngle, cumulativeAngle, rotationCenter, backInitialAngle, backCumulativeAngle, backRotationCenter]);
+   }, [isDraggingCursor, isDraggingDisc, isDraggingBackDisc, isDraggingFlyComputer, dragStart, dragStartFlyComputer, initialCursorPosition, previousAngle, cumulativeRotation, backInitialAngle, backCumulativeAngle, backRotationCenter]);
 
   if (!isVisible) return null;
 
   return (
     <div className="fixed inset-0 z-50">
-      {/* E6B Flight Computer déplaçable */}
-      <div 
-        className="absolute w-2/3 h-full"
-        style={{ 
-          transform: `translate(${flyComputerPosition.x}px, ${flyComputerPosition.y}px)`,
-          cursor: isDraggingFlyComputer ? 'grabbing' : 'grab'
-        }}
+      {/* E6B Flight Computer déplaçable - Positionné à droite */}
+        <div 
+          className="absolute w-2/3 h-full"
+          style={{ 
+            right: '-20%',
+            transform: `translate(-53px, ${flyComputerPosition.y}px)`,
+            cursor: isDraggingFlyComputer ? 'grabbing' : 'grab'
+          }}
         onMouseDown={(e) => handleMouseDown(e, 'flycomputer')}
       >
         {/* Barre de boutons centrée en haut */}
@@ -790,7 +701,7 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
         {/* Bouton de fermeture centré en bas */}
         <button
           onClick={onClose}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 bg-yellow-400 rounded-full shadow-lg hover:bg-yellow-500 p-2 text-yellow-900 hover:text-yellow-950"
+          className="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10 bg-yellow-400 rounded-full shadow-lg hover:bg-yellow-500 p-2 text-yellow-900 hover:text-yellow-950"
           onMouseDown={(e) => e.stopPropagation()} // Empêcher le drag du flycomputer
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -803,3 +714,4 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
 };
 
 export default FlyComputer;
+

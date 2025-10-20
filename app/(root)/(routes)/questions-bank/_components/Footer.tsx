@@ -4,11 +4,13 @@ import { Eye, LayoutPanelLeft, MessageCircleMore, Sparkles, BookOpen, Plane } fr
 interface FooterStateProps {
   onContentChange?: (index: number) => void;
   onFlyComputerToggle?: () => void;
+  onAIToggle?: () => void;
   topicName: string;
   isFlyComputerOpen?: boolean;
+  isAIOpen?: boolean;
 }
 
-const FooterState: React.FC<FooterStateProps> = ({ onContentChange, onFlyComputerToggle, topicName, isFlyComputerOpen = false }) => {
+const FooterState: React.FC<FooterStateProps> = ({ onContentChange, onFlyComputerToggle, onAIToggle, topicName, isFlyComputerOpen = false, isAIOpen = false }) => {
   const [selectedContent, setSelectedContent] = useState<number>(0);
 
   const handleButtonClick = (index: number): void => {
@@ -18,6 +20,10 @@ const FooterState: React.FC<FooterStateProps> = ({ onContentChange, onFlyCompute
 
   const handleFlyComputerToggle = (): void => {
     onFlyComputerToggle?.();
+  };
+
+  const handleAIToggle = (): void => {
+    onAIToggle?.();
   };
 
   return (
@@ -35,14 +41,23 @@ const FooterState: React.FC<FooterStateProps> = ({ onContentChange, onFlyCompute
                 { icon: <Eye className="w-5 h-5" />, label: "Preview" },
               ].map((item, index) => {
                 const isFlyComputer = item.label === "Fly Computer";
+                const isAI = item.label === "AI";
                 // Ajuster l'index pour le mapping correct avec QuizzComponents
                 const adjustedIndex = index > 3 ? index - 1 : index; // Fly Computer n'a pas d'index dans selectedContent
-                const isActive = isFlyComputer ? isFlyComputerOpen : selectedContent === adjustedIndex;
+                const isActive = isFlyComputer ? isFlyComputerOpen : isAI ? isAIOpen : selectedContent === adjustedIndex;
                 
                 return (
                   <button
                     key={index}
-                    onClick={() => isFlyComputer ? handleFlyComputerToggle() : handleButtonClick(adjustedIndex)}
+                    onClick={() => {
+                      if (isFlyComputer) {
+                        handleFlyComputerToggle();
+                      } else if (isAI) {
+                        handleAIToggle();
+                      } else {
+                        handleButtonClick(adjustedIndex);
+                      }
+                    }}
                     className={`
                       group flex items-center gap-2 px-4 py-2 rounded-[12px] transition-all duration-300
                       ${isActive

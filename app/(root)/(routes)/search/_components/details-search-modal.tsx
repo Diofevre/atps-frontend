@@ -34,6 +34,7 @@ export default function QuestionSearchDialog({
   onClose,
   searchTerm = ''
 }: QuestionDetailsDialogProps) {
+  const searchQuery = searchTerm || '';
   const { getToken } = useAuth();
   const { user } = useUser();
   const [details, setDetails] = useState<QuestionDetails | null>(null);
@@ -129,11 +130,11 @@ export default function QuestionSearchDialog({
 
             <div className="mt-4 h-[calc(100%-4rem)] overflow-y-auto">
               <TabsContent value="overview" className="h-full">
-                <OverviewTab details={details} />
+                <OverviewTab details={details} searchQuery={searchQuery} />
               </TabsContent>
 
               <TabsContent value="explanation" className="h-full">
-                <ExplanationTab explanation={details.explanation} searchTerm={searchTerm} />
+                <ExplanationTab explanation={details.explanation} searchTerm={searchQuery} />
               </TabsContent>
 
               <TabsContent value="comments" className="h-full">
@@ -168,7 +169,7 @@ export default function QuestionSearchDialog({
   );
 }
 
-function OverviewTab({ details }: { details: QuestionDetails }) {
+function OverviewTab({ details, searchQuery }: { details: QuestionDetails; searchQuery: string }) {
   const countryList = Object.keys(details.countries);
 
   return (
@@ -178,7 +179,7 @@ function OverviewTab({ details }: { details: QuestionDetails }) {
           <div className="flex-1">
             <h3 
               className="text-xl font-semibold leading-relaxed text-gray-900 dark:text-gray-100"
-              dangerouslySetInnerHTML={{ __html: highlightSearchTerms(details.question_text, searchTerm) }}
+              dangerouslySetInnerHTML={{ __html: highlightSearchTerms(details.question_text, searchQuery) }}
             />
             <div className="mt-2 space-y-2">
               {countryList.length > 0 ? (
@@ -243,7 +244,7 @@ function OverviewTab({ details }: { details: QuestionDetails }) {
                   </div>
                   <span 
                     className="text-gray-900 dark:text-gray-100"
-                    dangerouslySetInnerHTML={{ __html: highlightSearchTerms(value, searchTerm) }}
+                    dangerouslySetInnerHTML={{ __html: highlightSearchTerms(value, searchQuery) }}
                   />
                 </div>
 
@@ -273,6 +274,7 @@ function OverviewTab({ details }: { details: QuestionDetails }) {
 }
 
 function ExplanationTab({ explanation, searchTerm = '' }: { explanation: string; searchTerm?: string }) {
+  const searchQuery = searchTerm || '';
   return (
     <Card className="p-6 max-h-[calc(80vh-8rem)] overflow-hidden flex flex-col">
       <div className="space-y-6 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent">
@@ -290,7 +292,7 @@ function ExplanationTab({ explanation, searchTerm = '' }: { explanation: string;
           <div className="pl-8 space-y-4">
             <p 
               className="text-gray-700 dark:text-gray-300 leading-relaxed break-words whitespace-pre-wrap"
-              dangerouslySetInnerHTML={{ __html: highlightSearchTerms(explanation, searchTerm) }}
+              dangerouslySetInnerHTML={{ __html: highlightSearchTerms(explanation, searchQuery) }}
             />
 
             <div className="mt-6 pt-6 border-t dark:border-gray-800">

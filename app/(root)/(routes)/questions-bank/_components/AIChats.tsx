@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState, useRef, useMemo, memo } from 'react';
 import ReactDOM from 'react-dom/client';
-import { Send, Loader2, MessageSquareText, Pencil, Check, X } from 'lucide-react';
+import { Send, Loader2, MessageSquareText, Pencil, Check, X, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
@@ -75,9 +75,9 @@ const ChatMessage = memo(({
   const formattedContent = useMemo(() => formatMarkdown(message.content), [message.content]);
 
   return (
-    <div className="flex items-start gap-3 group chat-message-container mr-auto" style={{ maxWidth: '60%' }}>
+    <div className="flex items-start gap-3 mb-4">
       <Avatar className={cn(
-        "w-8 h-8",
+        "w-8 h-8 flex-shrink-0",
         message.role === 'assistant' 
           ? "bg-white p-1" 
           : "bg-gray-700"
@@ -91,7 +91,7 @@ const ChatMessage = memo(({
           {message.role === 'assistant' ? '' : userInitial}
         </AvatarFallback>
       </Avatar>
-      <div className="flex-1 relative group message-container">
+      <div className="flex-1 min-w-0">
         {editingMessageId === message.id ? (
           <div className="flex flex-col gap-2">
             <Textarea
@@ -147,9 +147,9 @@ const ChatMessage = memo(({
             )}>
               <div className="text-[15px] leading-relaxed break-words">
                 {message.role === 'assistant' ? (
-                  <div className="max-w-full overflow-hidden">
+                  <div className="w-full">
                     <div 
-                      className="prose prose-sm max-w-none break-words overflow-wrap-anywhere"
+                      className="prose prose-sm w-full break-words"
                       dangerouslySetInnerHTML={{ 
                         __html: formattedContent
                       }}
@@ -250,23 +250,56 @@ export default function ChatPage({ questionId }: ChatPageProps) {
   const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
   const [editContent, setEditContent] = useState('');
   const [mode, setMode] = useState<'tutor' | 'exam'>('tutor');
+  const [language, setLanguage] = useState('fr');
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const userInitial = user?.firstName?.[0] || 'A';
 
+  // Liste des langues disponibles avec drapeaux
+  const languages = [
+    { code: 'fr', name: 'Français', flag: '🇫🇷' },
+    { code: 'en', name: 'English', flag: '🇺🇸' },
+    { code: 'es', name: 'Español', flag: '🇪🇸' },
+    { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+    { code: 'it', name: 'Italiano', flag: '🇮🇹' },
+    { code: 'pt', name: 'Português', flag: '🇵🇹' },
+    { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+    { code: 'zh', name: '中文', flag: '🇨🇳' },
+    { code: 'ja', name: '日本語', flag: '🇯🇵' },
+    { code: 'ko', name: '한국어', flag: '🇰🇷' },
+    { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+    { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
+    { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+    { code: 'sv', name: 'Svenska', flag: '🇸🇪' },
+    { code: 'no', name: 'Norsk', flag: '🇳🇴' },
+    { code: 'da', name: 'Dansk', flag: '🇩🇰' },
+    { code: 'fi', name: 'Suomi', flag: '🇫🇮' },
+    { code: 'pl', name: 'Polski', flag: '🇵🇱' },
+    { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+    { code: 'th', name: 'ไทย', flag: '🇹🇭' },
+  ];
+
+  const selectedLanguage = languages.find(lang => lang.code === language) || languages[0];
+
   const scrollToBottom = () => {
-    if (scrollAreaRef.current) {
-      const scrollElement = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
-      if (scrollElement) {
-        scrollElement.scrollTop = scrollElement.scrollHeight;
-      }
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Ensure we land at the bottom when the chat mounts (e.g., when opening the overlay)
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      scrollToBottom();
+    }, 0);
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   const fetchChatLogs = useCallback(async () => {
     try {
@@ -300,6 +333,8 @@ export default function ChatPage({ questionId }: ChatPageProps) {
         }
       });
       setMessages(initialMessages);
+      // After initial load, ensure we are scrolled to the latest message
+      setTimeout(scrollToBottom, 0);
     } catch (error) {
       console.error('Error fetching chat logs:', error);
     }
@@ -308,6 +343,21 @@ export default function ChatPage({ questionId }: ChatPageProps) {
   useEffect(() => {
     fetchChatLogs();
   }, [questionId, fetchChatLogs]);
+
+  // Fermer le dropdown de langue quand on clique en dehors
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isLanguageDropdownOpen) {
+        const target = event.target as HTMLElement;
+        if (!target.closest('.language-dropdown')) {
+          setIsLanguageDropdownOpen(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isLanguageDropdownOpen]);
 
   // Effet pour remplacer les conteneurs aviation par des composants React
   useEffect(() => {
@@ -438,7 +488,8 @@ export default function ChatPage({ questionId }: ChatPageProps) {
         body: JSON.stringify({
           message: input,
           question_id: questionId,
-          mode: mode
+          mode: mode,
+          language: language
         }),
       });
 
@@ -468,7 +519,7 @@ export default function ChatPage({ questionId }: ChatPageProps) {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-240px)] bg-gray-50 rounded-xl shadow-sm chat-container">
+    <div className="flex flex-col h-full bg-gray-50 rounded-xl shadow-sm chat-container">
       <style jsx>{`
         .prose {
           word-wrap: break-word;
@@ -494,54 +545,67 @@ export default function ChatPage({ questionId }: ChatPageProps) {
         .prose td {
           vertical-align: top;
         }
-        .message-container {
-          max-width: 100%;
-          overflow: hidden;
+        .prose {
+          word-break: break-word;
+          overflow-wrap: break-word;
+          hyphens: auto;
         }
-        @media (max-width: 640px) {
-          .message-container {
-            max-width: 90%;
-          }
+        .prose p, .prose div, .prose span {
+          word-break: break-word;
+          overflow-wrap: break-word;
+          white-space: normal;
         }
-        .chat-message-container {
-          max-width: 60% !important;
-          width: auto !important;
-        }
-        @media (max-width: 768px) {
-          .chat-message-container {
-            max-width: 70% !important;
-          }
-        }
-        @media (max-width: 480px) {
-          .chat-message-container {
-            max-width: 80% !important;
-          }
-        }
-        .chat-container {
-          max-width: 100%;
-          overflow-x: hidden;
+        .prose pre, .prose code {
+          word-break: break-word;
+          overflow-wrap: break-word;
+          white-space: pre-wrap;
         }
       `}</style>
       {/* Chat Header */}
       <div className="px-4 py-3 border-b bg-white rounded-t-xl">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Image src="/ai.png" alt="ATPS" className="w-6 h-6" width={24} height={24} />
-            <h2 className="font-semibold text-gray-900">Assistant Intelligent</h2>
-          </div>
-          <div className="flex items-center gap-4">
-            <ModeSelector mode={mode} onModeChange={setMode} />
-            <span className="text-sm font-medium text-gray-500 flex items-center gap-1">
-              #{questionId} - {messages.length}
-              <MessageSquareText className="w-5 h-5 mt-1 text-[#EECE84]" />
-            </span>
+        <div className="flex items-center justify-center gap-3">
+          <ModeSelector mode={mode} onModeChange={setMode} />
+          
+          {/* Language Dropdown */}
+          <div className="relative language-dropdown">
+            <button
+              onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
+              className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+            >
+              <span className="text-lg">{selectedLanguage.flag}</span>
+              <span className="text-sm font-medium text-gray-700">{selectedLanguage.name}</span>
+              <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isLanguageDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
+            
+            {isLanguageDropdownOpen && (
+              <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto min-w-[200px]">
+                {languages.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => {
+                      setLanguage(lang.code);
+                      setIsLanguageDropdownOpen(false);
+                    }}
+                    className={`w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 transition-colors ${
+                      language === lang.code ? 'bg-blue-50 text-blue-700' : 'text-gray-700'
+                    }`}
+                  >
+                    <span className="text-lg">{lang.flag}</span>
+                    <span className="text-sm font-medium">{lang.name}</span>
+                    {language === lang.code && (
+                      <Check className="w-4 h-4 text-blue-600 ml-auto" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Messages Area */}
-      <ScrollArea ref={scrollAreaRef} className="flex-1 p-4">
-        <div className="flex flex-col h-full">
+      {/* Messages Area - Réécrit complètement */}
+      <div className="flex-1 overflow-y-auto p-4">
+        <div className="max-w-full">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-[40vh] text-center space-y-4 text-gray-500">
               <Image src="/ai.png" alt="ATPS" className="w-16 h-16" width={24} height={24} />
@@ -551,7 +615,7 @@ export default function ChatPage({ questionId }: ChatPageProps) {
               </div>
             </div>
           ) : (
-            <div className="flex-1 flex flex-col justify-end space-y-6 max-w-full overflow-x-hidden">
+            <div className="space-y-4">
               {messages.map((message, index) => (
                 <ChatMessage
                   key={message.id || `${message.role}-${index}-${message.content.slice(0, 50)}`}
@@ -567,7 +631,7 @@ export default function ChatPage({ questionId }: ChatPageProps) {
                 />
               ))}
               {isLoading && (
-                <div className="flex items-start gap-3 mr-auto chat-message-container" style={{ maxWidth: '60%' }}>
+                <div className="flex items-start gap-3">
                   <Avatar className="w-8 h-8 bg-white p-1">
                     <Image src="/ai.png" alt="ATPS" className="w-full h-full object-contain" width={24} height={24} />
                     <AvatarFallback></AvatarFallback>
@@ -581,10 +645,10 @@ export default function ChatPage({ questionId }: ChatPageProps) {
           )}
           <div ref={messagesEndRef} />
         </div>
-      </ScrollArea>
+      </div>
 
       {/* Input Area */}
-      <div className="p-4 border-t bg-white rounded-b-xl">
+      <div className="p-2 border-t bg-white rounded-b-xl">
         <div className="relative">
           <Textarea
             placeholder="Type your message..."
@@ -596,20 +660,20 @@ export default function ChatPage({ questionId }: ChatPageProps) {
                 sendMessage();
               }
             }}
-            className="min-h-[60px] max-h-[120px] resize-none rounded-xl border-gray-200 pr-12"
+            className="min-h-[40px] max-h-[80px] resize-none rounded-xl border-gray-200 pr-10"
           />
           <Button
             onClick={sendMessage}
             disabled={isLoading || !input.trim()}
             size="icon"
             className={cn(
-              "absolute right-2 bottom-2 h-8 w-8 rounded-lg transition-colors shrink-0",
+              "absolute right-1 bottom-1 h-6 w-6 rounded-lg transition-colors shrink-0",
               input.trim() 
                 ? "bg-[#EECE84] hover:bg-[#EECE84]/90" 
                 : "bg-[#EECE84] cursor-not-allowed"
             )}
           >
-            <Send className="h-4 w-4 text-black" />
+            <Send className="h-3 w-3 text-black" />
           </Button>
         </div>
       </div>

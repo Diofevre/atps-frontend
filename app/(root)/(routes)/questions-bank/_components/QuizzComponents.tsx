@@ -16,6 +16,7 @@ import FooterState from './Footer';
 import QuestionOptions from './QuestionOptionsQuizz';
 import AIChat from './AIChats';
 import FlyComputer from './FlyComputer';
+import AIOverlay from './AIOverlay';
 
 interface QuizData {
   topic_name?: string;
@@ -113,6 +114,7 @@ const QuizzComponents = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [topicName, setTopicName] = useState<string>('');
   const [isFlyComputerOpen, setIsFlyComputerOpen] = useState(false);
+  const [isAIOpen, setIsAIOpen] = useState(false);
 
   const animationVariants = {
     enter: { opacity: 0, x: -100 },
@@ -365,6 +367,10 @@ const QuizzComponents = () => {
     setIsFlyComputerOpen(!isFlyComputerOpen);
   };
 
+  const handleAIToggle = (): void => {
+    setIsAIOpen(!isAIOpen);
+  };
+
   const handleAnswer = (questionId: number, userAnswer: string) => {
     setAnsweredQuestions((prev) => {
       const newAnswers = [
@@ -612,11 +618,7 @@ const QuizzComponents = () => {
                   </div>
                 )}
 
-                {selectedContent === 2 && currentQuestion && (
-                  <div className="max-w-[1280px] mx-auto p-8 text-center">
-                    <AIChat questionId={currentQuestion.id} />
-                  </div>
-                )}
+                {/* AI content removed - now handled by overlay */}
 
                 {selectedContent === 3 && currentQuestion && (
                   <CommentsQuizz 
@@ -731,8 +733,10 @@ const QuizzComponents = () => {
       <FooterState 
         onContentChange={handleContentChange} 
         onFlyComputerToggle={handleFlyComputerToggle}
+        onAIToggle={handleAIToggle}
         topicName={topicName}
         isFlyComputerOpen={isFlyComputerOpen}
+        isAIOpen={isAIOpen}
       />
 
       {/* Fly Computer Modal */}
@@ -740,6 +744,15 @@ const QuizzComponents = () => {
         isVisible={isFlyComputerOpen} 
         onClose={() => setIsFlyComputerOpen(false)}
       />
+
+      {/* AI Overlay */}
+      {currentQuestion && (
+        <AIOverlay
+          isVisible={isAIOpen}
+          onClose={() => setIsAIOpen(false)}
+          questionId={currentQuestion.id}
+        />
+      )}
     </div>
   );
 }
