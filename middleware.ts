@@ -1,8 +1,6 @@
-import { withClerkMiddleware } from '@clerk/nextjs/server'
+import { clerkMiddleware } from '@clerk/nextjs'
 
-export default withClerkMiddleware(() => {
-  return Response.next()
-})
+export default clerkMiddleware()
 
 export const config = {
   matcher: [
