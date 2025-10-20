@@ -37,6 +37,7 @@ interface TopicsResponse {
 
 const TopicsExam = ({ onSelectionChange }: TopicsExamProps) => {
   const { getToken } = useAuth()
+  const [selectedValue, setSelectedValue] = React.useState<string>("")
 
   const fetcher = async (url: string) => {
     const token = await getToken()
@@ -63,6 +64,7 @@ const TopicsExam = ({ onSelectionChange }: TopicsExamProps) => {
   const options = data?.topics ?? []
 
   const handleSelection = (value: string) => {
+    setSelectedValue(value)
     const selectedTopic = options.find(topic => topic.id === value)
     if (selectedTopic) {
       onSelectionChange({
@@ -79,7 +81,7 @@ const TopicsExam = ({ onSelectionChange }: TopicsExamProps) => {
       <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">
         <BookOpen size={18} />
       </div>
-      <Select onValueChange={handleSelection}>
+      <Select onValueChange={handleSelection} value={selectedValue}>
         <SelectTrigger 
           className="w-full pl-10 pr-4 h-14 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm hover:border-primary/80 focus:ring-1 focus:ring-primary/20 transition-all duration-200"
         >

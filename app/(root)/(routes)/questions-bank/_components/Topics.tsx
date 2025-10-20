@@ -69,9 +69,7 @@ const Topics = ({ onSelectionChange, selectedTopic, selectedTopicName }: TopicsP
   return (
     <Select onValueChange={handleSelection} value={selectedTopic}>
       <SelectTrigger className="w-[400px] border rounded-[12px] py-6 bg-[#FFFFFF] p-6 dark:bg-transparent">
-        <SelectValue placeholder={isLoading ? "Loading ..." : "Select a syllabus"}>
-          {selectedTopicName || (isLoading ? "Loading ..." : "Select a syllabus")}
-        </SelectValue>
+        <SelectValue placeholder={isLoading ? "Loading ..." : "Select a syllabus"} />
       </SelectTrigger>
       <SelectContent className="border rounded-[10px] bg-[#FFFFFF] dark:bg-[#020526]">
         <SelectGroup className="mt-2 mb-2 ml-2 mr-2">
