@@ -40,11 +40,18 @@ const AviationThumbnail: React.FC<AviationThumbnailProps> = ({
   // Si c'est une URL d'asset aviation, utiliser un iframe ou object pour SVG
   const isAviationAsset = src.includes('/api/aviation-assets/asset/');
 
-  if (imageError) {
+  // Gérer les erreurs d'image de manière plus robuste
+  if (imageError || !src || src === '/placeholder-image.png') {
     return (
       <div className={`inline-block bg-gray-100 border border-gray-300 rounded-lg p-2 ${className}`}>
         <div className="w-24 h-24 flex items-center justify-center text-gray-500 text-xs">
-          Image non disponible
+          <Image
+            src="/placeholder-image.svg"
+            alt="Image non disponible"
+            width={88}
+            height={88}
+            className="object-contain rounded"
+          />
         </div>
       </div>
     );
@@ -68,10 +75,16 @@ const AviationThumbnail: React.FC<AviationThumbnailProps> = ({
               data={src}
               type="image/svg+xml"
               className="w-full h-full"
-              onError={() => setImageError(true)}
+              onError={() => {
+                console.log('Asset aviation non trouvé:', src);
+                setImageError(true);
+              }}
             >
               <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-500 text-xs">
-                SVG
+                <div className="text-center">
+                  <div className="text-lg mb-1">✈️</div>
+                  <div>Asset aviation</div>
+                </div>
               </div>
             </object>
           </div>
