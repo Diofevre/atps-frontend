@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { Eye, LayoutPanelLeft, MessageCircleMore, Sparkles, BookOpen, Plane } from 'lucide-react';
+import { Eye, LayoutPanelLeft, MessageCircleMore, Sparkles, BookOpen, Plane, Calculator } from 'lucide-react';
 
 interface FooterStateProps {
   onContentChange?: (index: number) => void;
   onFlyComputerToggle?: () => void;
   onAIToggle?: () => void;
+  onCalculatorToggle?: () => void;
   topicName: string;
   isFlyComputerOpen?: boolean;
   isAIOpen?: boolean;
+  isCalculatorOpen?: boolean;
 }
 
-const FooterState: React.FC<FooterStateProps> = ({ onContentChange, onFlyComputerToggle, onAIToggle, topicName, isFlyComputerOpen = false, isAIOpen = false }) => {
+const FooterState: React.FC<FooterStateProps> = ({ onContentChange, onFlyComputerToggle, onAIToggle, onCalculatorToggle, topicName, isFlyComputerOpen = false, isAIOpen = false, isCalculatorOpen = false }) => {
   const [selectedContent, setSelectedContent] = useState<number>(0);
 
   const handleButtonClick = (index: number): void => {
@@ -26,6 +28,10 @@ const FooterState: React.FC<FooterStateProps> = ({ onContentChange, onFlyCompute
     onAIToggle?.();
   };
 
+  const handleCalculatorToggle = (): void => {
+    onCalculatorToggle?.();
+  };
+
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50">
       <div className="backdrop-blur-3xl">
@@ -37,14 +43,16 @@ const FooterState: React.FC<FooterStateProps> = ({ onContentChange, onFlyCompute
                 { icon: <BookOpen className="w-5 h-5" />, label: "Explanation" },
                 { icon: <Sparkles className="w-5 h-5" />, label: "AI" },
                 { icon: <Plane className="w-5 h-5" />, label: "Fly Computer", isToggle: true },
+                { icon: <Calculator className="w-5 h-5" />, label: "Calculator", isToggle: true },
                 { icon: <MessageCircleMore className="w-5 h-5" />, label: "Comments" },
                 { icon: <Eye className="w-5 h-5" />, label: "Preview" },
               ].map((item, index) => {
                 const isFlyComputer = item.label === "Fly Computer";
                 const isAI = item.label === "AI";
+                const isCalculator = item.label === "Calculator";
                 // Ajuster l'index pour le mapping correct avec QuizzComponents
-                const adjustedIndex = index > 3 ? index - 1 : index; // Fly Computer n'a pas d'index dans selectedContent
-                const isActive = isFlyComputer ? isFlyComputerOpen : isAI ? isAIOpen : selectedContent === adjustedIndex;
+                const adjustedIndex = index > 4 ? index - 2 : index > 3 ? index - 1 : index; // Fly Computer et Calculator n'ont pas d'index dans selectedContent
+                const isActive = isFlyComputer ? isFlyComputerOpen : isAI ? isAIOpen : isCalculator ? isCalculatorOpen : selectedContent === adjustedIndex;
                 
                 return (
                   <button
@@ -54,6 +62,8 @@ const FooterState: React.FC<FooterStateProps> = ({ onContentChange, onFlyCompute
                         handleFlyComputerToggle();
                       } else if (isAI) {
                         handleAIToggle();
+                      } else if (isCalculator) {
+                        handleCalculatorToggle();
                       } else {
                         handleButtonClick(adjustedIndex);
                       }

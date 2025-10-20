@@ -17,6 +17,7 @@ import QuestionOptions from './QuestionOptionsQuizz';
 import AIChat from './AIChats';
 import FlyComputer from './FlyComputer';
 import AIOverlay from './AIOverlay';
+import ScientificCalculator from './ScientificCalculator';
 
 interface QuizData {
   topic_name?: string;
@@ -115,6 +116,7 @@ const QuizzComponents = () => {
   const [topicName, setTopicName] = useState<string>('');
   const [isFlyComputerOpen, setIsFlyComputerOpen] = useState(false);
   const [isAIOpen, setIsAIOpen] = useState(false);
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
 
   const animationVariants = {
     enter: { opacity: 0, x: -100 },
@@ -364,11 +366,30 @@ const QuizzComponents = () => {
   };
 
   const handleFlyComputerToggle = (): void => {
+    if (!isFlyComputerOpen) {
+      // Fermer les autres fenêtres avant d'ouvrir Flight Computer
+      setIsAIOpen(false);
+      setIsCalculatorOpen(false);
+    }
     setIsFlyComputerOpen(!isFlyComputerOpen);
   };
 
   const handleAIToggle = (): void => {
+    if (!isAIOpen) {
+      // Fermer les autres fenêtres avant d'ouvrir AI
+      setIsFlyComputerOpen(false);
+      setIsCalculatorOpen(false);
+    }
     setIsAIOpen(!isAIOpen);
+  };
+
+  const handleCalculatorToggle = (): void => {
+    if (!isCalculatorOpen) {
+      // Fermer les autres fenêtres avant d'ouvrir Calculator
+      setIsFlyComputerOpen(false);
+      setIsAIOpen(false);
+    }
+    setIsCalculatorOpen(!isCalculatorOpen);
   };
 
   const handleAnswer = (questionId: number, userAnswer: string) => {
@@ -734,9 +755,11 @@ const QuizzComponents = () => {
         onContentChange={handleContentChange} 
         onFlyComputerToggle={handleFlyComputerToggle}
         onAIToggle={handleAIToggle}
+        onCalculatorToggle={handleCalculatorToggle}
         topicName={topicName}
         isFlyComputerOpen={isFlyComputerOpen}
         isAIOpen={isAIOpen}
+        isCalculatorOpen={isCalculatorOpen}
       />
 
       {/* Fly Computer Modal */}
@@ -753,6 +776,12 @@ const QuizzComponents = () => {
           questionId={currentQuestion.id}
         />
       )}
+
+      {/* Scientific Calculator Modal */}
+      <ScientificCalculator
+        isVisible={isCalculatorOpen}
+        onClose={() => setIsCalculatorOpen(false)}
+      />
     </div>
   );
 }
