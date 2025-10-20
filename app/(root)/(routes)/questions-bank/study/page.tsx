@@ -464,6 +464,11 @@ const Study = () => {
               </div>
             </div>
 
+            {/* Test des thumbnails - TEMPORAIRE */}
+            <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+              <ThumbnailTest />
+            </div>
+
             {/* Start button */}
             <div className="flex justify-center py-4">
               <button

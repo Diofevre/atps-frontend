@@ -70,11 +70,12 @@ const AviationThumbnail: React.FC<AviationThumbnailProps> = ({
       >
         {isAviationAsset ? (
           // Pour les assets aviation SVG, utiliser un conteneur avec background
-          <div className="w-24 h-24 bg-white border border-gray-300 rounded-lg p-2 flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
+          <div className="w-24 h-24 bg-white border border-gray-300 rounded-lg p-1 flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
             <object
               data={src}
               type="image/svg+xml"
-              className="w-full h-full"
+              className="w-full h-full object-contain"
+              style={{ maxWidth: '100%', maxHeight: '100%' }}
               onError={() => {
                 console.log('Asset aviation non trouvé:', src);
                 setImageError(true);
@@ -96,7 +97,8 @@ const AviationThumbnail: React.FC<AviationThumbnailProps> = ({
               alt={alt}
               width={88}
               height={88}
-              className="object-contain rounded"
+              className="object-contain rounded max-w-full max-h-full"
+              style={{ maxWidth: '100%', maxHeight: '100%' }}
               onError={() => setImageError(true)}
             />
           </div>
