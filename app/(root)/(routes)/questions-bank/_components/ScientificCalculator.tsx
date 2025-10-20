@@ -248,10 +248,11 @@ const ScientificCalculator: React.FC<ScientificCalculatorProps> = ({ isVisible, 
   }, [isVisible, handleKeyPress]);
 
   const buttonClass = "w-full rounded-xl font-bold transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg border";
-  const numberButtonClass = `${buttonClass} h-10 text-sm bg-gradient-to-b from-slate-300 to-slate-400 text-slate-800 hover:from-slate-400 hover:to-slate-500 border-slate-200`;
-  const operatorButtonClass = `${buttonClass} h-10 text-sm bg-gradient-to-b from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 border-orange-400`;
-  const functionButtonClass = `${buttonClass} h-8 text-xs bg-gradient-to-b from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 border-purple-500`;
-  const memoryButtonClass = `${buttonClass} h-8 text-xs bg-gradient-to-b from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 border-blue-500`;
+  // App palette: accent #EECE84 (gold), dark slate neutrals
+  const numberButtonClass = `${buttonClass} h-10 text-sm bg-gradient-to-b from-[#EECE84] to-[#EECE84]/90 text-black hover:from-[#EECE84]/95 hover:to-[#EECE84]/80 border-[#EECE84]/60`;
+  const operatorButtonClass = `${buttonClass} h-10 text-sm bg-gradient-to-b from-slate-800 to-slate-900 text-white hover:from-slate-700 hover:to-slate-800 border-slate-700`;
+  const functionButtonClass = `${buttonClass} h-8 text-xs bg-gradient-to-b from-slate-600 to-slate-700 text-white hover:from-slate-500 hover:to-slate-600 border-slate-500`;
+  const memoryButtonClass = `${buttonClass} h-8 text-xs bg-gradient-to-b from-[#EECE84]/90 to-[#EECE84]/80 text-black hover:from-[#EECE84] hover:to-[#EECE84]/90 border-[#EECE84]/60`;
 
   if (!isVisible) return null;
 
@@ -279,10 +280,10 @@ const ScientificCalculator: React.FC<ScientificCalculatorProps> = ({ isVisible, 
         >
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-slate-600 to-slate-700 rounded-xl flex items-center justify-center shadow-inner">
-                  <span className="text-white font-bold text-lg">C</span>
-                </div>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-[#EECE84] to-[#EECE84]/90 rounded-xl flex items-center justify-center shadow-inner border border-[#EECE84]/60">
+                <span className="text-black font-bold text-lg">C</span>
+              </div>
                 <div>
                   <h2 className="text-xl font-bold text-slate-800">SCIENTIFIC</h2>
                   <p className="text-xs text-slate-600 font-medium">CALCULATOR</p>
@@ -297,7 +298,7 @@ const ScientificCalculator: React.FC<ScientificCalculatorProps> = ({ isVisible, 
             </div>
 
           {/* Display */}
-          <div className="bg-gradient-to-b from-slate-900 to-slate-800 rounded-2xl p-5 mb-6 shadow-inner border-2 border-slate-700">
+          <div className="bg-gradient-to-b from-slate-900 to-slate-800 rounded-2xl p-5 mb-6 shadow-inner border-2 border-[#EECE84]/40">
             <div className="text-right">
               <div className="text-green-400 text-sm mb-2 font-mono">
                 {previousValue !== null && operation ? `${previousValue} ${operation}` : ''}
@@ -379,7 +380,7 @@ const ScientificCalculator: React.FC<ScientificCalculatorProps> = ({ isVisible, 
             <button className={numberButtonClass} onClick={() => inputNumber('0')}>0</button>
             <button className={numberButtonClass} onClick={inputDecimal}>.</button>
             <button className={operatorButtonClass} onClick={() => scientificFunction('e')}>e</button>
-            <button className="w-full h-10 rounded-xl font-bold text-sm bg-gradient-to-b from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg border border-green-400" onClick={performCalculation}>=</button>
+            <button className="w-full h-10 rounded-xl font-bold text-sm bg-gradient-to-b from-[#EECE84] to-[#EECE84]/90 text-black hover:from-[#EECE84] hover:to-[#EECE84]/95 transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg border border-[#EECE84]/60" onClick={performCalculation}>=</button>
           </div>
         </motion.div>
       </motion.div>
