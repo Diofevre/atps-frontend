@@ -176,9 +176,9 @@ const ChatMessage = memo(({
                                 src={`${process.env.NEXT_PUBLIC_API_URL}${image.thumbnail}`}
                                 alt={image.title}
                                 className="w-24 h-24 object-cover rounded-lg"
-                                onError={(e) => {
-                                  e.currentTarget.src = '/placeholder-image.png';
-                                }}
+                                        onError={(e) => {
+                                          e.currentTarget.src = '/placeholder-image.svg';
+                                        }}
                               />
                               <div className="flex-1">
                                 <h5 className="font-medium text-sm text-gray-900">{image.title}</h5>
@@ -785,7 +785,7 @@ function formatMarkdown(text: string): string {
   // Images markdown classiques
   html = html.replace(
     /!\[([^\]]*)\]\(([^)]+)\)/g,
-    '<img src="$2" alt="$1" class="max-w-full h-auto rounded-lg my-2" onerror="this.src=\'/placeholder-image.png\'" />'
+    '<img src="$2" alt="$1" class="max-w-full h-auto rounded-lg my-2" onerror="this.src=\'/placeholder-image.svg\'" />'
   );
 
   // Liens

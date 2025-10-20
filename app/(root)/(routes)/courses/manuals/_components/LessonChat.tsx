@@ -480,7 +480,7 @@ function formatMarkdown(text: string): string {
   // Images markdown classiques
   html = html.replace(
     /!\[([^\]]*)\]\(([^)]+)\)/g,
-    '<img src="$2" alt="$1" class="max-w-full h-auto rounded-lg my-2" onerror="this.src=\'/placeholder-image.png\'" />'
+    '<img src="$2" alt="$1" class="max-w-full h-auto rounded-lg my-2" onerror="this.src=\'/placeholder-image.svg\'" />'
   );
 
   // Liens
