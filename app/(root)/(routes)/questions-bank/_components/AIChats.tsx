@@ -10,6 +10,7 @@ import { useAuth, useUser } from '@/lib/mock-clerk';
 import Image from 'next/image';
 import ModeSelector from './ModeSelector';
 import AviationThumbnail from '@/components/AviationThumbnail';
+import SVGRenderer, { extractSVGFromContent, removeSVGFromContent } from '@/components/SVGRenderer';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -359,7 +360,7 @@ export default function ChatPage({ questionId }: ChatPageProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isLanguageDropdownOpen]);
 
-  // Effet pour remplacer les conteneurs aviation par des composants React
+  // Effet pour remplacer les conteneurs aviation et SVG par des composants React
   useEffect(() => {
     const replaceAviationThumbnails = () => {
       const containers = document.querySelectorAll('.aviation-thumbnail-container:not(.processed)');
@@ -392,8 +393,52 @@ export default function ChatPage({ questionId }: ChatPageProps) {
       });
     };
 
-    // Exécuter après chaque mise à jour des messages avec un délai plus long
-    const timeoutId = setTimeout(replaceAviationThumbnails, 300);
+    const replaceSVGPlaceholders = () => {
+      const placeholders = document.querySelectorAll('.svg-placeholder:not(.processed)');
+      placeholders.forEach((placeholder) => {
+        const svgIndex = placeholder.getAttribute('data-svg-index');
+        if (svgIndex !== null) {
+          // Trouver le message correspondant qui contient ce SVG
+          const messageElement = placeholder.closest('.prose');
+          if (messageElement) {
+            const messageIndex = Array.from(messageElement.parentElement?.parentElement?.parentElement?.children || [])
+              .indexOf(messageElement.parentElement?.parentElement?.parentElement as Element);
+            
+            if (messageIndex >= 0 && messages[messageIndex]) {
+              const svgMatches = extractSVGFromContent(messages[messageIndex].content);
+              const svgContent = svgMatches[parseInt(svgIndex)];
+              
+              if (svgContent) {
+                // Marquer comme traité
+                placeholder.classList.add('processed');
+                
+                // Créer un élément React pour le SVG
+                const svgElement = document.createElement('div');
+                svgElement.className = 'svg-wrapper';
+                
+                // Remplacer le placeholder par le wrapper
+                placeholder.parentNode?.replaceChild(svgElement, placeholder);
+                
+                // Rendre le composant React dans le wrapper
+                const root = ReactDOM.createRoot(svgElement);
+                root.render(
+                  <SVGRenderer 
+                    svgContent={svgContent}
+                    title={`Diagram ${parseInt(svgIndex) + 1}`}
+                  />
+                );
+              }
+            }
+          }
+        }
+      });
+    };
+
+    // Exécuter après chaque mise à jour des messages
+    const timeoutId = setTimeout(() => {
+      replaceAviationThumbnails();
+      replaceSVGPlaceholders();
+    }, 300);
     
     return () => clearTimeout(timeoutId);
   }, [messages]);
@@ -681,11 +726,18 @@ export default function ChatPage({ questionId }: ChatPageProps) {
   );
 }
 
-// Fonction utilitaire pour formater le markdown avancé
+// Fonction utilitaire pour formater le markdown avancé avec support SVG
 function formatMarkdown(text: string): string {
   if (!text) return '';
   
   let html = text;
+  
+  // Détecter et remplacer les SVG par des placeholders
+  const svgMatches = extractSVGFromContent(text);
+  svgMatches.forEach((svg, index) => {
+    const placeholder = `<div class="svg-placeholder" data-svg-index="${index}"></div>`;
+    html = html.replace(svg, placeholder);
+  });
   
   // Tableaux (markdown simple)
   html = html.replace(

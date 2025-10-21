@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth, useUser } from '@/lib/mock-clerk';
 import Image from 'next/image';
 import AviationThumbnail from '@/components/AviationThumbnail';
+import SVGRenderer, { extractSVGFromContent, removeSVGFromContent } from '@/components/SVGRenderer';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -97,7 +98,7 @@ export default function LessonChat({ pageId }: LessonChatProps) {
     fetchChatLogs();
   }, [pageId, fetchChatLogs]);
 
-  // Effet pour remplacer les conteneurs aviation par des composants React
+  // Effet pour remplacer les conteneurs aviation et SVG par des composants React
   useEffect(() => {
     const replaceAviationThumbnails = () => {
       const containers = document.querySelectorAll('.aviation-thumbnail-container');
@@ -127,8 +128,56 @@ export default function LessonChat({ pageId }: LessonChatProps) {
       });
     };
 
+    const replaceSVGPlaceholders = () => {
+      const placeholders = document.querySelectorAll('.svg-placeholder:not(.processed)');
+      placeholders.forEach((placeholder) => {
+        const svgIndex = placeholder.getAttribute('data-svg-index');
+        if (svgIndex !== null) {
+          // Trouver le message correspondant qui contient ce SVG
+          const messageElement = placeholder.closest('[class*="message"]');
+          if (messageElement) {
+            // Trouver l'index du message dans le DOM
+            const messageContainer = messageElement.closest('.flex.items-start.gap-3');
+            if (messageContainer) {
+              const allMessages = Array.from(document.querySelectorAll('.flex.items-start.gap-3'));
+              const messageIndex = allMessages.indexOf(messageContainer as Element);
+              
+              if (messageIndex >= 0 && messages[messageIndex]) {
+                const svgMatches = extractSVGFromContent(messages[messageIndex].content);
+                const svgContent = svgMatches[parseInt(svgIndex)];
+                
+                if (svgContent) {
+                  // Marquer comme traité
+                  placeholder.classList.add('processed');
+                  
+                  // Créer un élément React pour le SVG
+                  const svgElement = document.createElement('div');
+                  svgElement.className = 'svg-wrapper';
+                  
+                  // Remplacer le placeholder par le wrapper
+                  placeholder.parentNode?.replaceChild(svgElement, placeholder);
+                  
+                  // Rendre le composant React dans le wrapper
+                  const root = ReactDOM.createRoot(svgElement);
+                  root.render(
+                    <SVGRenderer 
+                      svgContent={svgContent}
+                      title={`Diagram ${parseInt(svgIndex) + 1}`}
+                    />
+                  );
+                }
+              }
+            }
+          }
+        }
+      });
+    };
+
     // Exécuter après chaque mise à jour des messages
-    const timeoutId = setTimeout(replaceAviationThumbnails, 100);
+    const timeoutId = setTimeout(() => {
+      replaceAviationThumbnails();
+      replaceSVGPlaceholders();
+    }, 100);
     
     return () => clearTimeout(timeoutId);
   }, [messages]);
@@ -462,11 +511,18 @@ export default function LessonChat({ pageId }: LessonChatProps) {
   );
 }
 
-// Fonction utilitaire pour formater le markdown avancé
+// Fonction utilitaire pour formater le markdown avancé avec support SVG
 function formatMarkdown(text: string): string {
   if (!text) return '';
   
   let html = text;
+  
+  // Détecter et remplacer les SVG par des placeholders
+  const svgMatches = extractSVGFromContent(text);
+  svgMatches.forEach((svg, index) => {
+    const placeholder = `<div class="svg-placeholder" data-svg-index="${index}"></div>`;
+    html = html.replace(svg, placeholder);
+  });
   
   // Images aviation (détecter les URLs d'assets aviation)
   html = html.replace(
