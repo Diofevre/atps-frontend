@@ -134,7 +134,7 @@ export default function SVGRenderer({ svgContent, className, title }: SVGRendere
         dangerouslySetInnerHTML={{ __html: svgContent }}
       />
 
-      {/* Styles pour le SVG */}
+      {/* Styles pour le SVG haute précision */}
       <style jsx>{`
         .svg-container svg {
           max-width: 100%;
@@ -144,6 +144,11 @@ export default function SVGRenderer({ svgContent, className, title }: SVGRendere
           background: white;
           border-radius: 8px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          /* Haute précision - pas de lissage qui pourrait déformer */
+          shape-rendering: geometricPrecision;
+          text-rendering: geometricPrecision;
+          image-rendering: -webkit-optimize-contrast;
+          image-rendering: crisp-edges;
         }
         
         .svg-container svg:hover {
@@ -151,17 +156,43 @@ export default function SVGRenderer({ svgContent, className, title }: SVGRendere
           transition: box-shadow 0.2s ease;
         }
         
-        /* Responsive adjustments */
+        /* Responsive adjustments avec préservation de la précision */
         @media (max-width: 640px) {
           .svg-container svg {
             max-width: 100%;
-            min-width: 280px;
+            min-width: 320px;
+            /* Forcer la précision même sur mobile */
+            shape-rendering: geometricPrecision;
           }
         }
         
-        /* Animation pour les éléments SVG interactifs */
+        /* Styles haute précision pour les éléments critiques */
+        .svg-container svg line,
+        .svg-container svg path,
+        .svg-container svg polyline,
+        .svg-container svg polygon {
+          shape-rendering: geometricPrecision;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+        
+        .svg-container svg text {
+          text-rendering: geometricPrecision;
+          font-smooth: never;
+          -webkit-font-smoothing: none;
+        }
+        
+        /* Grille de référence pour la précision (optionnelle) */
+        .svg-container svg .precision-grid {
+          opacity: 0.1;
+          stroke: #ccc;
+          stroke-width: 0.5;
+        }
+        
+        /* Animation pour les éléments SVG interactifs - sans déformation */
         .svg-container svg * {
-          transition: all 0.2s ease;
+          transition: opacity 0.2s ease, fill 0.2s ease, stroke 0.2s ease;
+          /* Pas de transition sur transform pour éviter les déformations */
         }
       `}</style>
     </div>
