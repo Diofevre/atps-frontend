@@ -203,7 +203,7 @@ const LatestNews = () => {
                       expandedContent ? 'max-h-none' : 'max-h-[500px] overflow-hidden relative'
                     }`}
                   >
-                    <div dangerouslySetInnerHTML={{ __html: newsData.article.content }} />
+                    <div dangerouslySetInnerHTML={{ __html: newsData.article.content.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') }} />
                     {!expandedContent && (
                       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
                     )}

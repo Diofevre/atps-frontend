@@ -2,9 +2,10 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, CircleAlert, AlignJustify } from 'lucide-react';
+import { ChevronLeft, ChevronRight, CircleAlert, AlignJustify, Code, Type, Minus, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import ReportModal from '@/components/shared/ReportModal';
+import { useFontSize } from '@/hooks/useFontSize';
 
 interface HeaderStateProps {
   currentQuestionIndex: number;
@@ -18,6 +19,8 @@ interface HeaderStateProps {
   currentQuestionId: number;
   userId: string;
   onToggleSidebar: () => void;
+  isDevMode: boolean;
+  onToggleDevMode: () => void;
 }
 
 const HeaderState: React.FC<HeaderStateProps> = ({
@@ -31,9 +34,13 @@ const HeaderState: React.FC<HeaderStateProps> = ({
   pinnedQuestions,
   currentQuestionId,
   userId,
-  onToggleSidebar
+  onToggleSidebar,
+  isDevMode,
+  onToggleDevMode
 }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [isFontSizeSliderOpen, setIsFontSizeSliderOpen] = React.useState(false);
+  const { fontSize, increaseFontSize, decreaseFontSize, resetFontSize, setFontSizeDirect } = useFontSize();
 
   const formatTime = (time: number) => {
     const hours = Math.floor(time / 3600).toString().padStart(2, '0');
@@ -41,6 +48,23 @@ const HeaderState: React.FC<HeaderStateProps> = ({
     const seconds = (time % 60).toString().padStart(2, '0');
     return `${hours} : ${minutes} : ${seconds}`;
   };
+
+  // Close font size slider when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isFontSizeSliderOpen) {
+        const target = event.target as Element;
+        if (!target.closest('.font-size-control')) {
+          setIsFontSizeSliderOpen(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isFontSizeSliderOpen]);
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur-3xl">
@@ -68,6 +92,89 @@ const HeaderState: React.FC<HeaderStateProps> = ({
                 onClick={() => onPinQuestion(currentQuestionId, color)}
               />
             ))}
+          </div>
+
+          {/* Font Size Control - Apple Books Style */}
+          <div className="relative font-size-control">
+            <button
+              onClick={() => setIsFontSizeSliderOpen(!isFontSizeSliderOpen)}
+              className={cn(
+                "flex items-center justify-center w-12 h-12 rounded-full border transition-all duration-200 hover:scale-105",
+                fontSize !== 100 
+                  ? "bg-[#EECE84] border-[#EECE84] shadow-md" 
+                  : isFontSizeSliderOpen 
+                    ? "bg-[#EECE84]/20 border-[#EECE84] shadow-md" 
+                    : "bg-white/90 border-[#C1E0F1] shadow-sm hover:bg-white hover:border-[#EECE84]/50"
+              )}
+              title="Ajuster la taille de police"
+            >
+              <div className="flex flex-col items-center justify-center gap-0">
+                <span className={cn(
+                  "text-lg font-bold leading-none",
+                  fontSize !== 100 ? "text-white" : "text-gray-800"
+                )}>A</span>
+                <span className={cn(
+                  "text-xs font-bold leading-none",
+                  fontSize !== 100 ? "text-white" : "text-gray-600"
+                )}>A</span>
+              </div>
+            </button>
+
+            {/* Font Size Slider - Appears on click */}
+            {isFontSizeSliderOpen && (
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white/95 backdrop-blur-sm rounded-2xl border border-[#EECE84]/30 shadow-xl p-5 z-50 min-w-[240px] animate-in fade-in-0 zoom-in-95 duration-200">
+                <div className="flex flex-col items-center gap-4">
+                  {/* Font Size Display */}
+                  <div className="text-sm font-semibold text-gray-700 bg-[#EECE84]/10 px-3 py-1.5 rounded-lg">
+                    Taille: {fontSize}%
+                  </div>
+                  
+                  {/* Slider */}
+                  <div className="w-full px-2">
+                    <input
+                      type="range"
+                      min="50"
+                      max="200"
+                      step="10"
+                      value={fontSize}
+                      onChange={(e) => {
+                        const newSize = parseInt(e.target.value);
+                        setFontSizeDirect(newSize);
+                      }}
+                      className="w-full h-3 bg-gradient-to-r from-[#C1E0F1] to-[#EECE84] rounded-full appearance-none cursor-pointer slider-custom"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      <span>50%</span>
+                      <span>200%</span>
+                    </div>
+                  </div>
+                  
+                  {/* Quick buttons */}
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={decreaseFontSize}
+                      disabled={fontSize <= 50}
+                      className="px-4 py-2 text-sm bg-[#C1E0F1]/30 hover:bg-[#C1E0F1]/50 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-all duration-200 font-medium"
+                    >
+                      -
+                    </button>
+                    <button
+                      onClick={resetFontSize}
+                      className="px-4 py-2 text-sm bg-[#EECE84]/30 hover:bg-[#EECE84]/50 text-gray-800 rounded-lg transition-all duration-200 font-medium"
+                    >
+                      Reset
+                    </button>
+                    <button
+                      onClick={increaseFontSize}
+                      disabled={fontSize >= 200}
+                      className="px-4 py-2 text-sm bg-[#C1E0F1]/30 hover:bg-[#C1E0F1]/50 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-all duration-200 font-medium"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Navigation */}
@@ -98,7 +205,7 @@ const HeaderState: React.FC<HeaderStateProps> = ({
             {formatTime(timeSpent)}
           </div>
 
-          {/* Report Button and Sidebar Toggle */}
+          {/* Report Button, Dev Mode Button and Sidebar Toggle */}
           <div className="flex flex-row items-center gap-1">
             <button
               className="px-4 py-2 rounded-[12px] text-sm text-red-500 border border-red-100 flex items-center gap-1 hover:bg-red-50 transition-colors duration-300"
@@ -106,6 +213,20 @@ const HeaderState: React.FC<HeaderStateProps> = ({
             >
               <CircleAlert className="w-4 h-4" />
               <span className="hidden sm:block">Report</span>
+            </button>
+
+            {/* Developer Mode Button */}
+            <button
+              className={cn(
+                "px-4 py-2 rounded-[12px] text-sm border flex items-center gap-1 transition-colors duration-300",
+                isDevMode 
+                  ? "text-white bg-red-600 border-red-600 hover:bg-red-700" 
+                  : "text-red-500 border-red-100 hover:bg-red-50"
+              )}
+              onClick={onToggleDevMode}
+            >
+              <Code className="w-4 h-4" />
+              <span className="hidden sm:block">Dev Mode</span>
             </button>
 
             {/* Sidebar Toggle Button - Only visible on mobile */}

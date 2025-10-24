@@ -1,15 +1,13 @@
-import { LuLayoutGrid } from 'react-icons/lu';
-import { SiFiles } from 'react-icons/si';
-import { BsFillQuestionSquareFill } from 'react-icons/bs';
-import { FaSearch } from "react-icons/fa";
-import { FaUser } from 'react-icons/fa';
+import { MdDashboard, MdBook, MdQuiz, MdNewspaper, MdGroups, MdAccountCircle, MdFlight } from 'react-icons/md';
 
 export const MenuSidebar = [
-  { title: 'Dashboard', path: '/dashboard', icon: LuLayoutGrid },
-  { title: 'Courses', path: '/courses', icon: SiFiles },
-  { title: 'Question Bank', path: '/questions-bank', icon: BsFillQuestionSquareFill },
-  { title: 'Search', path: '/search', icon: FaSearch },
-  { title: 'Account', path: '/user-profile', icon: FaUser },
+  { title: 'Dashboard', path: '/dashboard', icon: MdDashboard },
+  { title: 'Courses', path: '/courses', icon: MdBook },
+  { title: 'Question Bank', path: '/questions-bank', icon: MdQuiz },
+  { title: 'ATC Simulator', path: '/atc-simulator', icon: MdFlight },
+  { title: 'News', path: '/news', icon: MdNewspaper },
+  { title: 'Community', path: '/community', icon: MdGroups },
+  { title: 'Account', path: '/user-profile', icon: MdAccountCircle },
 ];
 
 export const LandingMenues = [

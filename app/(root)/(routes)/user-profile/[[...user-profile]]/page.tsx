@@ -36,9 +36,10 @@ import {
   Briefcase,
   GraduationCap,
   Plane,
-  Target
+  Target,
+  LogOut
 } from 'lucide-react';
-import { useAuth, useClerk } from '@clerk/nextjs';
+import { useAuth, useUser } from '@clerk/nextjs';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -50,7 +51,6 @@ import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { cn, COUNTRIES_ACCOUNT, LANGUAGES, Option } from "@/lib/utils";
-import useSWR from 'swr';
 
 // Types
 interface UserProfileData {
@@ -261,8 +261,8 @@ const ProfileSkeleton = () => (
 );
 
 const Page = () => {
-  const { user } = useClerk();
-  const { getToken } = useAuth();
+  const { user: clerkUser } = useUser();
+  const { getToken, signOut } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -287,37 +287,44 @@ const Page = () => {
     confirmPassword: ''
   });
 
-  const fetcher = async (url: string) => {
-    const token = await getToken();
-    const response = await fetch(url, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-    if (!response.ok) throw new Error('Failed to fetch profile');
-    return response.json();
-  };
 
-  const { data: profile, error: fetchError, mutate } = useSWR<UserProfileData>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/users/me`,
-    fetcher,
-    {
-      onSuccess: (data) => {
-        setEditForm({
-          firstName: data.firstName || '',
-          lastName: data.lastName || '',
-          username: data.username || '',
-          email: data.email || '',
-          phoneNumber: data.phoneNumber || '',
-          country: data.country || '',
-          language: data.language || '',
-          occupation: data.occupation || '',
-          aviationExperience: data.aviationExperience || '',
-          licenseType: data.licenseType || ''
-        });
-      }
+  // Créer un profil basé sur les données Clerk
+  const profile: UserProfileData = {
+    id: clerkUser.id,
+    clerkId: clerkUser.id,
+    email: clerkUser.emailAddresses[0]?.emailAddress || '',
+    firstName: clerkUser.firstName || '',
+    lastName: clerkUser.lastName || '',
+    username: clerkUser.username || '',
+    picture: clerkUser.imageUrl || '',
+    phoneNumber: clerkUser.phoneNumbers[0]?.phoneNumber || '',
+    country: '',
+    language: '',
+    occupation: '',
+    aviationExperience: '',
+    licenseType: '',
+    createdAt: clerkUser.createdAt?.toISOString() || '',
+    updatedAt: clerkUser.updatedAt?.toISOString() || '',
+    subscriptionStatus: 'none',
+    achievements: [],
+    studyStats: {
+      totalStudyTime: 0,
+      questionsAnswered: 0,
+      examsCompleted: 0,
+      currentStreak: 0,
+      longestStreak: 0,
+      accuracy: 0,
+      certificatesEarned: 0
+    },
+    notifications: {
+      emailNotifications: true,
+      pushNotifications: true,
+      studyReminders: true,
+      examReminders: true,
+      achievementNotifications: true,
+      weeklyReports: false
     }
-  );
+  };
 
   const validateForm = () => {
     const errors: FormErrors = {};
@@ -401,20 +408,24 @@ const Page = () => {
     window.location.href = '/pricing';
   };
 
-  if (fetchError) {
+  // Vérifier l'authentification avec Clerk
+  if (!clerkUser) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-xl shadow-xl">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">Error</h2>
-          <p className="text-gray-600">{fetchError.message}</p>
+        <div className="bg-white p-8 rounded-xl shadow-xl text-center">
+          <h2 className="text-2xl font-bold text-red-600 mb-4">Authentication Required</h2>
+          <p className="text-gray-600 mb-6">Please log in to access your profile.</p>
+          <Button 
+            onClick={() => window.location.href = '/sign-in'}
+            className="bg-[#EECE84] hover:bg-[#e5c16e] text-black"
+          >
+            Go to Login
+          </Button>
         </div>
       </div>
     );
   }
 
-  if (!profile) {
-    return <ProfileSkeleton />;
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -443,7 +454,7 @@ const Page = () => {
                 <div className="absolute -bottom-16 inset-x-0 flex justify-center">
                   <div className="relative">
                   <img
-                    src={user?.imageUrl || "/default-avatar.png"}
+                    src={clerkUser?.imageUrl || "/default-avatar.png"}
                       alt="Profile picture"
                       className="w-32 h-32 rounded-full border-4 border-white shadow-lg"
                     />
@@ -495,6 +506,14 @@ const Page = () => {
                       >
                     <Edit3 className="h-4 w-4 mr-2" />
                         Edit Profile
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        onClick={() => signOut()}
+                        className="w-full text-red-600 border-red-200 hover:bg-red-50"
+                      >
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Logout
                       </Button>
                 </div>
               </CardContent>

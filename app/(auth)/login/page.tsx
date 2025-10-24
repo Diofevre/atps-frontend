@@ -1,152 +1,202 @@
-/* eslint-disable @next/next/no-img-element */
-'use client'
+'use client';
 
 import React, { useState } from 'react';
-import { Lock, Mail, User } from 'lucide-react';
-import { FcGoogle } from "react-icons/fc";
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 
-const Login = () => {
-  const [isLogin, setIsLogin] = useState(true);
+export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  
+  const { login, isAuthenticated, isAdmin } = useAuth();
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Rediriger si déjà authentifié
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      if (isAdmin()) {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
+    }
+  }, [isAuthenticated, isAdmin, router]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle authentication logic here
+    setIsLoading(true);
+    setError('');
+
+    try {
+      await login();
+      // La redirection sera gérée par l'effet ci-dessus
+    } catch (error) {
+      console.error('❌ Erreur de connexion:', error);
+      setError('Erreur de connexion. Veuillez réessayer.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleSocialLogin = (provider: string) => {
-    // Handle social login logic here
-    console.log(`Logging in with ${provider}`);
+  const handleKeycloakLogin = async () => {
+    setIsLoading(true);
+    setError('');
+
+    try {
+      await login();
+    } catch (error) {
+      console.error('❌ Erreur de connexion Keycloak:', error);
+      setError('Erreur de connexion Keycloak. Veuillez réessayer.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-4">
-      {/* Main Content */}
-      <div className="w-full max-w-md">
-        {/* Logo Section */}
-        <div className="mb-8 text-center">
-          <img 
-            src="/atps-default.png"
-            alt="Luxury Hotel"
-            className="w-20 h-20 mx-auto rounded-[12px] object-cover shadow-lg"
-          />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-lg">
+        {/* Header */}
+        <div className="text-center">
+          <div className="mx-auto h-12 w-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+            <span className="text-white font-bold text-xl">ATPS</span>
+          </div>
+          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+            Connexion
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Connectez-vous à votre compte ATPS
+          </p>
         </div>
 
-        {/* Main Card */}
-        <div className="p-8">
-          <h2 className="text-2xl font-light text-center text-blue-900 mb-8">
-            {isLogin ? 'Welcome back' : 'Create your account'}
-          </h2>
+        {/* Formulaire de connexion */}
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
+              {error}
+            </div>
+          )}
 
-          {/* Social Login Buttons */}
-          <div className="space-y-3 mb-8">
-            <button
-              onClick={() => handleSocialLogin('google')}
-              className="w-full flex items-center justify-center space-x-3 py-3 rounded-xl text-gray-700 bg-white border transition-colors"
-            >
-              <FcGoogle className="w-5 h-5 text-gray-700" />
-              <span className="text-gray-700 font-medium">Continue with Google</span>
-            </button>
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Adresse email
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                placeholder="Votre adresse email"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Mot de passe
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                placeholder="Votre mot de passe"
+              />
+            </div>
           </div>
 
-          <div className="relative my-8">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200"></div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              />
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                Se souvenir de moi
+              </label>
             </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-4 text-gray-500 bg-white ">Or continue with</span>
+
+            <div className="text-sm">
+              <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
+                Mot de passe oublié ?
+              </a>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {!isLogin && (
-              <div className="space-y-2">
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <User className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="block w-full pl-10 pr-3 py-3 text-gray-900 placeholder-gray-400 bg-white rounded-xl focus:ring-2 focus:ring-emerald-500/80 focus:outline-none transition-colors border border-gray-200"
-                    placeholder="Full Name"
-                    required
-                  />
-                </div>
-              </div>
-            )}
-
-            <div className="space-y-2">
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-3 text-gray-900 placeholder-gray-400 bg-white rounded-xl focus:ring-2 focus:ring-emerald-500/80 focus:outline-none transition-colors border border-gray-200"
-                  placeholder="Email address"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-3 text-gray-900 placeholder-gray-400 bg-white rounded-xl focus:ring-2 focus:ring-emerald-500/80 focus:outline-none transition-colors border border-gray-200"
-                  placeholder="Password"
-                  required
-                />
-              </div>
-            </div>
-
-            {isLogin && (
-              <div className="flex justify-end">
-                <button className="text-sm text-emerald-600 hover:text-emerald-700">
-                  Forgot password?
-                </button>
-              </div>
-            )}
-
+          <div>
             <button
               type="submit"
-              className="w-full flex items-center justify-center space-x-2 bg-[#EECE84] py-3 px-4 rounded-xl hover:bg-emerald-700 focus:ring-2 focus:ring-emerald-300 transition-colors mt-6"
+              disabled={isLoading}
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <span>{isLogin ? 'CONTINUE' : 'CONTINUE'}</span>
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <button
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-sm text-emerald-600 hover:text-emerald-700"
-            >
-              {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
+              {isLoading ? (
+                <div className="flex items-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Connexion...
+                </div>
+              ) : (
+                'Se connecter'
+              )}
             </button>
           </div>
-        </div>
 
-        {/* Footer */}
-        <p className="mt-8 text-center text-sm text-gray-500">
-          By clicking continue, you agree to our{' '}
-          <a href="#" className="text-blue-600 hover:text-blue-700">Terms of Service</a>{' '}
-          and acknowledge that you have read our{' '}
-          <a href="#" className="text-blue-600 hover:text-blue-700">Privacy Policy</a>
-        </p>
+          {/* Séparateur */}
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">Ou</span>
+            </div>
+          </div>
+
+          {/* Bouton de connexion Keycloak */}
+          <div>
+            <button
+              type="button"
+              onClick={handleKeycloakLogin}
+              disabled={isLoading}
+              className="group relative w-full flex justify-center py-2 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? (
+                <div className="flex items-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-700 mr-2"></div>
+                  Connexion...
+                </div>
+              ) : (
+                'Se connecter avec Keycloak'
+              )}
+            </button>
+          </div>
+        </form>
+
+        {/* Lien vers l'inscription */}
+        <div className="text-center">
+          <p className="text-sm text-gray-600">
+            Pas encore de compte ?{' '}
+            <a href="/signup" className="font-medium text-blue-600 hover:text-blue-500">
+              Créer un compte
+            </a>
+          </p>
+          <p className="text-sm text-gray-500 mt-2">
+            Vous êtes administrateur ?{' '}
+            <a href="/admin-login" className="font-medium text-red-600 hover:text-red-500">
+              Connexion admin
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );
 }
-
-export default Login;

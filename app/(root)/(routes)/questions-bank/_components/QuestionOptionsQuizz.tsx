@@ -3,8 +3,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, X, Lock, Star, XCircle, ZoomIn, ZoomOut } from 'lucide-react';
+import { Check, X, Lock, Star, XCircle, ZoomIn, ZoomOut, Edit3, Save, X as XIcon, Plus, Upload } from 'lucide-react';
 import ImageViewer from '@/components/shared/ImageViewer';
+import { toast } from 'sonner';
 
 interface QuestionOptionsProps {
   options: Record<string, string>;
@@ -22,6 +23,23 @@ interface QuestionOptionsProps {
     question_images: string | null;
     quality_score: string | null | undefined;
   };
+  isDevMode: boolean;
+  editingQuestionId: number | null;
+  tempQuestionId: string;
+  onEditQuestionId: (questionId: number) => void;
+  onSaveQuestionId: () => void;
+  onCancelEdit: () => void;
+  onTempQuestionIdChange: (value: string) => void;
+  editingQuestionText: number | null;
+  tempQuestionText: string;
+  onEditQuestionText: (questionId: number) => void;
+  onSaveQuestionText: () => void;
+  onCancelEditText: () => void;
+  onTempQuestionTextChange: (value: string) => void;
+  uploadingImages: boolean;
+  onImageUpload: (questionId: number, file: File) => void;
+  onImageDelete: (questionId: number, imageIndex: number) => void;
+  onImageReplace: (questionId: number, imageIndex: number, file: File) => void;
 }
 
 const QuestionOptions: React.FC<QuestionOptionsProps> = ({
@@ -30,6 +48,23 @@ const QuestionOptions: React.FC<QuestionOptionsProps> = ({
   questionId,
   handleAnswer,
   currentQuestion,
+  isDevMode,
+  editingQuestionId,
+  tempQuestionId,
+  onEditQuestionId,
+  onSaveQuestionId,
+  onCancelEdit,
+  onTempQuestionIdChange,
+  editingQuestionText,
+  tempQuestionText,
+  onEditQuestionText,
+  onSaveQuestionText,
+  onCancelEditText,
+  onTempQuestionTextChange,
+  uploadingImages,
+  onImageUpload,
+  onImageDelete,
+  onImageReplace,
 }) => {
   const [isImageEnlarged, setIsImageEnlarged] = useState(false);
   const [scale, setScale] = useState(1);
@@ -38,6 +73,7 @@ const QuestionOptions: React.FC<QuestionOptionsProps> = ({
   // Advanced Image Viewer states
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Enable body scrolling when modal is open
   useEffect(() => {
@@ -73,6 +109,43 @@ const QuestionOptions: React.FC<QuestionOptionsProps> = ({
   const handleZoomOut = (e: React.MouseEvent) => {
     e.stopPropagation();
     setScale(prev => Math.max(prev - 0.25, 0.5));
+  };
+
+  const handleFileUpload = (file: File) => {
+    if (file && file.type.startsWith('image/')) {
+      onImageUpload(questionId, file);
+    } else {
+      toast.error('Please select a valid image file');
+    }
+  };
+
+  const handleFileReplace = (file: File, imageIndex: number) => {
+    if (file && file.type.startsWith('image/')) {
+      onImageReplace(questionId, imageIndex, file);
+    } else {
+      toast.error('Please select a valid image file');
+    }
+  };
+
+  const triggerFileInput = (imageIndex?: number) => {
+    if (fileInputRef.current) {
+      fileInputRef.current.dataset.imageIndex = imageIndex?.toString() || '';
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const imageIndex = e.target.dataset.imageIndex;
+      if (imageIndex) {
+        handleFileReplace(file, parseInt(imageIndex));
+      } else {
+        handleFileUpload(file);
+      }
+    }
+    // Reset input
+    e.target.value = '';
   };
 
   const isAnswered = (key: string) => {
@@ -186,63 +259,166 @@ const QuestionOptions: React.FC<QuestionOptionsProps> = ({
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-4">
-      {/* Quality Score */}
-      <div className="flex items-center justify-end">
+      {/* Quality Score and Question ID */}
+      <div className="flex items-center justify-end gap-4">
+        <div className="flex items-center gap-1 bg-white backdrop-blur-sm px-3 py-1.5 rounded-[12px] border border-white">
+          <span className="text-sm font-medium text-gray-700">Question ID:</span>
+          {editingQuestionId === questionId ? (
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={tempQuestionId}
+                onChange={(e) => onTempQuestionIdChange(e.target.value)}
+                className="text-sm font-semibold text-[#EECE84] bg-transparent border-b border-[#EECE84] px-1 py-0.5 w-20 focus:outline-none"
+                autoFocus
+              />
+              <button
+                onClick={onSaveQuestionId}
+                className="p-1 hover:bg-green-100 rounded transition-colors"
+                title="Save"
+              >
+                <Save className="w-3 h-3 text-green-600" />
+              </button>
+              <button
+                onClick={onCancelEdit}
+                className="p-1 hover:bg-red-100 rounded transition-colors"
+                title="Cancel"
+              >
+                <XIcon className="w-3 h-3 text-red-600" />
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-[#EECE84]">{questionId}</span>
+              {isDevMode && (
+                <button
+                  onClick={() => onEditQuestionId(questionId)}
+                  className="p-1 hover:bg-blue-100 rounded transition-colors"
+                  title="Edit Question ID"
+                >
+                  <Edit3 className="w-3 h-3 text-blue-600" />
+                </button>
+              )}
+            </div>
+          )}
+        </div>
         {renderQualityStars(currentQuestion.quality_score)}
       </div>
       
       {/* Question Images - Display ALL images */}
-      {currentQuestion.question_images && (
-        <>
-          <div className="mb-6 flex flex-wrap gap-2 justify-start">
-            {getImageUrls().map((imageUrl, index) => (
-              <motion.div
-                key={index}
-                className="relative cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all duration-300 bg-gray-100"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => {
-                  setSelectedImageIndex(index);
-                  setIsImageViewerOpen(true);
-                }}
-                style={{ 
-                  width: '120px', 
-                  height: '80px',
-                  userSelect: 'none' // Empêche la sélection de texte
-                }}
-              >
-                <img
-                  src={imageUrl}
-                  alt={`Question image ${index + 1}`}
-                  className="w-full h-full object-contain rounded-lg"
-                  style={{ 
-                    imageRendering: 'crisp-edges' as any,
-                    userSelect: 'none', // Empêche la sélection de texte
-                    pointerEvents: 'none', // Empêche les événements de souris sur l'image
-                    WebkitUserSelect: 'none' as any,
-                    MozUserSelect: 'none' as any,
-                    msUserSelect: 'none' as any
-                  }}
-                  onLoad={(e) => {
-                    console.log('✅ Thumbnail loaded successfully:', imageUrl);
-                  }}
-                  onError={(e) => {
-                    console.error('❌ Failed to load thumbnail:', imageUrl);
-                    e.currentTarget.style.display = 'none';
-                  }}
-                  draggable={false} // Empêche le drag
-                />
-                <div className="absolute inset-0 bg-black/5 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <div className="bg-black/70 text-white text-xs px-2 py-1 rounded-md">
-                    Click to enlarge
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+      <div className="mb-6 flex flex-wrap gap-2 justify-start">
+        {/* Hidden file input for image uploads */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleFileInputChange}
+          className="hidden"
+        />
 
-        </>
-      )}
+        {/* Existing images */}
+        {currentQuestion.question_images && getImageUrls().map((imageUrl, index) => (
+          <motion.div
+            key={index}
+            className="relative cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all duration-300 bg-gray-100"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => {
+              if (isDevMode) {
+                // En mode dev, remplacer l'image
+                triggerFileInput(index);
+              } else {
+                // Mode normal, ouvrir le visualiseur
+                setSelectedImageIndex(index);
+                setIsImageViewerOpen(true);
+              }
+            }}
+            style={{ 
+              width: '120px', 
+              height: '80px',
+              userSelect: 'none'
+            }}
+          >
+            <img
+              src={imageUrl}
+              alt={`Question image ${index + 1}`}
+              className="w-full h-full object-contain rounded-lg"
+              style={{ 
+                imageRendering: 'crisp-edges' as any,
+                userSelect: 'none',
+                pointerEvents: 'none',
+                WebkitUserSelect: 'none' as any,
+                MozUserSelect: 'none' as any,
+                msUserSelect: 'none' as any
+              }}
+              onLoad={(e) => {
+                console.log('✅ Thumbnail loaded successfully:', imageUrl);
+              }}
+              onError={(e) => {
+                console.error('❌ Failed to load thumbnail:', imageUrl);
+                e.currentTarget.style.display = 'none';
+              }}
+              draggable={false}
+            />
+            
+            {/* Overlay pour mode normal */}
+            {!isDevMode && (
+              <div className="absolute inset-0 bg-black/5 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                <div className="bg-black/70 text-white text-xs px-2 py-1 rounded-md">
+                  Click to enlarge
+                </div>
+              </div>
+            )}
+
+            {/* Icône de suppression en mode dev */}
+            {isDevMode && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onImageDelete(questionId, index);
+                }}
+                className="absolute -top-1 -right-1 w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition-colors z-10"
+                title="Delete image"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            )}
+
+            {/* Overlay pour mode dev */}
+            {isDevMode && (
+              <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                <div className="bg-black/70 text-white text-xs px-2 py-1 rounded-md">
+                  Click to replace
+                </div>
+              </div>
+            )}
+          </motion.div>
+        ))}
+
+        {/* Placeholder pour ajouter une image en mode dev */}
+        {isDevMode && (
+          <motion.div
+            className="relative cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all duration-300 bg-gray-200 border-2 border-dashed border-gray-400 hover:border-[#EECE84]"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => triggerFileInput()}
+            style={{ 
+              width: '120px', 
+              height: '80px',
+              userSelect: 'none'
+            }}
+          >
+            <div className="w-full h-full flex items-center justify-center">
+              <Plus className="w-8 h-8 text-gray-500 hover:text-[#EECE84] transition-colors" />
+            </div>
+            <div className="absolute inset-0 bg-black/5 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+              <div className="bg-black/70 text-white text-xs px-2 py-1 rounded-md">
+                Add image
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </div>
       
       {Object.entries(options).map(([key, value], index) => {
         const answerResult = isAnswered(key);
@@ -292,7 +468,7 @@ const QuestionOptions: React.FC<QuestionOptionsProps> = ({
 
                 {/* Option Text */}
                 <span className={`
-                  flex-1 text-left text-lg
+                  flex-1 text-left quiz-option-text
                   ${answerResult?.status === 'correct' ? 'text-green-700' :
                     answerResult?.status === 'incorrect' ? 'text-red-700' :
                     'text-gray-700'}

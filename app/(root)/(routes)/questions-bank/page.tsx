@@ -114,7 +114,7 @@ const QuestionBank = () => {
                 disabled: unfinishedTests === 0
               },
               { href: '/questions-bank/history', img: '/qb/history.png', alt: 'History', label: 'History' },
-              { href: '/questions-bank/community', img: '/qb/community.png', alt: 'Community', label: 'Community' },
+              { href: '/questions-bank/search', img: '/qb/search.png', alt: 'Search', label: 'Search' },
             ].map((card, index) => (
               <Link 
                 key={index}
@@ -147,12 +147,16 @@ const QuestionBank = () => {
                   transition-transform duration-300 
                   ${!card.disabled ? 'group-hover:scale-110' : ''}
                 `}>
-                  <Image
-                    alt={card.alt}
-                    src={card.img}
-                    fill
-                    className="object-contain"
-                  />
+                  {card.img ? (
+                    <Image
+                      alt={card.alt}
+                      src={card.img}
+                      fill
+                      className="object-contain"
+                    />
+                  ) : card.icon ? (
+                    <card.icon className="w-8 h-8 text-gray-600" />
+                  ) : null}
                 </div>
                 <span className={`
                   text-sm font-medium 

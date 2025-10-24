@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Loader2, Sparkles, ZoomIn, ZoomOut, XCircle } from 'lucide-react';
+import { Loader2, Sparkles, ZoomIn, ZoomOut, XCircle, Plus, X, Edit3, Save } from 'lucide-react';
 import { useAuth } from '@/lib/mock-clerk';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -14,6 +14,7 @@ import 'katex/dist/katex.min.css';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import ImageViewer from '@/components/shared/ImageViewer';
+import { toast } from 'sonner';
 
 interface ChatExplanation {
   id: number;
@@ -25,6 +26,17 @@ interface ExplanationProps {
   questionId: number;
   chatExplanations?: ChatExplanation[];
   explanation_images: string | null;
+  isDevMode?: boolean;
+  uploadingExplanationImages?: boolean;
+  onExplanationImageUpload?: (questionId: number, file: File) => Promise<void>;
+  onExplanationImageDelete?: (questionId: number, imageIndex: number) => Promise<void>;
+  onExplanationImageReplace?: (questionId: number, imageIndex: number, file: File) => Promise<void>;
+  editingExplanationText?: number | null;
+  tempExplanationText?: string;
+  onEditExplanationText?: (questionId: number) => void;
+  onSaveExplanationText?: () => void;
+  onCancelEditExplanationText?: () => void;
+  onTempExplanationTextChange?: (text: string) => void;
 }
 
 interface AIExplanation {
@@ -33,7 +45,23 @@ interface AIExplanation {
   date: string;
 }
 
-const Explanation: React.FC<ExplanationProps> = ({ explanation, questionId, chatExplanations = [], explanation_images }) => {
+const Explanation: React.FC<ExplanationProps> = ({ 
+  explanation, 
+  questionId, 
+  chatExplanations = [], 
+  explanation_images,
+  isDevMode = false,
+  uploadingExplanationImages = false,
+  onExplanationImageUpload,
+  onExplanationImageDelete,
+  onExplanationImageReplace,
+  editingExplanationText = null,
+  tempExplanationText = '',
+  onEditExplanationText,
+  onSaveExplanationText,
+  onCancelEditExplanationText,
+  onTempExplanationTextChange
+}) => {
   const router = useRouter();
   const { getToken } = useAuth();
   const [isGenerating, setIsGenerating] = useState(false);
@@ -49,6 +77,7 @@ const Explanation: React.FC<ExplanationProps> = ({ explanation, questionId, chat
   // Advanced Image Viewer states
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Enable body scrolling when modal is open
   useEffect(() => {
@@ -85,6 +114,54 @@ const Explanation: React.FC<ExplanationProps> = ({ explanation, questionId, chat
     e.stopPropagation();
     setScale(prev => Math.max(prev - 0.25, 0.5));
   };
+
+  const getExplanationImageUrls = useCallback(() => {
+    if (!explanation_images) return [];
+    try {
+      const parsed = JSON.parse(explanation_images);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }, [explanation_images]);
+
+  const handleFileUpload = useCallback(() => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  }, []);
+
+  const handleFileReplace = useCallback((imageIndex: number) => {
+    if (fileInputRef.current) {
+      fileInputRef.current.dataset.replaceIndex = imageIndex.toString();
+      fileInputRef.current.click();
+    }
+  }, []);
+
+  const triggerFileInput = useCallback((replaceIndex?: number) => {
+    if (replaceIndex !== undefined) {
+      handleFileReplace(replaceIndex);
+    } else {
+      handleFileUpload();
+    }
+  }, [handleFileUpload, handleFileReplace]);
+
+  const handleFileInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const replaceIndex = event.target.dataset.replaceIndex;
+    
+    if (replaceIndex !== undefined && onExplanationImageReplace) {
+      onExplanationImageReplace(questionId, parseInt(replaceIndex), file);
+    } else if (onExplanationImageUpload) {
+      onExplanationImageUpload(questionId, file);
+    }
+
+    // Reset the input
+    event.target.value = '';
+    delete event.target.dataset.replaceIndex;
+  }, [questionId, onExplanationImageUpload, onExplanationImageReplace]);
 
   // Helper function to build complete image URLs
   const getImageUrls = useCallback(() => {
@@ -159,8 +236,9 @@ const Explanation: React.FC<ExplanationProps> = ({ explanation, questionId, chat
       const data: AIExplanation = await response.json();
       setAiExplanations(prev => [...prev, data]);
       setSelectedExplanation(data.id);
-
-      router.refresh();
+      
+      // Mise à jour immédiate sans rechargement de page
+      console.log('✅ Nouvelle explication générée:', data.id);
     } catch (error) {
       console.error('Error generating explanation:', error);
     } finally {
@@ -223,6 +301,13 @@ const Explanation: React.FC<ExplanationProps> = ({ explanation, questionId, chat
         {explanation_images && (
           <>
             <div className="mb-6 flex flex-wrap gap-2">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileInputChange}
+                className="hidden"
+              />
               {getImageUrls().map((imageUrl, index) => (
                 <motion.div
                   key={index}
@@ -230,8 +315,12 @@ const Explanation: React.FC<ExplanationProps> = ({ explanation, questionId, chat
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => {
-                    setSelectedImageIndex(index);
-                    setIsImageViewerOpen(true);
+                    if (isDevMode) {
+                      triggerFileInput(index); // Replace image
+                    } else {
+                      setSelectedImageIndex(index);
+                      setIsImageViewerOpen(true); // View image
+                    }
                   }}
                   style={{ 
                     width: '120px', 
@@ -260,25 +349,141 @@ const Explanation: React.FC<ExplanationProps> = ({ explanation, questionId, chat
                     }}
                     draggable={false} // Empêche le drag
                   />
+                  {!isDevMode && (
+                    <div className="absolute inset-0 bg-black/5 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                      <div className="bg-black/70 text-white text-xs px-2 py-1 rounded-md">
+                        Click to enlarge
+                      </div>
+                    </div>
+                  )}
+                  {isDevMode && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onExplanationImageDelete?.(questionId, index);
+                      }}
+                      className="absolute -top-1 -right-1 w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition-colors z-10"
+                      title="Delete explanation image"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                  {isDevMode && (
+                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                      <div className="bg-black/70 text-white text-xs px-2 py-1 rounded-md">
+                        Click to replace
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+              {isDevMode && (
+                <motion.div
+                  className="relative cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all duration-300 bg-gray-200 border-2 border-dashed border-gray-400 hover:border-[#EECE84]"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => triggerFileInput()}
+                  style={{
+                    width: '120px',
+                    height: '80px',
+                    userSelect: 'none'
+                  }}
+                >
+                  <div className="w-full h-full flex items-center justify-center">
+                    <Plus className="w-8 h-8 text-gray-500 hover:text-[#EECE84] transition-colors" />
+                  </div>
                   <div className="absolute inset-0 bg-black/5 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
                     <div className="bg-black/70 text-white text-xs px-2 py-1 rounded-md">
-                      Click to enlarge
+                      Add explanation image
                     </div>
                   </div>
                 </motion.div>
-              ))}
+              )}
             </div>
 
           </>
         )}
 
-        <ReactMarkdown
-          remarkPlugins={[remarkGfm, remarkMath]}
-          rehypePlugins={[rehypeKatex, rehypeRaw]}
-          className="text-[18px] leading-relaxed"
-        >
-          {currentText}
-        </ReactMarkdown>
+        {!explanation_images && isDevMode && (
+          <div className="mb-6 flex flex-wrap gap-2">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileInputChange}
+              className="hidden"
+            />
+            <motion.div
+              className="relative cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all duration-300 bg-gray-200 border-2 border-dashed border-gray-400 hover:border-[#EECE84]"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => triggerFileInput()}
+              style={{
+                width: '120px',
+                height: '80px',
+                userSelect: 'none'
+              }}
+            >
+              <div className="w-full h-full flex items-center justify-center">
+                <Plus className="w-8 h-8 text-gray-500 hover:text-[#EECE84] transition-colors" />
+              </div>
+              <div className="absolute inset-0 bg-black/5 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                <div className="bg-black/70 text-white text-xs px-2 py-1 rounded-md">
+                  Add explanation image
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        <div className="relative group">
+          {editingExplanationText === questionId ? (
+            <div className="space-y-2">
+              <textarea
+                value={tempExplanationText}
+                onChange={(e) => onTempExplanationTextChange?.(e.target.value)}
+                className="w-full text-[18px] leading-relaxed p-3 border border-[#EECE84] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#EECE84]/50 resize-none"
+                rows={8}
+                autoFocus
+              />
+              <div className="flex gap-2">
+                <button
+                  onClick={onSaveExplanationText}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+                >
+                  <Save className="w-4 h-4" />
+                  Save
+                </button>
+                <button
+                  onClick={onCancelEditExplanationText}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+                >
+                  <X className="w-4 h-4" />
+                  Cancel
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-start gap-2">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm, remarkMath]}
+                rehypePlugins={[rehypeKatex, rehypeRaw]}
+                className="quiz-explanation-text flex-1"
+              >
+                {currentText}
+              </ReactMarkdown>
+              {isDevMode && (
+                <button
+                  onClick={() => onEditExplanationText?.(questionId)}
+                  className="p-2 hover:bg-blue-100 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                  title="Edit Explanation Text"
+                >
+                  <Edit3 className="w-4 h-4 text-blue-600" />
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Advanced Image Viewer */}

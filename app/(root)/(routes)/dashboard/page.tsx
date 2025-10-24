@@ -138,7 +138,7 @@ const Dashboard = () => {
               </h3>
               
               <p className="text-gray-600 leading-relaxed text-sm flex-1 overflow-y-auto">
-                {dashboardData.latestArticle.content}
+                {dashboardData.latestArticle.content.replace(/<[^>]*>/g, '')}
               </p>
               
               <div className="flex items-center text-yellow-600 text-sm font-medium pt-2">

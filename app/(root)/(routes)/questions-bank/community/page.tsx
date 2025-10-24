@@ -23,13 +23,13 @@ const Community = () => {
   const fetchPosts = useCallback(async () => {
     const token = await getToken();
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forum-posts`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/community/posts`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         }
       });
       const data = await response.json();
-      setPosts(data);
+      setPosts(data.posts || []);
     } catch (error) {
       console.error('Error fetching posts:', error);
     }
@@ -38,13 +38,13 @@ const Community = () => {
   const fetchCategories = useCallback(async () => {
     const token = await getToken();
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forum-categories`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/community`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         }
       });
       const data = await response.json();
-      setCategories(data);
+      setCategories(data.categories || []);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -96,13 +96,16 @@ const Community = () => {
   }) => {
     const token = await getToken();
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forum-posts`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/community/posts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(post),
+        body: JSON.stringify({
+          ...post,
+          user_id: user?.id || ''
+        }),
       });
       
       if (response.ok) {
@@ -217,15 +220,15 @@ const Community = () => {
   const handleComment = async (postId: number, content: string) => {
     const token = await getToken();
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forum-comments`, {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/community/posts/${postId}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
-          post_id: postId,
           content,
+          user_id: userId
         }),
       });
       fetchUserPosts();
