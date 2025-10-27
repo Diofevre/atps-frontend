@@ -20,10 +20,10 @@ import {
   Code,
   Activity
 } from 'lucide-react';
-import { format } from "date-fns";
 import { useRouter } from 'next/navigation';
 import { Skeleton } from "@/components/ui/skeleton";
 import useSWR from 'swr';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 interface DashboardData {
   user: {
@@ -64,9 +64,10 @@ interface DashboardData {
 
 const Dashboard = () => {
   const router = useRouter();
+  const { shouldShowLoading } = useRequireAuth();
 
   const { data: dashboardData, error, isLoading } = useSWR<DashboardData>(
-    'http://localhost:8000/api/dashboard',
+    '/api/dashboard', // Use relative URL to leverage Next.js rewrites
     async (url: string) => {
       const response = await fetch(url);
       if (!response.ok) throw new Error('Failed to fetch dashboard data');
@@ -74,7 +75,7 @@ const Dashboard = () => {
     }
   );
 
-  if (isLoading) {
+  if (shouldShowLoading || isLoading) {
     return <DashboardSkeleton />;
   }
 
@@ -125,7 +126,7 @@ const Dashboard = () => {
               <div className="absolute bottom-4 left-4">
                 <div className="bg-black/70 backdrop-blur-sm px-3 py-1 rounded-full">
                   <div className="text-white text-sm">
-                    {dashboardData.latestArticle.pubDate ? format(new Date(dashboardData.latestArticle.pubDate), 'MMM dd, yyyy') : 'Date not available'}
+                    {dashboardData.latestArticle.pubDate ? new Date(dashboardData.latestArticle.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Date not available'}
         </div>
         </div>
       </div>

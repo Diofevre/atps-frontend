@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useAuth } from "@/lib/mock-clerk";
+import { useKeycloakAuth } from "@/hooks/useKeycloakAuth";
 import useSWR from "swr";
 
 interface TopicV2 {
@@ -30,7 +30,7 @@ interface TopicsV2Response {
 }
 
 const TopicsV2 = ({ onSelectionChange, selectedTopic, selectedTopicName }: TopicsV2Props) => {
-  const { getToken } = useAuth();
+  const { getToken } = useKeycloakAuth();
 
   const fetcher = async (url: string) => {
     const token = await getToken();

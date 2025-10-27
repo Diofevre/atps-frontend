@@ -1,4 +1,4 @@
-import { MdDashboard, MdBook, MdQuiz, MdNewspaper, MdGroups, MdAccountCircle, MdFlight } from 'react-icons/md';
+import { MdDashboard, MdBook, MdQuiz, MdNewspaper, MdGroups, MdAccountCircle, MdFlight, MdArticle } from 'react-icons/md';
 
 export const MenuSidebar = [
   { title: 'Dashboard', path: '/dashboard', icon: MdDashboard },
@@ -6,6 +6,7 @@ export const MenuSidebar = [
   { title: 'Question Bank', path: '/questions-bank', icon: MdQuiz },
   { title: 'ATC Simulator', path: '/atc-simulator', icon: MdFlight },
   { title: 'News', path: '/news', icon: MdNewspaper },
+  { title: 'Blog', path: '/blog', icon: MdArticle },
   { title: 'Community', path: '/community', icon: MdGroups },
   { title: 'Account', path: '/user-profile', icon: MdAccountCircle },
 ];

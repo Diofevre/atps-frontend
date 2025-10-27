@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/mock-clerk';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 import {
   Dialog,
   DialogContent,
@@ -227,6 +228,7 @@ const billingCycles = [
 ];
 
 const SubscriptionPage = () => {
+  const { shouldShowLoading } = useRequireAuth();
   const { getToken } = useAuth();
   const router = useRouter();
   const [selectedCycle, setSelectedCycle] = useState<number>(12);
@@ -376,6 +378,10 @@ const SubscriptionPage = () => {
       onConfirm: () => handleSubscriptionAction('resume')
     });
   };
+
+  if (shouldShowLoading || (!userSubscription && !error)) {
+    return <SubscriptionSkeleton />;
+  }
 
   if (error) {
     return (

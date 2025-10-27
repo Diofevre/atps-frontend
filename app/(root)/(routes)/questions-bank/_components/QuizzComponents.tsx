@@ -194,13 +194,11 @@ const QuizzComponents = () => {
       try {
         if ((isFromHistory || isFromResume) && testIdFromUrl) {
           const endpoint = isFromResume 
-            ? `${process.env.NEXT_PUBLIC_API_URL}/api/tests/resumeTest`
-            : `${process.env.NEXT_PUBLIC_API_URL}/api/tests/continueTest/${testIdFromUrl}`;
+            ? `/api/tests/resumeTest`
+            : `/api/tests/continueTest/${testIdFromUrl}`;
 
           const response = await fetch(endpoint, {
-            headers: { 
-              'Authorization': `Bearer ${token}`,
-            }
+            // Token will be automatically injected by API proxy from cookies
           });
 
           if (!response.ok) {
@@ -267,6 +265,9 @@ const QuizzComponents = () => {
             total_question: quizData.total_question || quizData.questionCount,
             nombre_question: quizData.nombre_question || quizData.questionCount,
             sub_chapters: quizData.subChapters?.map(subChapter => parseInt(subChapter, 10)) || [],
+            subChapters: quizData.subChapters?.map(subChapter => parseInt(subChapter, 10)) || [],
+            questionCount: quizData.total_question || quizData.questionCount,
+            chapters: quizData.chapters || [],
             filter: {
               ...quizData.filter,
               countries: null,
@@ -278,13 +279,14 @@ const QuizzComponents = () => {
               last_exam: null
             }
           };
+          
+          console.log('📤 Sending request to /api/tests/start:', bodyData);
   
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/tests/start`,
+            `/api/tests/start`,
             {
               method: 'POST',
               headers: { 
-                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json' 
               },
               body: JSON.stringify(bodyData),

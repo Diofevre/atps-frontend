@@ -1,8 +1,9 @@
 'use client';
 
 import React, { createContext, useContext, ReactNode } from 'react';
+import { getAccessToken, getUser, logout as logoutKeycloak, isAuthenticated } from '@/lib/keycloakAuth';
 
-// Mock user object
+// Mock user object (for backwards compatibility)
 const mockUser = {
   id: 'mock-user-dev-123',
   emailAddresses: [{ emailAddress: 'test@atps.com' }],
@@ -24,24 +25,41 @@ interface MockClerkContextType {
 
 const MockClerkContext = createContext<MockClerkContextType>({
   isLoaded: true,
-  isSignedIn: true,
+  isSignedIn: false,
   user: mockUser,
   signOut: () => {},
-  getToken: async () => 'mock-token-123',
+  getToken: async () => getAccessToken() || '',
 });
 
 // Mock Clerk Provider
 export function MockClerkProvider({ children }: { children: ReactNode }) {
+  const signOut = () => {
+    logoutKeycloak();
+  };
+
+  const getToken = async () => {
+    return getAccessToken() || '';
+  };
+
+  const authenticated = isAuthenticated();
+  const keycloakUser = getUser();
+
+  const user = authenticated && keycloakUser ? {
+    ...mockUser,
+    id: keycloakUser.sub || mockUser.id,
+    emailAddresses: [{ emailAddress: keycloakUser.email || 'test@atps.com' }],
+    firstName: keycloakUser.given_name || 'Test',
+    lastName: keycloakUser.family_name || 'User',
+  } : null;
+
   return (
     <MockClerkContext.Provider
       value={{
         isLoaded: true,
-        isSignedIn: true,
-        user: mockUser,
-        signOut: () => {
-          console.log('Mock sign out');
-        },
-        getToken: async () => 'mock-token-123',
+        isSignedIn: authenticated,
+        user,
+        signOut,
+        getToken,
       }}
     >
       {children}

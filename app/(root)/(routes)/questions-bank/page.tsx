@@ -5,8 +5,10 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { AlignLeft } from "lucide-react";
 import { useAuth } from '@/lib/mock-clerk';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 const QuestionBank = () => {
+  const { shouldShowLoading } = useRequireAuth();
   const { getToken } = useAuth();
   const [unfinishedTests, setUnfinishedTests] = useState(0);
 
@@ -29,6 +31,16 @@ const QuestionBank = () => {
 
     fetchUnfinishedTests();
   }, [getToken]);
+
+  if (shouldShowLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col">

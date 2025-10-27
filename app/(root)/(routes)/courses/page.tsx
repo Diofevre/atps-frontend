@@ -3,8 +3,20 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { MdOutlineFeaturedVideo } from "react-icons/md";
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 const Courses = () => {
+  const { shouldShowLoading } = useRequireAuth();
+
+  if (shouldShowLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col">
       {/* Header */}

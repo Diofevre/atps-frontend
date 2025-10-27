@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Urbanist } from "next/font/google"
 import { Toaster } from "@/components/ui/sonner";
+// import { ClerkProvider } from '@clerk/nextjs'
 import TopLoader from "@/components/shared/TopLoader";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { FontSizeProvider } from "@/hooks/useFontSize";
-import { AuthProvider } from "@/contexts/AuthContext";
 
 const font = Urbanist({ 
   subsets: ['latin'], 
@@ -26,25 +26,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    // <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
         <body
           className={`${font.className} antialiased`}
         >
-          <AuthProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <FontSizeProvider>
-                <Toaster />
-                <TopLoader/>
-                {children}
-              </FontSizeProvider>
-            </ThemeProvider>
-          </AuthProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <FontSizeProvider>
+              <Toaster />
+              <TopLoader/>
+              {children}
+            </FontSizeProvider>
+          </ThemeProvider>
         </body>
       </html>
+    // </ClerkProvider>
   );
 }
