@@ -5,9 +5,8 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import { MessageCircle, Info, Eye, BookOpen, Lightbulb } from 'lucide-react';
-import { useAuth, useUser } from '@/lib/mock-clerk';
+import { useAuth } from '@/lib/mock-clerk';
 import { Loader } from '@/components/ui/loader';
-import ReviewForm from '../../../_components/ReviewForm';
 import CommentsQuizz from '../../../_components/CommentsQuizz';
 
 // Fonction utilitaire pour formater le markdown (copiée depuis AIChats.tsx)
@@ -140,8 +139,7 @@ export default function QuestionDetailsDialog({
   children,
   onClose
 }: QuestionDetailsDialogProps) {
-  const { getToken } = useAuth();
-  const { user } = useUser();
+  const { getToken, user } = useAuth();
   const [details, setDetails] = useState<QuestionDetails | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -213,22 +211,34 @@ export default function QuestionDetailsDialog({
           </div>
         ) : details ? (
           <Tabs defaultValue="overview" className="h-full">
-            <TabsList className="grid w-full grid-cols-4 rounded-full">
-              <TabsTrigger value="overview" className="flex items-center gap-2 rounded-full">
+            <TabsList className="grid w-full grid-cols-4 gap-2 p-1 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-800 dark:to-gray-800 rounded-2xl">
+              <TabsTrigger 
+                value="overview" 
+                className="flex items-center gap-2 rounded-xl data-[state=active]:bg-gradient-to-br data-[state=active]:from-emerald-500 data-[state=active]:to-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all"
+              >
                 <Eye className="w-4 h-4" />
-                <span>Overview</span>
+                <span className="font-medium">Overview</span>
               </TabsTrigger>
-              <TabsTrigger value="explanation" className="flex items-center gap-2 rounded-full">
+              <TabsTrigger 
+                value="explanation"
+                className="flex items-center gap-2 rounded-xl data-[state=active]:bg-gradient-to-br data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all"
+              >
                 <BookOpen className="w-4 h-4" />
-                <span>Explanation</span>
+                <span className="font-medium">Explanation</span>
               </TabsTrigger>
-              <TabsTrigger value="comments" className="flex items-center gap-2 rounded-full">
+              <TabsTrigger 
+                value="comments"
+                className="flex items-center gap-2 rounded-xl data-[state=active]:bg-gradient-to-br data-[state=active]:from-purple-500 data-[state=active]:to-pink-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all"
+              >
                 <MessageCircle className="w-4 h-4" />
-                <span>Comments</span>
+                <span className="font-medium">Comments</span>
               </TabsTrigger>
-              <TabsTrigger value="preview" className="flex items-center gap-2 rounded-full">
+              <TabsTrigger 
+                value="preview"
+                className="flex items-center gap-2 rounded-xl data-[state=active]:bg-gradient-to-br data-[state=active]:from-amber-500 data-[state=active]:to-orange-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all"
+              >
                 <Info className="w-4 h-4" />
-                <span>Preview</span>
+                <span className="font-medium">Review</span>
               </TabsTrigger>
             </TabsList>
 
@@ -246,20 +256,35 @@ export default function QuestionDetailsDialog({
               </TabsContent>
 
               <TabsContent value="preview" className="h-full">
-                <div className="bg-white rounded-[20px] p-4 max-w-[620px] mx-auto border border-[#EECE84]/50 shadow-sm">
-                  <h3 className="text-lg font-semibold mb-1 text-gray-800">Available in</h3>
-                  <div className="flex flex-wrap gap-2 mb-1">
-                    {getCountryList(details.countries).map((country, index) => (
-                      <span
-                        key={index}
-                        className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#EECE84]/20 text-black/80 border border-[#EECE84]/50"
-                      >
-                        {country}
-                      </span>
-                    ))}
+                <div className="space-y-6 max-h-[calc(80vh-8rem)] overflow-y-auto pr-2">
+                  <div className="relative">
+                    {/* Decorative gradient background */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-transparent to-blue-50 dark:from-emerald-950/10 dark:to-blue-950/10 rounded-2xl -z-10"></div>
+                    
+                    <div className="p-6 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-500 to-blue-600 shadow-lg">
+                          <Info className="w-5 h-5 text-white" />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white">Question Availability</h3>
+                      </div>
+
+                      <div>
+                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-3">Available in:</p>
+                        <div className="flex flex-wrap gap-2">
+                          {getCountryList(details.countries).map((country, index) => (
+                            <span
+                              key={index}
+                              className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50 hover:scale-105 transition-transform"
+                            >
+                              🌍 {country}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <ReviewForm questionId={questionId} userId={user?.id || ''} />
               </TabsContent>
             </div>
           </Tabs>
@@ -286,93 +311,108 @@ function OverviewTab({ details }: { details: QuestionDetails }) {
               className="text-xl font-semibold leading-relaxed text-gray-900 dark:text-gray-100 prose prose-lg max-w-none"
               dangerouslySetInnerHTML={{ __html: formattedQuestion }}
             />
-            <div className="mt-2 space-y-2">
-              {countryList.length > 0 ? (
-                <div className="flex flex-wrap gap-2 max-h-24 overflow-y-auto">
-                  {countryList.map((country, index) => (
-                    <span
-                      key={index}
-                      className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10 dark:bg-blue-900/30 dark:text-blue-300"
-                    >
-                      {country}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700">
-                  No countries available
-                </span>
-              )}
+            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 space-y-3">
               {details.is_correct !== null && (
-                <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${
+                <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full ${
                   details.is_correct
-                    ? 'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-900/30 dark:text-green-300'
-                    : 'bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-900/30 dark:text-red-300'
+                    ? 'bg-gradient-to-r from-emerald-100 to-green-100 dark:from-emerald-900/30 dark:to-green-900/30'
+                    : 'bg-gradient-to-r from-red-100 to-orange-100 dark:from-red-900/30 dark:to-orange-900/30'
                 }`}>
-                  {details.is_correct ? 'Correct' : 'Incorrect'}
-                </span>
+                  <div className={`w-2 h-2 rounded-full ${
+                    details.is_correct ? 'bg-emerald-500' : 'bg-red-500'
+                  }`}></div>
+                  <span className={`text-sm font-semibold ${
+                    details.is_correct ? 'text-emerald-700 dark:text-emerald-300' : 'text-red-700 dark:text-red-300'
+                  }`}>
+                    {details.is_correct ? 'Correct Answer' : 'Incorrect Answer'}
+                  </span>
+                </div>
               )}
+              
             </div>
           </div>
         </div>
       </div>
 
-      <div className="grid gap-3">
-        {details.options ? (
-          Object.entries(details.options).map(([key, value]) => {
-            const isUserAnswer = details.user_answer === key;
-            const isCorrectAnswer = details.answer === key;
+      <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+          <div className="w-1 h-4 bg-gradient-to-b from-emerald-500 to-blue-500 rounded-full"></div>
+          Answer Options
+        </h4>
+        <div className="grid gap-3">
+          {details.options ? (
+            Object.entries(details.options).map(([key, value]) => {
+              const isUserAnswer = details.user_answer === key;
+              const isCorrectAnswer = details.answer === key;
 
-            let optionStyle = '';
-            if (isUserAnswer && details.is_correct) {
-              optionStyle = 'border-green-500 bg-green-50 dark:bg-green-900/20 shadow-sm shadow-green-100 dark:shadow-green-900/10';
-            } else if (isUserAnswer && !details.is_correct) {
-              optionStyle = 'border-red-500 bg-red-50 dark:bg-red-900/20 shadow-sm shadow-red-100 dark:shadow-red-900/10';
-            } else if (isCorrectAnswer) {
-              optionStyle = 'border-green-500 bg-green-50 dark:bg-green-900/20 shadow-sm shadow-green-100 dark:shadow-green-900/10';
-            } else {
-              optionStyle = 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600';
-            }
+              let optionStyle = '';
+              let badgeStyle = '';
+              let iconStyle = '';
+              
+              if (isUserAnswer && details.is_correct) {
+                // User's answer and it's correct - green
+                optionStyle = 'border-emerald-500 bg-gradient-to-r from-emerald-50/50 to-green-50/50 dark:from-emerald-900/20 dark:to-green-900/20 shadow-md shadow-emerald-200/50 dark:shadow-emerald-900/20';
+                badgeStyle = 'bg-gradient-to-r from-emerald-500 to-green-500 text-white';
+                iconStyle = 'text-emerald-600 dark:text-emerald-400';
+              } else if (isUserAnswer && !details.is_correct) {
+                // User's answer but it's incorrect - red
+                optionStyle = 'border-red-500 bg-gradient-to-r from-red-50/50 to-orange-50/50 dark:from-red-900/20 dark:to-orange-900/20 shadow-md shadow-red-200/50 dark:shadow-red-900/20';
+                badgeStyle = 'bg-gradient-to-r from-red-500 to-orange-500 text-white';
+                iconStyle = 'text-red-600 dark:text-red-400';
+              } else if (isCorrectAnswer) {
+                // Not user's answer but it's the correct one - green
+                optionStyle = 'border-emerald-500 bg-gradient-to-r from-emerald-50/50 to-green-50/50 dark:from-emerald-900/20 dark:to-green-900/20 shadow-md shadow-emerald-200/50 dark:shadow-emerald-900/20';
+                badgeStyle = 'bg-gradient-to-r from-emerald-500 to-green-500 text-white';
+                iconStyle = 'text-emerald-600 dark:text-emerald-400';
+              } else {
+                // Neutral answer
+                optionStyle = 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800/50';
+                badgeStyle = 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400';
+                iconStyle = 'text-gray-400 dark:text-gray-500';
+              }
 
-            return (
-              <div
-                key={key}
-                className={`relative flex items-center p-4 rounded-lg border transition-all ${optionStyle}`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`flex h-8 w-8 items-center justify-center rounded-full border text-sm font-medium ${
-                    isUserAnswer || isCorrectAnswer
-                      ? 'border-transparent bg-white text-gray-900 shadow-sm dark:bg-gray-900 dark:text-white'
-                      : 'border-gray-300 text-gray-500 dark:border-gray-600'
-                  }`}>
-                    {key}
+              return (
+                <div
+                  key={key}
+                  className={`relative group flex items-center p-4 rounded-xl border-2 transition-all ${optionStyle}`}
+                >
+                  <div className="flex items-center gap-4 flex-1">
+                    <div className={`flex h-10 w-10 items-center justify-center rounded-xl border-2 font-bold text-sm transition-transform ${badgeStyle}`}>
+                      {key}
+                    </div>
+                    <span 
+                      className="text-gray-900 dark:text-gray-100 flex-1 prose max-w-none"
+                      dangerouslySetInnerHTML={{ __html: formatMarkdown(value) }}
+                    />
                   </div>
-                  <span 
-                    className="text-gray-900 dark:text-gray-100 prose max-w-none"
-                    dangerouslySetInnerHTML={{ __html: formatMarkdown(value) }}
-                  />
+
+                  {(isUserAnswer || isCorrectAnswer) && (
+                    <div className="absolute right-4 flex items-center gap-2">
+                      {isUserAnswer && (
+                        <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+                          <div className={`w-2 h-2 rounded-full ${isCorrectAnswer ? 'bg-emerald-500' : 'bg-red-500'}`}></div>
+                          <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                            Your answer
+                          </span>
+                        </div>
+                      )}
+                      {isCorrectAnswer && !isUserAnswer && (
+                        <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+                          <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                          <span className="text-xs font-medium text-emerald-700 dark:text-emerald-400">
+                            Correct
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
-
-                {(isUserAnswer || isCorrectAnswer) && (
-                  <div className="absolute right-4 flex items-center gap-2">
-                    {isUserAnswer && (
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
-                        Your answer
-                      </span>
-                    )}
-                    {isCorrectAnswer && !isUserAnswer && (
-                      <span className="text-sm text-green-600 dark:text-green-400">
-                        Correct answer
-                      </span>
-                    )}
-                  </div>
-                )}
-              </div>
-            );
-          })
-        ) : (
-          <div className="text-gray-500 text-center py-4">No options available</div>
-        )}
+              );
+            })
+          ) : (
+            <div className="text-gray-500 text-center py-8">No options available</div>
+          )}
+        </div>
       </div>
     </Card>
   );
@@ -382,41 +422,48 @@ function ExplanationTab({ explanation }: { explanation: string }) {
   const formattedExplanation = formatMarkdown(explanation);
 
   return (
-    <Card className="p-6 max-h-[calc(80vh-8rem)] overflow-hidden flex flex-col">
-      <div className="space-y-6 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent">
-        <div className="flex items-center gap-3 pb-4 border-b dark:border-gray-800 sticky top-0 bg-card z-10">
-          <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/30">
-            <BookOpen className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-          </div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            Detailed Explanation
-          </h3>
-        </div>
-
-        <div className="relative">
-          <div className="absolute top-0 left-4 w-px h-full bg-gradient-to-b from-blue-500/20 to-transparent" />
-          <div className="pl-8 space-y-4">
-            <div 
-              className="text-gray-700 dark:text-gray-300 leading-relaxed break-words prose prose-lg max-w-none"
-              dangerouslySetInnerHTML={{ __html: formattedExplanation }}
-            />
-
-            <div className="mt-6 pt-6 border-t dark:border-gray-800">
-              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                <Lightbulb className="w-4 h-4" />
-                <span className="font-medium">Pro Tip:</span>
-                <span>Take notes and review this explanation multiple times for better retention.</span>
-              </div>
+    <div className="space-y-6 max-h-[calc(80vh-8rem)] overflow-y-auto pr-2">
+      <div className="relative">
+        {/* Decorative gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-transparent to-purple-50 dark:from-blue-950/10 dark:to-purple-950/10 rounded-2xl -z-10"></div>
+        
+        <div className="p-6 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg">
+              <BookOpen className="w-5 h-5 text-white" />
             </div>
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+              Detailed Explanation
+            </h3>
+          </div>
+
+          <div 
+            className="text-gray-700 dark:text-gray-300 leading-relaxed break-words prose prose-lg max-w-none"
+            dangerouslySetInnerHTML={{ __html: formattedExplanation }}
+          />
+        </div>
+      </div>
+
+      {/* Pro Tip Card */}
+      <div className="p-4 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 border border-amber-200 dark:border-amber-800/50">
+        <div className="flex items-start gap-3">
+          <div className="p-2 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500">
+            <Lightbulb className="w-4 h-4 text-white" />
+          </div>
+          <div>
+            <p className="font-semibold text-amber-900 dark:text-amber-300 mb-1">Pro Tip</p>
+            <p className="text-sm text-amber-800 dark:text-amber-400">
+              Take notes and review this explanation multiple times for better retention.
+            </p>
           </div>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }
 
 function CommentsTab({ questionId }: { questionId: number }) {
-  const { user } = useUser();
+  const { user } = useAuth();
 
   return (
     <Card className="p-6 max-h-[calc(80vh-8rem)] overflow-y-auto">

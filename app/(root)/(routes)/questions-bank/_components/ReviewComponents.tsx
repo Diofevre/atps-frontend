@@ -127,15 +127,29 @@ const ReviewComponents = () => {
   return (
     <div className="min-h-screen py-8">
       <div className="max-w-7xl mx-auto px-4 space-y-6">
-        {/* Header */}
-        <Card className="overflow-hidden border-white shadow-md">
-          <div className="p-6">
+        {/* Header - Modern Redesigned */}
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 shadow-2xl">
+          {/* Decorative background elements */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-emerald-400/10 via-blue-400/5 to-purple-400/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-br from-amber-400/10 via-orange-400/5 to-red-400/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3"></div>
+          
+          <div className="relative p-8">
             <div className="flex flex-col lg:flex-row justify-between gap-6">
               {/* Left side - Title and metadata */}
-              <div className="flex flex-col">
-                <div className="flex items-center gap-3 mb-4">
-                  <Trophy className="w-8 h-8 text-emerald-500" />
-                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{data.topic}</h1>
+              <div className="flex flex-col flex-1">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl blur-lg opacity-30"></div>
+                    <div className="relative bg-gradient-to-br from-emerald-500 to-emerald-600 p-3 rounded-xl shadow-lg">
+                      <Trophy className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                  <div>
+                    <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent">
+                      {data.topic}
+                    </h1>
+                    <div className="h-1 w-24 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full mt-2"></div>
+                  </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600 dark:text-gray-400">
                   <div className="flex items-center gap-2">
@@ -208,7 +222,7 @@ const ReviewComponents = () => {
               </div>
             </div>
           </div>
-        </Card>
+        </div>
 
         {/* Actions */}
         <div className="flex flex-row items-center gap-2">
