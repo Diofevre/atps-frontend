@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { login, LoginCredentials } from '@/lib/keycloakAuth';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -10,7 +10,8 @@ interface LoginFormProps {
 
 type View = 'login' | 'forgot-password';
 
-export default function LoginForm({ redirectTo = '/dashboard' }: LoginFormProps) {
+// Composant interne qui utilise useSearchParams
+function LoginFormContent({ redirectTo }: LoginFormProps) {
   const [view, setView] = useState<View>('login');
   const [credentials, setCredentials] = useState<LoginCredentials>({
     username: '',
@@ -385,5 +386,14 @@ export default function LoginForm({ redirectTo = '/dashboard' }: LoginFormProps)
         <p className="mt-2">Test account: <span className="font-semibold" style={{ color: '#2D3748' }}>client@atps.com</span> / <span className="font-semibold" style={{ color: '#2D3748' }}>client123</span></p>
       </div>
     </form>
+  );
+}
+
+// Wrapper avec Suspense pour useSearchParams
+export default function LoginForm({ redirectTo = '/dashboard' }: LoginFormProps) {
+  return (
+    <Suspense fallback={<div className="p-4">Loading...</div>}>
+      <LoginFormContent redirectTo={redirectTo} />
+    </Suspense>
   );
 }
