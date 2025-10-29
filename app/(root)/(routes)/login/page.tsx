@@ -6,6 +6,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useKeycloakAuth } from '@/hooks/useKeycloakAuth';
 
+// Force dynamic rendering to avoid static generation errors
+export const dynamic = 'force-dynamic';
+
 export default function LoginPage() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const router = useRouter();
