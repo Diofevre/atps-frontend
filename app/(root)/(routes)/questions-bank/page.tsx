@@ -159,16 +159,14 @@ const QuestionBank = () => {
                   transition-transform duration-300 
                   ${!card.disabled ? 'group-hover:scale-110' : ''}
                 `}>
-                  {card.img ? (
+                  {card.img && (
                     <Image
                       alt={card.alt}
                       src={card.img}
                       fill
                       className="object-contain"
                     />
-                  ) : card.icon ? (
-                    <card.icon className="w-8 h-8 text-gray-600" />
-                  ) : null}
+                  )}
                 </div>
                 <span className={`
                   text-sm font-medium 

@@ -9,8 +9,6 @@ export default function AdminLoginPage() {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8">
           <LoginForm 
             redirectTo="/administrateur"
-            title="Connexion Administrateur"
-            subtitle="Espace d'administration ATPS"
           />
         </div>
       </div>

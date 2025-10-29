@@ -112,6 +112,10 @@ export default function NewsArticlePage() {
               src={article.featuredImageUrl}
               alt={article.title}
               className="w-full h-64 md:h-96 object-cover rounded-lg"
+              onError={(e) => {
+                console.error('Image failed to load:', article.featuredImageUrl);
+                e.currentTarget.src = '/placeholder-news.jpg';
+              }}
             />
           </div>
         )}

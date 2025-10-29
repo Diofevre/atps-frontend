@@ -1,10 +1,18 @@
-import { Webhook } from "svix";
-import { headers } from "next/headers";
-import { WebhookEvent } from "@clerk/nextjs/server";
-import { createUser, updateUser, deleteUser } from "@/lib/users_actions";
+// Désactivé - utilisation de Keycloak au lieu de Clerk
+// import { Webhook } from "svix";
+// import { headers } from "next/headers";
+// import { WebhookEvent } from "@clerk/nextjs/server";
+// import { createUser, updateUser, deleteUser } from "@/lib/users_actions";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
+  // Webhook désactivé - Keycloak gère les utilisateurs différemment
+  return NextResponse.json({ message: "Webhook endpoint disabled - using Keycloak" }, { status: 404 });
+}
+
+/*
+// Ancien code Clerk (désactivé)
+export async function POST_OLD(req: Request) {
   console.log("Received a POST request");
 
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
@@ -123,5 +131,7 @@ export async function POST(req: Request) {
 }
 
 export async function GET() {
-  return new Response("Method Not Allowed", { status: 405 });
+  return NextResponse.json({ message: "Webhook endpoint disabled" }, { status: 405 });
 }
+
+*/

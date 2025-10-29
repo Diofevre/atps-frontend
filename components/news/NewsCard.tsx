@@ -23,6 +23,10 @@ export default function NewsCard({ article }: NewsCardProps) {
             src={article.featuredImageUrl || '/placeholder-news.jpg'}
             alt={article.title}
             className="w-full h-full object-cover"
+            onError={(e) => {
+              console.error('Image failed to load:', article.featuredImageUrl);
+              e.currentTarget.src = '/placeholder-news.jpg';
+            }}
           />
         </div>
         <div className="p-6">

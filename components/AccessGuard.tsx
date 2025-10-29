@@ -96,7 +96,7 @@ const AccessGuard: React.FC<AccessGuardProps> = ({
         <div className="flex items-center gap-2 text-orange-700">
           <AlertTriangle className="w-4 h-4" />
           <span className="text-sm">
-            Your current plan: <strong>{subscription?.planType.toUpperCase()}</strong>
+            Your current plan: <strong>{subscription?.tier?.toUpperCase() || 'FREE'}</strong>
           </span>
         </div>
 

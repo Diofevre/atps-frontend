@@ -3,6 +3,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  output: 'standalone', // Pour le déploiement Docker optimisé
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -17,14 +18,17 @@ const nextConfig = {
     ],
   },
   async rewrites() {
+    // Utiliser l'URL du backend depuis les variables d'environnement
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.BACKEND_URL || 'http://myatps-backend:3000';
+    
     return [
       {
         source: '/api/:path*',
-        destination: 'http://localhost:8000/api/:path*',
+        destination: `${backendUrl}/api/:path*`,
       },
       {
         source: '/questions/:path*',
-        destination: 'http://localhost:8000/questions/:path*',
+        destination: `${backendUrl}/questions/:path*`,
       },
     ];
   },

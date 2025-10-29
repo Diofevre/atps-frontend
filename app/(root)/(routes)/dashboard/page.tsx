@@ -138,9 +138,35 @@ const Dashboard = () => {
                 {dashboardData.latestArticle.title}
               </h3>
               
-              <p className="text-gray-600 leading-relaxed text-sm flex-1 overflow-y-auto">
-                {dashboardData.latestArticle.content.replace(/<[^>]*>/g, '')}
-              </p>
+              <div 
+                className="text-gray-600 leading-relaxed text-sm overflow-hidden flex-1 relative"
+                style={{
+                  fontSize: '0.875rem',
+                  lineHeight: '1.5rem',
+                  maxHeight: 'calc(100% - 40px)'
+                }}
+              >
+                <div 
+                  className="overflow-y-auto max-h-full"
+                  dangerouslySetInnerHTML={{ __html: dashboardData.latestArticle.content }}
+                />
+              </div>
+              <style jsx global>{`
+                .text-gray-600 p {
+                  margin-bottom: 0.5rem !important;
+                }
+                .text-gray-600 strong {
+                  font-weight: 600 !important;
+                }
+                .text-gray-600 ul, 
+                .text-gray-600 ol {
+                  margin-bottom: 0.5rem !important;
+                  padding-left: 1.5rem !important;
+                }
+                .text-gray-600 li {
+                  margin-bottom: 0.25rem !important;
+                }
+              `}</style>
               
               <div className="flex items-center text-yellow-600 text-sm font-medium pt-2">
                 <span>Read more</span>

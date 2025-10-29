@@ -69,6 +69,7 @@ export function useKeycloakAuth() {
   return {
     ...authState,
     getToken,
+    getAccessToken: getToken,
     logout,
   };
 }

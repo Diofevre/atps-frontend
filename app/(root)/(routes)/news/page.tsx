@@ -109,23 +109,34 @@ export default function NewsPage() {
         {featured && (
           <div className="mb-12">
             <Link href={`/news/${featured.titleSlug}`}>
-              <article className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="relative h-64 md:h-auto">
-                    <img
-                      src={featured.featuredImageUrl || '/placeholder-news.jpg'}
-                      alt={featured.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="p-8">
-                    <span className="text-sm text-blue-600 font-semibold">Featured</span>
-                    <h2 className="text-3xl font-bold mt-2 mb-4">{featured.title}</h2>
-                    <p className="text-gray-600 mb-4">{featured.excerpt}</p>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <span>{new Date(featured.publishedAt).toLocaleDateString()} {new Date(featured.publishedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                      <span className="mx-2">•</span>
-                      <span>{featured.readingTimeMinutes} min read</span>
+              <article className="relative rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all cursor-pointer group">
+                {/* Background Image */}
+                <div 
+                  className="relative h-[500px] bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url(${featured.featuredImageUrl || '/placeholder-news.jpg'})`
+                  }}
+                >
+                  {/* Dark Overlay for Text Readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
+                  
+                  {/* Content Overlay */}
+                  <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12">
+                    <div className="max-w-4xl">
+                      <span className="inline-block px-4 py-2 bg-atps-yellow text-[#111111] text-sm font-semibold rounded-full mb-4">
+                        Featured
+                      </span>
+                      <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 group-hover:text-atps-yellow transition-colors">
+                        {featured.title}
+                      </h2>
+                      <p className="text-gray-200 mb-6 text-lg leading-relaxed line-clamp-2">
+                        {featured.excerpt}
+                      </p>
+                      <div className="flex items-center text-white text-sm">
+                        <span>{new Date(featured.publishedAt).toLocaleDateString()} {new Date(featured.publishedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                        <span className="mx-2">•</span>
+                        <span>{featured.readingTimeMinutes} min read</span>
+                      </div>
                     </div>
                   </div>
                 </div>
