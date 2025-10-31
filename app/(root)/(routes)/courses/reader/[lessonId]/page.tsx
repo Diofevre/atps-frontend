@@ -25,7 +25,7 @@ export default function PDFReaderPage({ params }: { params: { lessonId: string }
 
   const fetchLesson = async () => {
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+      const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001";
       
       const response = await fetch(`${API_URL}/api/ebook/lessons/${params.lessonId}`);
       const data = await response.json();

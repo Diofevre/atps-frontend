@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     }
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/news?page=${page}&limit=${limit}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/news?page=${page}&limit=${limit}`,
       {
         headers,
       }

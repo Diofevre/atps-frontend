@@ -110,10 +110,10 @@ const Resume = () => {
   const { getToken } = useAuth();
   
   const { data: testData, error } = useSWR<TestResume>(
-    user?.id ? [`${process.env.NEXT_PUBLIC_API_URL}/api/tests/resumeTest`, user.id] : null,
+    user?.id ? [`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tests/resumeTest`, user.id] : null,
     async () => {
       const token = await getToken();
-      return fetcher(`${process.env.NEXT_PUBLIC_API_URL}/api/tests/resumeTest`, token as string);
+      return fetcher(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tests/resumeTest`, token as string);
     }
   );
 

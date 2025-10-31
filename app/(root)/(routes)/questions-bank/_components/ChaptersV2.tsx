@@ -38,7 +38,7 @@ const ChaptersV2: React.FC<ChaptersV2Props> = ({ subjectCode, onSelectionChange 
       try {
         const token = await getToken();
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/questions-v2/chapter?subjectCode=${subjectCode}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questions-v2/chapter?subjectCode=${subjectCode}`,
           {
             headers: {
               'Authorization': `Bearer ${token}`,

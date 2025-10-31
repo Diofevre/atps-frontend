@@ -74,7 +74,7 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
     setLoading(true);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/keycloak/forgot-password`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/keycloak/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

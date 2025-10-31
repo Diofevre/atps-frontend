@@ -218,7 +218,7 @@ const Explanation: React.FC<ExplanationProps> = ({
     setIsGenerating(true);
     try {
       const token = await getToken();
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/questions/ameliorate`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questions/ameliorate`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -79,7 +79,7 @@ const History = () => {
   };
 
   const { data, error, isLoading, mutate } = useSWR<{ unfinishedTests: RawTest[] }>(
-    isLoaded && user ? `${process.env.NEXT_PUBLIC_API_URL}/api/tests/list/${userId}` : null,
+    isLoaded && user ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tests/list/${userId}` : null,
     fetcher
   );
 
@@ -136,7 +136,7 @@ const History = () => {
     const token = await getToken();
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tests/supprimeTest`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tests/supprimeTest`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

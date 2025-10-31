@@ -37,7 +37,7 @@ export default function LessonViewerPage({
 		setLessonNotFound(false);
 		try {
 			const response = await fetch(
-				`${process.env.NEXT_PUBLIC_API_URL}/api/lessons/pages/${params.topicLessonId}/${params.lessonId}/${pageNumber}`
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/lessons/pages/${params.topicLessonId}/${params.lessonId}/${pageNumber}`
 			);
 
 			if (!response.ok) {
@@ -62,7 +62,7 @@ export default function LessonViewerPage({
 	useEffect(() => {
 		const checkBookmarkStatus = async () => {
 			try {
-				const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookmarks/${params.pageId}`);
+				const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bookmarks/${params.pageId}`);
 				if (response.ok) {
 					const data = await response.json();
 					setIsBookmarked(data.isBookmarked);
@@ -79,7 +79,7 @@ export default function LessonViewerPage({
 	const handleBookmarkToggle = async () => {
     const token = await getToken();
 		try {
-			const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookmarks`, {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bookmarks`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

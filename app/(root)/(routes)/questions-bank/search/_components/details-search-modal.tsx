@@ -51,7 +51,7 @@ export default function QuestionSearchDialog({
     try {
       const token = await getAccessToken();
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/questions/${questionId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questions/${questionId}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`,

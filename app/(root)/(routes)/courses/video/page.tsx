@@ -51,7 +51,7 @@ const VideoPage = () => {
       try {
         const token = await getToken();
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/videos/topic/${selectedTopicId}/search/${searchQuery || ''}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/videos/topic/${selectedTopicId}/search/${searchQuery || ''}`,
           {
             headers: {
               'Authorization': `Bearer ${token}`

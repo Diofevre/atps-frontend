@@ -16,7 +16,7 @@ const QuestionBank = () => {
     const fetchUnfinishedTests = async () => {
       try {
         const token = await getToken();
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tests/count-unfinished`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tests/count-unfinished`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },

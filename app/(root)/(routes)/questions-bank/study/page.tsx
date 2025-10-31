@@ -93,7 +93,7 @@ const Study = () => {
           Object.entries(params).map(([key, value]) => [key, String(value)])
         );
     
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/topics/${topicId}/chapters?${queryParams.toString()}`, 
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/topics/${topicId}/chapters?${queryParams.toString()}`, 
           {
             method: 'GET',
             headers: {

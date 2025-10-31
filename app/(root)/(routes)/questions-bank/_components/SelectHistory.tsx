@@ -55,7 +55,7 @@ function ActionDropdown({ testId, onDelete, isFinished, isValidation = false }: 
     } else if (action === 'Delete') {
       try {
         const token = await getToken();
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tests/supprimeTest`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tests/supprimeTest`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

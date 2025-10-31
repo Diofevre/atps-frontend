@@ -26,7 +26,7 @@ function ArticlePage() {
   const [isScrolling, setIsScrolling] = useState(false);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/articles/${id}`)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/articles/${id}`)
       .then(response => response.json())
       .then(data => setArticle(data));
   }, [id]);

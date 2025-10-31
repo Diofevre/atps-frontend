@@ -66,7 +66,7 @@ export default function NewTestModal() {
 
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/tests/validate`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tests/validate`,
           {
             method: 'POST',
             headers: {

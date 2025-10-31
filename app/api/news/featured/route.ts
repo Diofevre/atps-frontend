@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     }
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/news/featured`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/news/featured`,
       {
         headers,
       }

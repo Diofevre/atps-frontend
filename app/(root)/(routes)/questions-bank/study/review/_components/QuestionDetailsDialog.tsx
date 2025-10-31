@@ -154,7 +154,7 @@ export default function QuestionDetailsDialog({
     try {
       const token = await getToken();
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/questions/${questionId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questions/${questionId}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`,

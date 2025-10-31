@@ -57,7 +57,7 @@ const TopicsExam = ({ onSelectionChange }: TopicsExamProps) => {
   }
 
   const { data, error, isLoading } = useSWR<TopicsResponse>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/topics`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/topics`,
     fetcher
   )
 

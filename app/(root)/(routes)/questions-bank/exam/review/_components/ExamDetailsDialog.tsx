@@ -44,7 +44,7 @@ export default function ExamDetailsDialog({
       try {
         const token = await getToken();
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/questions/${questionId}/${testId}/${examId}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questions/${questionId}/${testId}/${examId}`,
           {
             headers: {
               'Authorization': `Bearer ${token}`,

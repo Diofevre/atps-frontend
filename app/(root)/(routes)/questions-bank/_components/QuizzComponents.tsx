@@ -445,9 +445,9 @@ const QuizzComponents = () => {
       const token = await getToken();
       console.log('🔑 Token obtenu:', token ? 'Oui' : 'Non');
       
-      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/annexes`;
+      const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/annexes`;
       console.log('🌐 URL API:', apiUrl);
-      console.log('🌐 NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
+      console.log('🌐 NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_BACKEND_URL);
       
       const response = await fetch(apiUrl, {
         method: 'GET',
@@ -516,9 +516,9 @@ const QuizzComponents = () => {
     let imagePath = '';
     
     if (annexId === 1) {
-      imagePath = `${process.env.NEXT_PUBLIC_API_URL}/annexes/visual_aids_handbook_pages/page_${pageNumber}.jpg`;
+      imagePath = `${process.env.NEXT_PUBLIC_BACKEND_URL}/annexes/visual_aids_handbook_pages/page_${pageNumber}.jpg`;
     } else if (annexId === 2) {
-      imagePath = `${process.env.NEXT_PUBLIC_API_URL}/annexes/ace_interview_pages/page_${pageNumber}.jpg`;
+      imagePath = `${process.env.NEXT_PUBLIC_BACKEND_URL}/annexes/ace_interview_pages/page_${pageNumber}.jpg`;
     }
     
     console.log('🖼️ Image path:', imagePath);
@@ -572,7 +572,7 @@ const QuizzComponents = () => {
       async () => {
         try {
           const token = await getToken();
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/questions/${editingQuestionId}`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questions/${editingQuestionId}`, {
             method: 'PATCH',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -635,7 +635,7 @@ const QuizzComponents = () => {
       async () => {
         try {
           const token = await getToken();
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/questions/${editingQuestionText}`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questions/${editingQuestionText}`, {
             method: 'PUT',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -688,7 +688,7 @@ const QuizzComponents = () => {
 
     try {
       const token = await getToken();
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/questions/${editingExplanationText}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questions/${editingExplanationText}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -736,7 +736,7 @@ const QuizzComponents = () => {
           formData.append('image', file);
           formData.append('questionId', questionId.toString());
 
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/questions/${questionId}/images`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questions/${questionId}/images`, {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -780,7 +780,7 @@ const QuizzComponents = () => {
       async () => {
         try {
           const token = await getToken();
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/questions/${questionId}/images/${imageIndex}`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questions/${questionId}/images/${imageIndex}`, {
             method: 'DELETE',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -827,7 +827,7 @@ const QuizzComponents = () => {
           formData.append('image', file);
           formData.append('imageIndex', imageIndex.toString());
 
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/questions/${questionId}/images/${imageIndex}`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questions/${questionId}/images/${imageIndex}`, {
             method: 'PUT',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -881,7 +881,7 @@ const QuizzComponents = () => {
           formData.append('image', file);
           formData.append('questionId', questionId.toString());
 
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/questions/${questionId}/explanation-images`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questions/${questionId}/explanation-images`, {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -925,7 +925,7 @@ const QuizzComponents = () => {
       async () => {
         try {
           const token = await getToken();
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/questions/${questionId}/explanation-images/${imageIndex}`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questions/${questionId}/explanation-images/${imageIndex}`, {
             method: 'DELETE',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -972,7 +972,7 @@ const QuizzComponents = () => {
           formData.append('image', file);
           formData.append('imageIndex', imageIndex.toString());
 
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/questions/${questionId}/explanation-images/${imageIndex}`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questions/${questionId}/explanation-images/${imageIndex}`, {
             method: 'PUT',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -1052,7 +1052,7 @@ const QuizzComponents = () => {
         }))
       };
     
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tests/validate`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tests/validate`, {
         method: 'POST',
         headers: { 
           'Authorization': `Bearer ${token}`,
@@ -1094,7 +1094,7 @@ const QuizzComponents = () => {
         : [...currentColors, color];
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/questions/pin`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questions/pin`,
         {
           method: 'POST',
           headers: {
@@ -1127,7 +1127,7 @@ const QuizzComponents = () => {
     const token = await getToken();
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reports`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/reports`, {
         method: "POST",
         headers: { 
           'Authorization': `Bearer ${token}`,
@@ -1164,7 +1164,7 @@ const QuizzComponents = () => {
         }))
       };
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tests/saveTest`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tests/saveTest`, {
         method: 'POST',
         headers: { 
           'Authorization': `Bearer ${token}`,
@@ -1678,7 +1678,7 @@ const QuizzComponents = () => {
                           <div className="w-24 h-32 bg-white rounded-lg shadow-md border border-gray-200 flex items-center justify-center overflow-hidden">
                             {annex.thumbnail_path ? (
                               <img
-                                src={`${process.env.NEXT_PUBLIC_API_URL}${annex.thumbnail_path}`}
+                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${annex.thumbnail_path}`}
                                 alt={`${annex.title} thumbnail`}
                                 className="w-full h-full object-cover"
                                 onError={(e) => {

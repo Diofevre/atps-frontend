@@ -17,8 +17,12 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Variables d'environnement pour le build
+ARG NODE_ENV=production
+ARG NEXT_PUBLIC_BACKEND_URL
+
 ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV production
+ENV NODE_ENV=${NODE_ENV}
+ENV NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
 
 # Générer Prisma Client et builder Next.js
 RUN npx prisma generate || echo "Prisma generate failed, continuing..."

@@ -60,7 +60,7 @@ export default function LessonChat({ pageId }: LessonChatProps) {
   const fetchChatLogs = useCallback(async () => {
     try {
       const token = await getToken();
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat_lessons/logs`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chat_lessons/logs`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -185,7 +185,7 @@ export default function LessonChat({ pageId }: LessonChatProps) {
   const updateMessage = async (logId: number, newMessage: string) => {
     try {
       const token = await getToken();
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat_lessons/logs/${logId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chat_lessons/logs/${logId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -208,7 +208,7 @@ export default function LessonChat({ pageId }: LessonChatProps) {
         return updatedMessages;
       });
 
-      const aiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat_lessons`, {
+      const aiResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chat_lessons`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -264,7 +264,7 @@ export default function LessonChat({ pageId }: LessonChatProps) {
       setMessages(prev => [...prev, userMessage]);
       setInput('');
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat_lessons`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chat_lessons`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

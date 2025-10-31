@@ -43,7 +43,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ userId, questionId }) => {
     };
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/reviews`, payload, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/reviews`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

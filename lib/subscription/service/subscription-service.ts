@@ -4,7 +4,7 @@ import axios from 'axios';
 export const subscriptionService = {
   async createCheckoutSession(request: CreateCheckoutSessionRequest, token: string): Promise<CheckoutSession> {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/create-checkout-session`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/create-checkout-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -25,28 +25,28 @@ export const subscriptionService = {
   },
 
   async upgradeSubscription(data: { newPlan: string; billingCycle: number }, token: string) {
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/subscription/upgrade`, data, {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/subscription/upgrade`, data, {
       headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
   },
 
   async cancelSubscription(token: string) {
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/subscription/cancel`, {}, {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/subscription/cancel`, {}, {
       headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
   },
 
   async resumeSubscription(token: string) {
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/subscription/resume`, {}, {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/subscription/resume`, {}, {
       headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
   },
 
   async renewSubscription(data: { plan: string }, token: string) {
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/subscription/renew`, data, {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/subscription/renew`, data, {
       headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;

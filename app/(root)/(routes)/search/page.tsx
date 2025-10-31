@@ -64,7 +64,7 @@ const SearchPage = () => {
     setError(null);
 
     try {
-      let url = `${process.env.NEXT_PUBLIC_API_URL}/api/tests/search/${encodeURIComponent(searchFilters.keyword)}`;
+      let url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tests/search/${encodeURIComponent(searchFilters.keyword)}`;
       url += `/${searchFilters.country === null ? 'null' : encodeURIComponent(searchFilters.country)}`;
       url += `/${searchFilters.topicId === null ? 'null' : encodeURIComponent(searchFilters.topicId)}`;
       url += `/${searchFilters.lastExam === null ? 'null' : searchFilters.lastExam}`; //handle the null to null string

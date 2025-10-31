@@ -58,7 +58,7 @@ export default function SignupForm() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/keycloak/signup`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/keycloak/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ export default function SignupForm() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/keycloak/verify-email`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/keycloak/verify-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ export default function SignupForm() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/keycloak/resend-code`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/keycloak/resend-code`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

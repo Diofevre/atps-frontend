@@ -82,7 +82,7 @@ const Footer = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/avis`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/avis`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

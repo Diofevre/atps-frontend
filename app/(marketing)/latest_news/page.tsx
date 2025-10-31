@@ -61,7 +61,7 @@ const RecentArticleSkeleton = () => (
 
 const LatestNews = () => {
   const { data: newsData, error, isLoading, mutate } = useSWR<NewsData>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/latest-news`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/latest-news`,
     fetcher,
     {
       revalidateOnFocus: false,

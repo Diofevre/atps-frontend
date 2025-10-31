@@ -35,7 +35,7 @@ const ManualPage = () => {
       setError(null);
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/lessons/${selectedTopicId}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/lessons/${selectedTopicId}`
         );
 
         if (!response.ok) {

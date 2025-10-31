@@ -51,7 +51,7 @@ const TopicsV2 = ({ onSelectionChange, selectedTopic, selectedTopicName }: Topic
 
   // Récupérer les sujets disponibles depuis la nouvelle structure
   const { data, error, isLoading } = useSWR<TopicsV2Response>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/questions-v2/subjects`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questions-v2/subjects`,
     fetcher
   );
 

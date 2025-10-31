@@ -174,7 +174,7 @@ const ChatMessage = memo(({
                           <div key={index} className="bg-gray-50 rounded-lg p-3">
                             <div className="flex items-start gap-3">
                               <img 
-                                src={`${process.env.NEXT_PUBLIC_API_URL}${image.thumbnail}`}
+                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${image.thumbnail}`}
                                 alt={image.title}
                                 className="w-24 h-24 object-cover rounded-lg"
                                         onError={(e) => {
@@ -305,7 +305,7 @@ export default function ChatPage({ questionId }: ChatPageProps) {
   const fetchChatLogs = useCallback(async () => {
     try {
       const token = await getToken();
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat/logs`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chat/logs`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -446,7 +446,7 @@ export default function ChatPage({ questionId }: ChatPageProps) {
   const updateMessage = useCallback(async (logId: number, newMessage: string) => {
     try {
       const token = await getToken();
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat/logs/${logId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chat/logs/${logId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -468,7 +468,7 @@ export default function ChatPage({ questionId }: ChatPageProps) {
         return updatedMessages;
       });
 
-      const aiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat`, {
+      const aiResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -524,7 +524,7 @@ export default function ChatPage({ questionId }: ChatPageProps) {
       setMessages(prev => [...prev, userMessage]);
       setInput('');
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat-intelligent`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chat-intelligent`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -24,7 +24,7 @@ const Dictionary = () => {
 
   const fetchDictionary = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dictionary`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/dictionary`);
       const data = await response.json();
       // Sort entries alphabetically by word
       const sortedData = data.sort((a: DictionaryEntry, b: DictionaryEntry) => 
@@ -45,7 +45,7 @@ const Dictionary = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dictionary/search?word=${encodeURIComponent(searchTerm)}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/dictionary/search?word=${encodeURIComponent(searchTerm)}`);
       const data = await response.json();
       // Sort search results alphabetically
       const sortedData = data.sort((a: DictionaryEntry, b: DictionaryEntry) => 

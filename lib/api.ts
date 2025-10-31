@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const fetcher = <T>(url: string): Promise<T> => fetch(url).then(res => res.json());
 

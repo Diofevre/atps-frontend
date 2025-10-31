@@ -39,7 +39,7 @@ const CommentsQuizz: React.FC<CommentsQuizzProps> = ({ questionId, userId }) => 
 
   const fetchComments = useCallback(async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/comments/list/${questionId}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/comments/list/${questionId}`);
       if (!response.ok) throw new Error('Error fetching comments');
       const data = await response.json();
       setComments(data.comments);
@@ -63,7 +63,7 @@ const CommentsQuizz: React.FC<CommentsQuizzProps> = ({ questionId, userId }) => 
     setLoading(true);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/comments/create`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/comments/create`, {
         method: 'POST',
         headers: { 
           'Authorization': `Bearer ${token}`,
@@ -90,7 +90,7 @@ const CommentsQuizz: React.FC<CommentsQuizzProps> = ({ questionId, userId }) => 
     const token = await getToken();
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reactions/create`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/reactions/create`, {
         method: 'POST',
         headers: { 
           'Authorization': `Bearer ${token}`,
@@ -119,7 +119,7 @@ const CommentsQuizz: React.FC<CommentsQuizzProps> = ({ questionId, userId }) => 
     setIsEditing(true);
     
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/comments/update/${commentId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/comments/update/${commentId}`, {
         method: 'PUT',
         headers: { 
           'Authorization': `Bearer ${token}`,
@@ -149,7 +149,7 @@ const CommentsQuizz: React.FC<CommentsQuizzProps> = ({ questionId, userId }) => 
     setIsDeleting(commentId);
     
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/comments/${commentId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/comments/${commentId}`, {
         method: 'DELETE',
         headers: { 
           'Authorization': `Bearer ${token}`,
@@ -173,7 +173,7 @@ const CommentsQuizz: React.FC<CommentsQuizzProps> = ({ questionId, userId }) => 
     const token = await getToken();
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reports`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/reports`, {
         method: "POST",
         headers: { 
           'Authorization': `Bearer ${token}`,

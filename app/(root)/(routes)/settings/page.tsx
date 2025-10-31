@@ -261,7 +261,7 @@ const SubscriptionPage = () => {
   };
 
   const { data: userSubscription, error, mutate } = useSWR<UserSubscription>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/users/me`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/me`,
     fetcher,
     {
       onSuccess: (data) => {

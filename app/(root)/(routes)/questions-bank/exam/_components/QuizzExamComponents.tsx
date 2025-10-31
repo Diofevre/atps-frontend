@@ -111,7 +111,7 @@ const QuizzComponents = () => {
     const token = await getToken();
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/exams/validate`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/exams/validate`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -163,7 +163,7 @@ const QuizzComponents = () => {
 
         if (existingExamId) {
           response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/exams/reinit`,
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/exams/reinit`,
             {
               method: 'POST',
               headers: {
@@ -177,7 +177,7 @@ const QuizzComponents = () => {
           );
         } else if (topicId) {
           response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/exams/create`,
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/exams/create`,
             {
               method: 'POST',
               headers: {
@@ -335,7 +335,7 @@ const QuizzComponents = () => {
     const token = await getToken();
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reports`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/reports`, {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -45,7 +45,7 @@ const BrowseTopicsModal = ({ isOpen, onClose }: BrowseTopicsModalProps) => {
     try {
       const token = await getToken();
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/videos/search/${query}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/videos/search/${query}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`
