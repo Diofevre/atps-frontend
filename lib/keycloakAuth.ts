@@ -54,8 +54,10 @@ export async function login(credentials: LoginCredentials): Promise<AuthResponse
       localStorage.setItem('keycloak_tokens', JSON.stringify(tokens));
       localStorage.setItem('keycloak_user', JSON.stringify(data.data.user));
       
-      // Store in cookie for middleware access
-      document.cookie = `keycloak_tokens=${JSON.stringify(tokens)}; path=/; max-age=${data.data.expires_in}`;
+      // Store in cookie for middleware access (properly encoded for JSON)
+      const encodedTokens = encodeURIComponent(JSON.stringify(tokens));
+      const isSecure = window.location.protocol === 'https:';
+      document.cookie = `keycloak_tokens=${encodedTokens}; path=/; max-age=${data.data.expires_in}; SameSite=Lax${isSecure ? '; Secure' : ''};`;
     }
 
     return data;
@@ -140,7 +142,7 @@ export async function refreshToken(): Promise<AuthResponse> {
     const data = await response.json();
 
     if (data.success && data.data) {
-      // Update tokens in localStorage
+      // Update tokens in localStorage and cookies
       const expiresAt = Date.now() + data.data.expires_in * 1000;
       const newTokens: AuthTokens = {
         ...data.data,
@@ -148,6 +150,11 @@ export async function refreshToken(): Promise<AuthResponse> {
       };
       
       localStorage.setItem('keycloak_tokens', JSON.stringify(newTokens));
+      
+      // Update cookie
+      const encodedTokens = encodeURIComponent(JSON.stringify(newTokens));
+      const isSecure = window.location.protocol === 'https:';
+      document.cookie = `keycloak_tokens=${encodedTokens}; path=/; max-age=${data.data.expires_in}; SameSite=Lax${isSecure ? '; Secure' : ''};`;
     }
 
     return data;
@@ -268,5 +275,5 @@ export function clearAuth(): void {
   localStorage.removeItem('keycloak_user');
   
   // Clear cookie
-  document.cookie = 'keycloak_tokens=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+  document.cookie = 'keycloak_tokens=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
 }
