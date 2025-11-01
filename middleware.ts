@@ -58,7 +58,8 @@ export function middleware(request: NextRequest) {
 
     // Try to parse and validate the token
     try {
-      const tokens = JSON.parse(tokenCookie);
+      const decodedCookie = decodeURIComponent(tokenCookie);
+      const tokens = JSON.parse(decodedCookie);
       
       // Check if token is expired
       if (tokens.expires_at && Date.now() > tokens.expires_at) {
