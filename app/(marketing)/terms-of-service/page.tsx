@@ -33,13 +33,13 @@ export default function TermsOfService() {
               <Scale className="w-8 h-8 text-[#EECE84]" />
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
-              Terms of Service
+              {t.termsOfService.title}
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Please read these terms carefully before using our platform.
+              {t.termsOfService.subtitle}
             </p>
             <div className="mt-6 inline-flex items-center gap-2 text-sm text-gray-400">
-              Last updated: {new Date(lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              {t.termsOfService.lastUpdated} {new Date(lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
             </div>
           </motion.div>
         </div>
