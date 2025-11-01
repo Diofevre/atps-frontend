@@ -123,12 +123,20 @@ const Footer = () => {
       {/* Main Footer Content */}
       <div className="relative border-t border-white/5">
         {/* Giant ATPS background - Artistic Silhouette */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-10">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.08]">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <span className="text-[600px] font-black text-white tracking-[40px] leading-none" style={{
-              textShadow: '0 0 200px rgba(255,255,255,0.3), 0 0 400px rgba(238,206,132,0.2)',
-              WebkitTextStroke: '2px rgba(255,255,255,0.5)',
-              filter: 'blur(1px)'
+            <span className="text-[800px] font-black text-transparent leading-none" style={{
+              letterSpacing: '60px',
+              WebkitTextStroke: '4px rgba(255,255,255,0.6)',
+              filter: 'blur(2px) drop-shadow(0 0 60px rgba(238,206,132,0.4)) drop-shadow(0 0 120px rgba(255,255,255,0.2))',
+              fontFamily: 'system-ui, -apple-system, sans-serif',
+              fontWeight: 900,
+              textShadow: `
+                0 0 100px rgba(255,255,255,0.4),
+                0 0 200px rgba(238,206,132,0.3),
+                0 0 400px rgba(255,255,255,0.2),
+                inset 0 0 80px rgba(255,255,255,0.1)
+              `,
             }}>
               ATPS
             </span>
