@@ -68,7 +68,9 @@ const DashboardNew = () => {
   const { data: dashboardData, error, isLoading } = useSWR<DashboardData>(
     '/api/dashboard',
     async (url: string) => {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        credentials: 'include',
+      });
       if (!response.ok) throw new Error('Failed to fetch dashboard data');
       return response.json();
     }
