@@ -179,6 +179,123 @@ export interface Translations {
     submit: string;
     submitting: string;
   };
+  privacyPolicy: {
+    title: string;
+    subtitle: string;
+    lastUpdated: string;
+    section1Title: string;
+    section1Desc: string;
+    section1Item1: string;
+    section1Item2: string;
+    section1Item3: string;
+    section1Item4: string;
+    section1Item5: string;
+    section2Title: string;
+    section2Item1: string;
+    section2Item2: string;
+    section2Item3: string;
+    section2Item4: string;
+    section2Item5: string;
+    section2Item6: string;
+    section2Item7: string;
+    section3Title: string;
+    section3Desc: string;
+    section3Item1: string;
+    section3Item2: string;
+    section3Item3: string;
+    section3Item4: string;
+    section3Item5: string;
+    section4Title: string;
+    section4Intro: string;
+    section4Item1: string;
+    section4Item2: string;
+    section4Item3: string;
+    section4Item4: string;
+    section4Item5: string;
+    section4Item6: string;
+    section4Item7: string;
+    section5Title: string;
+    section5Desc: string;
+    section6Title: string;
+    section6Desc: string;
+    contactTitle: string;
+    contactDesc: string;
+    contactEmail: string;
+  };
+  termsOfService: {
+    title: string;
+    subtitle: string;
+    lastUpdated: string;
+    section1Title: string;
+    section1Desc: string;
+    section2Title: string;
+    section2Intro: string;
+    section2Item1: string;
+    section2Item2: string;
+    section2Item3: string;
+    section2Item4: string;
+    section3Title: string;
+    section3Intro: string;
+    section3Item1: string;
+    section3Item2: string;
+    section3Item3: string;
+    section3Item4: string;
+    section3Item5: string;
+    section3Item6: string;
+    section4Title: string;
+    section4Label1: string;
+    section4Text1: string;
+    section4Label2: string;
+    section4Text2: string;
+    section4Label3: string;
+    section4Text3: string;
+    section5Title: string;
+    section5Desc: string;
+    section6Title: string;
+    section6Desc: string;
+    section7Title: string;
+    section7Desc: string;
+    contactTitle: string;
+    contactDesc: string;
+    contactEmail: string;
+  };
+  cookiePolicy: {
+    title: string;
+    subtitle: string;
+    lastUpdated: string;
+    section1Title: string;
+    section1Desc: string;
+    section2Title: string;
+    section2Desc: string;
+    section2Item1: string;
+    section2Item2: string;
+    section2Item3: string;
+    section2Item4: string;
+    section2Item5: string;
+    section3Title: string;
+    section3Desc1: string;
+    section3Desc2: string;
+    section3Desc3: string;
+    section4Title: string;
+    section4Desc: string;
+    section5Title: string;
+    section5Intro: string;
+    section5Item1: string;
+    section5Item2: string;
+    section5Item3: string;
+    section5Item4: string;
+    section5Note: string;
+    section6Title: string;
+    section6Label1: string;
+    section6Desc1: string;
+    section6Label2: string;
+    section6Desc2: string;
+    section7Title: string;
+    section7Desc: string;
+    contactTitle: string;
+    contactDesc: string;
+    contactEmail: string;
+  };
 }
 
 export const translations: Record<Language, Translations> = {
@@ -361,6 +478,123 @@ export const translations: Record<Language, Translations> = {
       submit: 'Submit Request',
       submitting: 'Submitting...',
     },
+    privacyPolicy: {
+      title: 'Privacy Policy',
+      subtitle: 'Your privacy is important to us. This policy explains how we collect, use, and protect your information.',
+      lastUpdated: 'Last updated:',
+      section1Title: '1. Information We Collect',
+      section1Desc: 'We collect information that you provide directly to us when you register, create an account, make a purchase, or communicate with us. This may include:',
+      section1Item1: 'Name, email address, and contact information',
+      section1Item2: 'Account credentials and profile information',
+      section1Item3: 'Payment and billing information',
+      section1Item4: 'Usage data and interaction with our platform',
+      section1Item5: 'Technical information like IP address and device information',
+      section2Title: '2. How We Use Your Information',
+      section2Item1: 'Provide, maintain, and improve our services',
+      section2Item2: 'Process transactions and send related information',
+      section2Item3: 'Send you technical notices and support messages',
+      section2Item4: 'Respond to your comments, questions, and requests',
+      section2Item5: 'Monitor and analyze trends and usage',
+      section2Item6: 'Detect, prevent, and address technical issues',
+      section2Item7: 'Personalize your experience on our platform',
+      section3Title: '3. Data Protection',
+      section3Desc: 'We implement appropriate technical and organizational security measures to protect your personal information. This includes:',
+      section3Item1: 'Encryption of sensitive data in transit and at rest',
+      section3Item2: 'Regular security assessments and updates',
+      section3Item3: 'Access controls and authentication mechanisms',
+      section3Item4: 'Employee training on data protection',
+      section3Item5: 'Compliance with industry standards and regulations',
+      section4Title: '4. Your Rights',
+      section4Intro: 'You have the right to:',
+      section4Item1: 'Access and receive a copy of your personal data',
+      section4Item2: 'Correct inaccurate or incomplete information',
+      section4Item3: 'Request deletion of your personal data',
+      section4Item4: 'Object to processing of your personal data',
+      section4Item5: 'Request restriction of processing',
+      section4Item6: 'Data portability',
+      section4Item7: 'Withdraw consent at any time',
+      section5Title: '5. Cookies and Tracking',
+      section5Desc: 'We use cookies and similar tracking technologies to enhance your experience on our platform. For detailed information about our use of cookies, please refer to our Cookie Policy.',
+      section6Title: '6. Changes to This Policy',
+      section6Desc: 'We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date.',
+      contactTitle: '7. Contact Us',
+      contactDesc: 'If you have any questions about this Privacy Policy, please contact us at:',
+      contactEmail: 'support@atps.com',
+    },
+    termsOfService: {
+      title: 'Terms of Service',
+      subtitle: 'Please read these terms carefully before using our platform.',
+      lastUpdated: 'Last updated:',
+      section1Title: '1. Acceptance of Terms',
+      section1Desc: 'By accessing and using ATPS, you accept and agree to be bound by the terms and provisions of this agreement. If you do not agree to abide by the above, please do not use this service.',
+      section2Title: '2. User Account',
+      section2Intro: 'When you create an account with us, you must provide accurate, complete, and current information. You are responsible for:',
+      section2Item1: 'Maintaining the confidentiality of your account credentials',
+      section2Item2: 'All activities that occur under your account',
+      section2Item3: 'Notifying us immediately of any unauthorized use',
+      section2Item4: 'Compliance with all applicable laws and regulations',
+      section3Title: '3. Prohibited Uses',
+      section3Intro: 'You may not use our service:',
+      section3Item1: 'For any unlawful purpose or to solicit others to perform unlawful acts',
+      section3Item2: 'To violate any international, federal, provincial, or state regulations, rules, or laws',
+      section3Item3: 'To infringe upon or violate our intellectual property rights or the intellectual property rights of others',
+      section3Item4: 'To harass, abuse, insult, harm, defame, slander, disparage, intimidate, or discriminate',
+      section3Item5: 'To submit false or misleading information',
+      section3Item6: 'To upload or transmit viruses or any other type of malicious code',
+      section4Title: '4. Subscription and Billing',
+      section4Label1: 'Subscription Plans:',
+      section4Text1: 'We offer various subscription plans with different features and pricing.',
+      section4Label2: 'Billing:',
+      section4Text2: 'Subscriptions are billed on a recurring basis according to your selected plan. You authorize us to charge your payment method for all subscription fees.',
+      section4Label3: 'Cancellation:',
+      section4Text3: 'You may cancel your subscription at any time. Cancellation takes effect at the end of the current billing period.',
+      section5Title: '5. Intellectual Property',
+      section5Desc: 'The platform and its original content, features, and functionality are owned by ATPS and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws. Our trademarks and trade dress may not be used in connection with any product or service without our prior written consent.',
+      section6Title: '6. Limitation of Liability',
+      section6Desc: 'ATPS shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your use of the service.',
+      section7Title: '7. Changes to Terms',
+      section7Desc: 'We reserve the right to modify these terms at any time. We will notify users of any material changes by posting the new Terms of Service on this page.',
+      contactTitle: '8. Contact Us',
+      contactDesc: 'If you have any questions about these Terms of Service, please contact us at:',
+      contactEmail: 'support@atps.com',
+    },
+    cookiePolicy: {
+      title: 'Cookie Policy',
+      subtitle: 'Learn about how we use cookies and similar technologies to enhance your experience.',
+      lastUpdated: 'Last updated:',
+      section1Title: '1. What Are Cookies?',
+      section1Desc: 'Cookies are small text files that are placed on your computer or mobile device when you visit a website. They are widely used to make websites work more efficiently and to provide information to the website owners.',
+      section2Title: '2. How We Use Cookies',
+      section2Desc: 'We use cookies for various purposes to improve your experience on our platform:',
+      section2Item1: 'Essential Cookies: Required for the platform to function properly',
+      section2Item2: 'Authentication: To identify you and keep you logged in',
+      section2Item3: 'Preferences: To remember your settings and preferences',
+      section2Item4: 'Analytics: To understand how visitors interact with our platform',
+      section2Item5: 'Performance: To improve the speed and reliability of the platform',
+      section3Title: '3. Types of Cookies We Use',
+      section3Desc1: 'Essential Cookies',
+      section3Desc2: 'These cookies are necessary for the website to function and cannot be switched off. They are usually set in response to actions made by you.',
+      section3Desc3: 'Functional Cookies',
+      section4Title: '4. Third-Party Cookies',
+      section4Desc: 'In addition to our own cookies, we may also use various third-party cookies to report usage statistics and deliver advertisements on and through the service. These third parties may use cookies to collect information about your online activities over time and across different websites.',
+      section5Title: '5. Managing Cookies',
+      section5Intro: 'You can control and manage cookies in various ways. Please keep in mind that removing or blocking cookies can impact your user experience:',
+      section5Item1: 'Most web browsers allow you to refuse or accept cookies through their settings',
+      section5Item2: 'You can configure your browser to notify you when cookies are being set',
+      section5Item3: 'You can delete cookies that have been set on your device',
+      section5Item4: 'You can use browser extensions to block cookies',
+      section5Note: 'Note that disabling certain cookies may prevent you from accessing some features of our platform.',
+      section6Title: '6. Duration of Cookies',
+      section6Label1: 'Session Cookies:',
+      section6Desc1: 'These are temporary cookies that expire when you close your browser.',
+      section6Label2: 'Persistent Cookies:',
+      section6Desc2: 'These cookies remain on your device for a longer period, or until you delete them manually. They enable us to recognize you when you return to our platform.',
+      section7Title: '7. Updates to This Policy',
+      section7Desc: 'We may update this Cookie Policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. Please revisit this page periodically to stay informed about our use of cookies.',
+      contactTitle: '8. Contact Us',
+      contactDesc: 'If you have any questions about our use of cookies, please contact us at:',
+      contactEmail: 'support@atps.com',
+    },
   },
   fr: {
     header: {
@@ -541,6 +775,123 @@ export const translations: Record<Language, Translations> = {
       submit: 'Envoyer la Demande',
       submitting: 'Envoi en cours...',
     },
+    privacyPolicy: {
+      title: 'Politique de Confidentialité',
+      subtitle: 'Votre vie privée est importante pour nous. Cette politique explique comment nous collectons, utilisons et protégeons vos informations.',
+      lastUpdated: 'Dernière mise à jour:',
+      section1Title: '1. Informations que nous collectons',
+      section1Desc: 'Nous collectons les informations que vous nous fournissez directement lorsque vous vous inscrivez, créez un compte, effectuez un achat ou communiquez avec nous. Cela peut inclure:',
+      section1Item1: 'Nom, adresse e-mail et coordonnées',
+      section1Item2: 'Identifiants de compte et informations de profil',
+      section1Item3: 'Informations de paiement et de facturation',
+      section1Item4: 'Données d\'utilisation et interaction avec notre plateforme',
+      section1Item5: 'Informations techniques comme l\'adresse IP et les informations sur l\'appareil',
+      section2Title: '2. Comment nous utilisons vos informations',
+      section2Item1: 'Fournir, maintenir et améliorer nos services',
+      section2Item2: 'Traiter les transactions et envoyer des informations connexes',
+      section2Item3: 'Vous envoyer des avis techniques et des messages de support',
+      section2Item4: 'Répondre à vos commentaires, questions et demandes',
+      section2Item5: 'Surveiller et analyser les tendances et l\'utilisation',
+      section2Item6: 'Détecter, prévenir et résoudre les problèmes techniques',
+      section2Item7: 'Personnaliser votre expérience sur notre plateforme',
+      section3Title: '3. Protection des données',
+      section3Desc: 'Nous mettons en place des mesures de sécurité techniques et organisationnelles appropriées pour protéger vos informations personnelles. Cela comprend:',
+      section3Item1: 'Chiffrement des données sensibles en transit et au repos',
+      section3Item2: 'Évaluations de sécurité et mises à jour régulières',
+      section3Item3: 'Contrôles d\'accès et mécanismes d\'authentification',
+      section3Item4: 'Formation du personnel sur la protection des données',
+      section3Item5: 'Conformité aux normes et réglementations de l\'industrie',
+      section4Title: '4. Vos droits',
+      section4Intro: 'Vous avez le droit de:',
+      section4Item1: 'Accéder et recevoir une copie de vos données personnelles',
+      section4Item2: 'Corriger des informations inexactes ou incomplètes',
+      section4Item3: 'Demander la suppression de vos données personnelles',
+      section4Item4: 'Vous opposer au traitement de vos données personnelles',
+      section4Item5: 'Demander la limitation du traitement',
+      section4Item6: 'Portabilité des données',
+      section4Item7: 'Retirer votre consentement à tout moment',
+      section5Title: '5. Cookies et suivi',
+      section5Desc: 'Nous utilisons des cookies et des technologies de suivi similaires pour améliorer votre expérience sur notre plateforme. Pour des informations détaillées sur notre utilisation des cookies, veuillez consulter notre Politique de Cookies.',
+      section6Title: '6. Modifications de cette politique',
+      section6Desc: 'Nous pouvons mettre à jour cette Politique de Confidentialité de temps à autre. Nous vous informerons de tout changement en publiant la nouvelle Politique de Confidentialité sur cette page et en mettant à jour la date de "Dernière mise à jour".',
+      contactTitle: '7. Contactez-nous',
+      contactDesc: 'Si vous avez des questions sur cette Politique de Confidentialité, veuillez nous contacter à:',
+      contactEmail: 'support@atps.com',
+    },
+    termsOfService: {
+      title: 'Conditions d\'Utilisation',
+      subtitle: 'Veuillez lire attentivement ces conditions avant d\'utiliser notre plateforme.',
+      lastUpdated: 'Dernière mise à jour:',
+      section1Title: '1. Acceptation des conditions',
+      section1Desc: 'En accédant et en utilisant ATPS, vous acceptez et convenez d\'être lié par les termes et dispositions de cet accord. Si vous n\'acceptez pas de respecter ce qui précède, veuillez ne pas utiliser ce service.',
+      section2Title: '2. Compte utilisateur',
+      section2Intro: 'Lorsque vous créez un compte avec nous, vous devez fournir des informations exactes, complètes et à jour. Vous êtes responsable de:',
+      section2Item1: 'Maintenir la confidentialité de vos identifiants de compte',
+      section2Item2: 'Toutes les activités qui se produisent sous votre compte',
+      section2Item3: 'Nous avertir immédiatement de toute utilisation non autorisée',
+      section2Item4: 'Se conformer à toutes les lois et réglementations applicables',
+      section3Title: '3. Utilisations interdites',
+      section3Intro: 'Vous ne pouvez pas utiliser notre service:',
+      section3Item1: 'À des fins illégales ou pour inciter d\'autres personnes à accomplir des actes illégaux',
+      section3Item2: 'Pour violer toute réglementation, règle ou loi internationale, fédérale, provinciale ou étatique',
+      section3Item3: 'Pour porter atteinte aux droits de propriété intellectuelle ou violer les droits de propriété intellectuelle d\'autrui',
+      section3Item4: 'Pour harceler, abuser, insulter, nuire, diffamer, calomnier, dénigrer, intimider ou discriminer',
+      section3Item5: 'Pour soumettre des informations fausses ou trompeuses',
+      section3Item6: 'Pour télécharger ou transmettre des virus ou tout autre type de code malveillant',
+      section4Title: '4. Abonnement et facturation',
+      section4Label1: 'Plans d\'abonnement:',
+      section4Text1: 'Nous proposons divers plans d\'abonnement avec différentes fonctionnalités et tarifs.',
+      section4Label2: 'Facturation:',
+      section4Text2: 'Les abonnements sont facturés de manière récurrente selon votre plan sélectionné. Vous nous autorisez à facturer votre moyen de paiement pour tous les frais d\'abonnement.',
+      section4Label3: 'Annulation:',
+      section4Text3: 'Vous pouvez annuler votre abonnement à tout moment. L\'annulation prend effet à la fin de la période de facturation en cours.',
+      section5Title: '5. Propriété intellectuelle',
+      section5Desc: 'La plateforme, son contenu original, ses fonctionnalités et ses performances sont la propriété d\'ATPS et sont protégés par des lois internationales sur les droits d\'auteur, les marques déposées, les brevets, les secrets commerciaux et autres lois de propriété intellectuelle. Nos marques et notre image de marque ne peuvent pas être utilisées en relation avec un produit ou un service sans notre consentement écrit préalable.',
+      section6Title: '6. Limitation de responsabilité',
+      section6Desc: 'ATPS ne sera pas responsable de tout dommage indirect, accidentel, spécial, consécutif ou punitif, y compris, sans limitation, la perte de profits, de données, d\'utilisation, de goodwill ou d\'autres pertes intangibles, résultant de votre utilisation du service.',
+      section7Title: '7. Modifications des conditions',
+      section7Desc: 'Nous nous réservons le droit de modifier ces conditions à tout moment. Nous informerons les utilisateurs de tout changement matériel en publiant les nouvelles Conditions d\'Utilisation sur cette page.',
+      contactTitle: '8. Contactez-nous',
+      contactDesc: 'Si vous avez des questions sur ces Conditions d\'Utilisation, veuillez nous contacter à:',
+      contactEmail: 'support@atps.com',
+    },
+    cookiePolicy: {
+      title: 'Politique de Cookies',
+      subtitle: 'Découvrez comment nous utilisons les cookies et les technologies similaires pour améliorer votre expérience.',
+      lastUpdated: 'Dernière mise à jour:',
+      section1Title: '1. Que sont les cookies?',
+      section1Desc: 'Les cookies sont de petits fichiers texte placés sur votre ordinateur ou appareil mobile lorsque vous visitez un site web. Ils sont largement utilisés pour rendre les sites web plus efficaces et fournir des informations aux propriétaires de sites.',
+      section2Title: '2. Comment nous utilisons les cookies',
+      section2Desc: 'Nous utilisons des cookies à diverses fins pour améliorer votre expérience sur notre plateforme:',
+      section2Item1: 'Cookies essentiels: Requis pour le bon fonctionnement de la plateforme',
+      section2Item2: 'Authentification: Pour vous identifier et vous maintenir connecté',
+      section2Item3: 'Préférences: Pour mémoriser vos paramètres et préférences',
+      section2Item4: 'Analytiques: Pour comprendre comment les visiteurs interagissent avec notre plateforme',
+      section2Item5: 'Performance: Pour améliorer la vitesse et la fiabilité de la plateforme',
+      section3Title: '3. Types de cookies que nous utilisons',
+      section3Desc1: 'Cookies essentiels',
+      section3Desc2: 'Ces cookies sont nécessaires au fonctionnement du site web et ne peuvent pas être désactivés. Ils sont généralement définis en réponse aux actions que vous effectuez.',
+      section3Desc3: 'Cookies fonctionnels',
+      section4Title: '4. Cookies tiers',
+      section4Desc: 'En plus de nos propres cookies, nous pouvons également utiliser divers cookies tiers pour signaler les statistiques d\'utilisation et diffuser des publicités sur et via le service. Ces tiers peuvent utiliser des cookies pour collecter des informations sur vos activités en ligne au fil du temps et sur différents sites web.',
+      section5Title: '5. Gestion des cookies',
+      section5Intro: 'Vous pouvez contrôler et gérer les cookies de différentes manières. Veuillez garder à l\'esprit que la suppression ou le blocage des cookies peut affecter votre expérience utilisateur:',
+      section5Item1: 'La plupart des navigateurs web vous permettent de refuser ou d\'accepter les cookies via leurs paramètres',
+      section5Item2: 'Vous pouvez configurer votre navigateur pour vous notifier lorsque des cookies sont définis',
+      section5Item3: 'Vous pouvez supprimer les cookies qui ont été définis sur votre appareil',
+      section5Item4: 'Vous pouvez utiliser des extensions de navigateur pour bloquer les cookies',
+      section5Note: 'Notez que la désactivation de certains cookies peut vous empêcher d\'accéder à certaines fonctionnalités de notre plateforme.',
+      section6Title: '6. Durée des cookies',
+      section6Label1: 'Cookies de session:',
+      section6Desc1: 'Ce sont des cookies temporaires qui expirent lorsque vous fermez votre navigateur.',
+      section6Label2: 'Cookies persistants:',
+      section6Desc2: 'Ces cookies restent sur votre appareil pendant une période plus longue ou jusqu\'à ce que vous les supprimiez manuellement. Ils nous permettent de vous reconnaître lorsque vous revenez sur notre plateforme.',
+      section7Title: '7. Mises à jour de cette politique',
+      section7Desc: 'Nous pouvons mettre à jour cette Politique de Cookies de temps à autre pour refléter les changements dans nos pratiques ou pour d\'autres raisons opérationnelles, légales ou réglementaires. Veuillez revisiter cette page périodiquement pour rester informé de notre utilisation des cookies.',
+      contactTitle: '8. Contactez-nous',
+      contactDesc: 'Si vous avez des questions sur notre utilisation des cookies, veuillez nous contacter à:',
+      contactEmail: 'support@atps.com',
+    },
   },
   es: {
     header: {
@@ -720,6 +1071,123 @@ export const translations: Record<Language, Translations> = {
       cancel: 'Cancelar',
       submit: 'Enviar Solicitud',
       submitting: 'Enviando...',
+    },
+    privacyPolicy: {
+      title: 'Política de Privacidad',
+      subtitle: 'Tu privacidad es importante para nosotros. Esta política explica cómo recopilamos, usamos y protegemos tu información.',
+      lastUpdated: 'Última actualización:',
+      section1Title: '1. Información que recopilamos',
+      section1Desc: 'Recopilamos información que nos proporcionas directamente cuando te registras, creas una cuenta, realizas una compra o te comunicas con nosotros. Esto puede incluir:',
+      section1Item1: 'Nombre, dirección de correo electrónico e información de contacto',
+      section1Item2: 'Credenciales de cuenta e información de perfil',
+      section1Item3: 'Información de pago y facturación',
+      section1Item4: 'Datos de uso e interacción con nuestra plataforma',
+      section1Item5: 'Información técnica como dirección IP e información del dispositivo',
+      section2Title: '2. Cómo usamos tu información',
+      section2Item1: 'Proporcionar, mantener y mejorar nuestros servicios',
+      section2Item2: 'Procesar transacciones y enviar información relacionada',
+      section2Item3: 'Enviarte avisos técnicos y mensajes de soporte',
+      section2Item4: 'Responder a tus comentarios, preguntas y solicitudes',
+      section2Item5: 'Monitorear y analizar tendencias y uso',
+      section2Item6: 'Detectar, prevenir y abordar problemas técnicos',
+      section2Item7: 'Personalizar tu experiencia en nuestra plataforma',
+      section3Title: '3. Protección de datos',
+      section3Desc: 'Implementamos medidas de seguridad técnicas y organizativas apropiadas para proteger tu información personal. Esto incluye:',
+      section3Item1: 'Cifrado de datos sensibles en tránsito y en reposo',
+      section3Item2: 'Evaluaciones y actualizaciones de seguridad regulares',
+      section3Item3: 'Controles de acceso y mecanismos de autenticación',
+      section3Item4: 'Capacitación de empleados sobre protección de datos',
+      section3Item5: 'Cumplimiento con estándares y regulaciones de la industria',
+      section4Title: '4. Tus derechos',
+      section4Intro: 'Tienes derecho a:',
+      section4Item1: 'Acceder y recibir una copia de tus datos personales',
+      section4Item2: 'Corregir información inexacta o incompleta',
+      section4Item3: 'Solicitar la eliminación de tus datos personales',
+      section4Item4: 'Oponerte al procesamiento de tus datos personales',
+      section4Item5: 'Solicitar la restricción del procesamiento',
+      section4Item6: 'Portabilidad de datos',
+      section4Item7: 'Retirar tu consentimiento en cualquier momento',
+      section5Title: '5. Cookies y seguimiento',
+      section5Desc: 'Utilizamos cookies y tecnologías de seguimiento similares para mejorar tu experiencia en nuestra plataforma. Para obtener información detallada sobre nuestro uso de cookies, consulta nuestra Política de Cookies.',
+      section6Title: '6. Cambios en esta política',
+      section6Desc: 'Podemos actualizar esta Política de Privacidad de vez en cuando. Te informaremos de cualquier cambio publicando la nueva Política de Privacidad en esta página y actualizando la fecha de "Última actualización".',
+      contactTitle: '7. Contáctanos',
+      contactDesc: 'Si tienes alguna pregunta sobre esta Política de Privacidad, contáctanos en:',
+      contactEmail: 'support@atps.com',
+    },
+    termsOfService: {
+      title: 'Términos de Servicio',
+      subtitle: 'Lee estos términos cuidadosamente antes de usar nuestra plataforma.',
+      lastUpdated: 'Última actualización:',
+      section1Title: '1. Aceptación de términos',
+      section1Desc: 'Al acceder y usar ATPS, aceptas y acuerdas estar sujeto a los términos y disposiciones de este acuerdo. Si no estás de acuerdo con lo anterior, no uses este servicio.',
+      section2Title: '2. Cuenta de usuario',
+      section2Intro: 'Cuando creas una cuenta con nosotros, debes proporcionar información precisa, completa y actual. Eres responsable de:',
+      section2Item1: 'Mantener la confidencialidad de tus credenciales de cuenta',
+      section2Item2: 'Todas las actividades que ocurran bajo tu cuenta',
+      section2Item3: 'Notificarnos inmediatamente de cualquier uso no autorizado',
+      section2Item4: 'Cumplir con todas las leyes y regulaciones aplicables',
+      section3Title: '3. Usos prohibidos',
+      section3Intro: 'No puedes usar nuestro servicio:',
+      section3Item1: 'Para ningún propósito ilegal o para incitar a otros a realizar actos ilegales',
+      section3Item2: 'Para violar cualquier regulación, regla o ley internacional, federal, provincial o estatal',
+      section3Item3: 'Para infringir o violar nuestros derechos de propiedad intelectual o los derechos de propiedad intelectual de otros',
+      section3Item4: 'Para acosar, abusar, insultar, dañar, difamar, calumniar, menospreciar, intimidar o discriminar',
+      section3Item5: 'Para enviar información falsa o engañosa',
+      section3Item6: 'Para cargar o transmitir virus o cualquier otro tipo de código malicioso',
+      section4Title: '4. Suscripción y facturación',
+      section4Label1: 'Planes de suscripción:',
+      section4Text1: 'Ofrecemos varios planes de suscripción con diferentes características y precios.',
+      section4Label2: 'Facturación:',
+      section4Text2: 'Las suscripciones se facturan de forma recurrente según tu plan seleccionado. Nos autorizas a cobrar a tu método de pago todos los cargos de suscripción.',
+      section4Label3: 'Cancelación:',
+      section4Text3: 'Puedes cancelar tu suscripción en cualquier momento. La cancelación entra en vigor al final del período de facturación actual.',
+      section5Title: '5. Propiedad intelectual',
+      section5Desc: 'La plataforma y su contenido original, características y funcionalidad son propiedad de ATPS y están protegidos por leyes internacionales de derechos de autor, marcas registradas, patentes, secretos comerciales y otras leyes de propiedad intelectual. Nuestras marcas comerciales no pueden ser utilizadas en relación con ningún producto o servicio sin nuestro consentimiento escrito previo.',
+      section6Title: '6. Limitación de responsabilidad',
+      section6Desc: 'ATPS no será responsable de ningún daño indirecto, incidental, especial, consecuente o punitivo, incluyendo, sin limitación, pérdida de ganancias, datos, uso, reputación u otras pérdidas intangibles, resultantes de tu uso del servicio.',
+      section7Title: '7. Cambios en términos',
+      section7Desc: 'Nos reservamos el derecho de modificar estos términos en cualquier momento. Informaremos a los usuarios de cualquier cambio material publicando los nuevos Términos de Servicio en esta página.',
+      contactTitle: '8. Contáctanos',
+      contactDesc: 'Si tienes alguna pregunta sobre estos Términos de Servicio, contáctanos en:',
+      contactEmail: 'support@atps.com',
+    },
+    cookiePolicy: {
+      title: 'Política de Cookies',
+      subtitle: 'Conoce cómo utilizamos las cookies y tecnologías similares para mejorar tu experiencia.',
+      lastUpdated: 'Última actualización:',
+      section1Title: '1. ¿Qué son las cookies?',
+      section1Desc: 'Las cookies son pequeños archivos de texto que se colocan en tu computadora o dispositivo móvil cuando visitas un sitio web. Se usan ampliamente para hacer que los sitios web funcionen de manera más eficiente y proporcionar información a los propietarios de sitios web.',
+      section2Title: '2. Cómo usamos las cookies',
+      section2Desc: 'Utilizamos cookies con diversos fines para mejorar tu experiencia en nuestra plataforma:',
+      section2Item1: 'Cookies esenciales: Requeridas para que la plataforma funcione correctamente',
+      section2Item2: 'Autenticación: Para identificarte y mantenerte conectado',
+      section2Item3: 'Preferencias: Para recordar tu configuración y preferencias',
+      section2Item4: 'Analíticas: Para entender cómo los visitantes interactúan con nuestra plataforma',
+      section2Item5: 'Rendimiento: Para mejorar la velocidad y confiabilidad de la plataforma',
+      section3Title: '3. Tipos de cookies que usamos',
+      section3Desc1: 'Cookies esenciales',
+      section3Desc2: 'Estas cookies son necesarias para que el sitio web funcione y no se pueden desactivar. Por lo general, se establecen en respuesta a acciones que realizas.',
+      section3Desc3: 'Cookies funcionales',
+      section4Title: '4. Cookies de terceros',
+      section4Desc: 'Además de nuestras propias cookies, también podemos usar varias cookies de terceros para informar estadísticas de uso y entregar anuncios a través del servicio. Estas terceras partes pueden usar cookies para recopilar información sobre tus actividades en línea a lo largo del tiempo y en diferentes sitios web.',
+      section5Title: '5. Gestión de cookies',
+      section5Intro: 'Puedes controlar y gestionar las cookies de varias maneras. Ten en cuenta que eliminar o bloquear cookies puede afectar tu experiencia de usuario:',
+      section5Item1: 'La mayoría de los navegadores web te permiten rechazar o aceptar cookies a través de su configuración',
+      section5Item2: 'Puedes configurar tu navegador para que te notifique cuando se establecen cookies',
+      section5Item3: 'Puedes eliminar las cookies que se han establecido en tu dispositivo',
+      section5Item4: 'Puedes usar extensiones del navegador para bloquear cookies',
+      section5Note: 'Ten en cuenta que deshabilitar ciertas cookies puede impedirte acceder a algunas funciones de nuestra plataforma.',
+      section6Title: '6. Duración de las cookies',
+      section6Label1: 'Cookies de sesión:',
+      section6Desc1: 'Estas son cookies temporales que expiran cuando cierras tu navegador.',
+      section6Label2: 'Cookies persistentes:',
+      section6Desc2: 'Estas cookies permanecen en tu dispositivo durante un período más largo, o hasta que las elimines manualmente. Nos permiten reconocerte cuando regresas a nuestra plataforma.',
+      section7Title: '7. Actualizaciones de esta política',
+      section7Desc: 'Podemos actualizar esta Política de Cookies de vez en cuando para reflejar cambios en nuestras prácticas o por otras razones operativas, legales o regulatorias. Por favor, revisa esta página periódicamente para mantenerte informado sobre nuestro uso de cookies.',
+      contactTitle: '8. Contáctanos',
+      contactDesc: 'Si tienes alguna pregunta sobre nuestro uso de cookies, contáctanos en:',
+      contactEmail: 'support@atps.com',
     },
   },
 };

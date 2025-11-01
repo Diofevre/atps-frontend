@@ -33,14 +33,14 @@ export default function PrivacyPolicy() {
               <Shield className="w-8 h-8 text-[#EECE84]" />
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
-              Privacy Policy
+              {t.privacyPolicy.title}
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Your privacy is important to us. This policy explains how we collect, use, and protect your information.
+              {t.privacyPolicy.subtitle}
             </p>
             <div className="mt-6 inline-flex items-center gap-2 text-sm text-gray-400">
               <Calendar className="w-4 h-4" />
-              Last updated: {new Date(lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              {t.privacyPolicy.lastUpdated} {new Date(lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
             </div>
           </motion.div>
         </div>
@@ -63,16 +63,16 @@ export default function PrivacyPolicy() {
                 <Eye className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">1. Information We Collect</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.privacyPolicy.section1Title}</h2>
                 <p className="text-gray-300 leading-relaxed">
-                  We collect information that you provide directly to us when you register, create an account, make a purchase, or communicate with us. This may include:
+                  {t.privacyPolicy.section1Desc}
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-gray-300 mt-4 ml-4">
-                  <li>Name, email address, and contact information</li>
-                  <li>Account credentials and profile information</li>
-                  <li>Payment and billing information</li>
-                  <li>Usage data and interaction with our platform</li>
-                  <li>Technical information like IP address and device information</li>
+                  <li>{t.privacyPolicy.section1Item1}</li>
+                  <li>{t.privacyPolicy.section1Item2}</li>
+                  <li>{t.privacyPolicy.section1Item3}</li>
+                  <li>{t.privacyPolicy.section1Item4}</li>
+                  <li>{t.privacyPolicy.section1Item5}</li>
                 </ul>
               </div>
             </div>
@@ -91,18 +91,18 @@ export default function PrivacyPolicy() {
                 <FileText className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">2. How We Use Your Information</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.privacyPolicy.section2Title}</h2>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  We use the information we collect to:
+                  {t.privacyPolicy.section2Title.includes('How We Use') ? 'We use the information we collect to:' : ''}
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-                  <li>Provide, maintain, and improve our services</li>
-                  <li>Process transactions and send related information</li>
-                  <li>Send you technical notices and support messages</li>
-                  <li>Respond to your comments, questions, and requests</li>
-                  <li>Monitor and analyze trends and usage</li>
-                  <li>Detect, prevent, and address technical issues</li>
-                  <li>Personalize your experience on our platform</li>
+                  <li>{t.privacyPolicy.section2Item1}</li>
+                  <li>{t.privacyPolicy.section2Item2}</li>
+                  <li>{t.privacyPolicy.section2Item3}</li>
+                  <li>{t.privacyPolicy.section2Item4}</li>
+                  <li>{t.privacyPolicy.section2Item5}</li>
+                  <li>{t.privacyPolicy.section2Item6}</li>
+                  <li>{t.privacyPolicy.section2Item7}</li>
                 </ul>
               </div>
             </div>
@@ -121,16 +121,16 @@ export default function PrivacyPolicy() {
                 <Lock className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">3. Data Protection</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.privacyPolicy.section3Title}</h2>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  We implement appropriate technical and organizational security measures to protect your personal information. This includes:
+                  {t.privacyPolicy.section3Desc}
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-                  <li>Encryption of sensitive data in transit and at rest</li>
-                  <li>Regular security assessments and updates</li>
-                  <li>Access controls and authentication mechanisms</li>
-                  <li>Employee training on data protection</li>
-                  <li>Compliance with industry standards and regulations</li>
+                  <li>{t.privacyPolicy.section3Item1}</li>
+                  <li>{t.privacyPolicy.section3Item2}</li>
+                  <li>{t.privacyPolicy.section3Item3}</li>
+                  <li>{t.privacyPolicy.section3Item4}</li>
+                  <li>{t.privacyPolicy.section3Item5}</li>
                 </ul>
               </div>
             </div>
@@ -149,18 +149,18 @@ export default function PrivacyPolicy() {
                 <UserCheck className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">4. Your Rights</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.privacyPolicy.section4Title}</h2>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  You have the right to:
+                  {t.privacyPolicy.section4Intro}
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-                  <li>Access and receive a copy of your personal data</li>
-                  <li>Correct inaccurate or incomplete information</li>
-                  <li>Request deletion of your personal data</li>
-                  <li>Object to processing of your personal data</li>
-                  <li>Request restriction of processing</li>
-                  <li>Data portability</li>
-                  <li>Withdraw consent at any time</li>
+                  <li>{t.privacyPolicy.section4Item1}</li>
+                  <li>{t.privacyPolicy.section4Item2}</li>
+                  <li>{t.privacyPolicy.section4Item3}</li>
+                  <li>{t.privacyPolicy.section4Item4}</li>
+                  <li>{t.privacyPolicy.section4Item5}</li>
+                  <li>{t.privacyPolicy.section4Item6}</li>
+                  <li>{t.privacyPolicy.section4Item7}</li>
                 </ul>
               </div>
             </div>
@@ -179,10 +179,9 @@ export default function PrivacyPolicy() {
                 <Cookie className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">5. Cookies and Tracking</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.privacyPolicy.section5Title}</h2>
                 <p className="text-gray-300 leading-relaxed">
-                  We use cookies and similar tracking technologies to enhance your experience on our platform. 
-                  For detailed information about our use of cookies, please refer to our Cookie Policy.
+                  {t.privacyPolicy.section5Desc}
                 </p>
               </div>
             </div>
@@ -201,10 +200,9 @@ export default function PrivacyPolicy() {
                 <RefreshCw className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">6. Changes to This Policy</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.privacyPolicy.section6Title}</h2>
                 <p className="text-gray-300 leading-relaxed">
-                  We may update this Privacy Policy from time to time. We will notify you of any changes by posting 
-                  the new Privacy Policy on this page and updating the "Last updated" date.
+                  {t.privacyPolicy.section6Desc}
                 </p>
               </div>
             </div>
@@ -218,12 +216,12 @@ export default function PrivacyPolicy() {
             transition={{ duration: 0.6, delay: 0.6 }}
             className="bg-gradient-to-br from-[#EECE84]/10 to-[#EECE84]/5 backdrop-blur-xl rounded-2xl p-8 border border-[#EECE84]/20"
           >
-            <h2 className="text-2xl font-bold text-white mb-3">7. Contact Us</h2>
+            <h2 className="text-2xl font-bold text-white mb-3">{t.privacyPolicy.contactTitle}</h2>
             <p className="text-gray-300 leading-relaxed mb-4">
-              If you have any questions about this Privacy Policy, please contact us at:
+              {t.privacyPolicy.contactDesc}
             </p>
             <p className="text-[#EECE84] font-medium">
-              support@atps.com
+              {t.privacyPolicy.contactEmail}
             </p>
           </motion.section>
 
@@ -232,4 +230,3 @@ export default function PrivacyPolicy() {
     </div>
   );
 }
-
