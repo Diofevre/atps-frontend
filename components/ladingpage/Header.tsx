@@ -2,7 +2,7 @@
 'use client';
 
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@/lib/mock-clerk';
-import { Menu, X, Globe } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
@@ -118,10 +118,9 @@ const Header = () => {
           <div className="hidden lg:flex items-center justify-end mr-4 relative language-dropdown">
             <button
               onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-gray-300 hover:text-white"
+              className="flex items-center px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-gray-300 hover:text-white"
             >
-              <Globe className="w-4 h-4" />
-              <span className="text-sm font-medium">{languages.find(l => l.code === language)?.flag}</span>
+              <span className="text-xl">{languages.find(l => l.code === language)?.flag}</span>
             </button>
             {languageDropdownOpen && (
               <div className="absolute top-full right-0 mt-2 w-48 bg-slate-900 rounded-xl border border-white/10 overflow-hidden shadow-xl">
@@ -176,10 +175,9 @@ const Header = () => {
             <div className="relative language-dropdown">
               <button
                 onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-gray-300"
+                className="flex items-center px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-gray-300"
               >
-                <Globe className="w-4 h-4" />
-                <span className="text-sm">{languages.find(l => l.code === language)?.flag}</span>
+                <span className="text-xl">{languages.find(l => l.code === language)?.flag}</span>
               </button>
               {languageDropdownOpen && (
                 <div className="absolute top-full right-0 mt-2 w-40 bg-slate-900 rounded-xl border border-white/10 overflow-hidden shadow-xl z-50">

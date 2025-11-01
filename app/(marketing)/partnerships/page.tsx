@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Shield, GraduationCap, Target, Award, Users, TrendingUp, Zap, CheckCircle2, Rocket } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useI18n } from '@/lib/i18n/context';
+import { PartnershipFormOverlay } from '@/components/partnership-form-overlay';
 
 const benefits = [
   {
@@ -56,17 +57,20 @@ const Partnerships = () => {
   const heroRef = useRef(null);
   const benefitsRef = useRef(null);
   const featuresRef = useRef(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   
   const heroInView = useInView(heroRef, { once: true, amount: 0.3 });
   const benefitsInView = useInView(benefitsRef, { once: true, amount: 0.2 });
   const featuresInView = useInView(featuresRef, { once: true, amount: 0.2 });
 
   const handleContactClick = () => {
-    window.location.href = '/#contact';
+    setIsFormOpen(true);
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white overflow-hidden">
+    <>
+      <PartnershipFormOverlay isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
+      <div className="min-h-screen bg-slate-900 text-white overflow-hidden">
       {/* Hero Section - Left aligned */}
       <div ref={heroRef} className="relative min-h-screen flex items-center">
         <div className="absolute inset-0 z-0 overflow-hidden">
@@ -285,6 +289,7 @@ const Partnerships = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

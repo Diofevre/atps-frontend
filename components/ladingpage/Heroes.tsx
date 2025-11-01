@@ -58,9 +58,9 @@ const Heroes = () => {
         </div>
 
         {/* Hero Content */}
-        <div className="relative pt-40 pb-24">
+        <div className="relative pt-32 pb-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl space-y-8">
+            <div className="max-w-4xl space-y-6">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -70,7 +70,7 @@ const Heroes = () => {
                 <span className="animate-pulse mr-2 h-2 w-2 rounded-full bg-[#EECE84]"></span>
                 {t.heroes.badge}
               </motion.div>
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <motion.h1 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -78,7 +78,7 @@ const Heroes = () => {
                   className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white"
                 >
                   {t.heroes.title}
-                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#EECE84] via-amber-500 to-amber-400 mt-2 animate-gradient">
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#EECE84] via-amber-500 to-amber-400 mt-1 animate-gradient">
                     {t.heroes.titleHighlight}
                   </span>
                 </motion.h1>
@@ -89,7 +89,7 @@ const Heroes = () => {
                   className="relative"
                 >
                   <div className="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-[#EECE84] to-transparent opacity-50" />
-                  <p className="text-xl text-gray-300/90 max-w-2xl leading-relaxed pl-4">
+                  <p className="text-lg text-gray-300/90 max-w-2xl leading-relaxed pl-4">
                     {t.heroes.description}
                   </p>
                 </motion.div>
@@ -99,7 +99,7 @@ const Heroes = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.6 }}
-                  className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8"
+                  className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4"
                 >
                   {mainFeatures.map((feature, index) => {
                     const Icon = feature.icon;
@@ -135,7 +135,7 @@ const Heroes = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1.2 }}
-                className="flex flex-wrap gap-4 pt-4"
+                className="flex flex-wrap gap-4 pt-2"
               >
                 <Button 
                   onClick={() => router.push('/signup')}

@@ -117,7 +117,7 @@ export const translations: Record<Language, Translations> = {
     footer: {
       ctaBanner: 'Commencez Votre Voyage Aéronautique',
       ctaTitle: 'Prêt à s\'envoler vers',
-      ctaSubtitle: 'la Connaissance avec ATPS?',
+      ctaSubtitle: 'la connaissance ATPS?',
       getStarted: 'Commencer',
       quickLinks: 'Liens Rapides',
       company: 'Entreprise',
@@ -144,8 +144,8 @@ export const translations: Record<Language, Translations> = {
     },
     heroes: {
       badge: 'Commencez Votre Voyage Aéronautique Aujourd\'hui',
-      title: 'Envolez-vous vers la connaissance',
-      titleHighlight: 'avec ATPS',
+      title: 'Envolez-vous vers',
+      titleHighlight: 'la connaissance ATPS',
       description: 'ATPS est la plateforme de formation aéronautique la plus performante, conçue pour fournir la préparation ATPL la plus précise, efficace et de haute qualité disponible aujourd\'hui.',
       tryForFree: 'ESSAYEZ GRATUITEMENT',
       joinCommunity: 'Rejoignez Notre Communauté',

@@ -74,7 +74,7 @@ const PricingPage = () => {
       subscriptions: [
         { duration: 12, price: 5, saving: 60 },
         { duration: 6, price: 7, saving: 36 },
-        { duration: 3, price: 0, saving: 0 },
+        { duration: 3, price: 1, saving: 27 },
         { duration: 1, price: 10, saving: 0 }
       ],
       highlight: false,
@@ -88,7 +88,7 @@ const PricingPage = () => {
       subscriptions: [
         { duration: 12, price: 10, saving: 120 },
         { duration: 6, price: 12, saving: 60 },
-        { duration: 3, price: 0, saving: 0 },
+        { duration: 3, price: 1, saving: 42 },
         { duration: 1, price: 15, saving: 0 }
       ],
       highlight: true,
@@ -157,16 +157,10 @@ const PricingPage = () => {
                       }`}>
                         <div className="flex justify-between items-center mb-2">
                           <div className="flex items-baseline gap-1">
-                            {sub.price === 0 ? (
-                              <span className="text-2xl font-bold text-[#EECE84]">FREE</span>
-                            ) : (
-                              <>
-                                <span className="text-2xl font-bold text-white">€{sub.price}</span>
-                                <span className="text-gray-400">/month</span>
-                              </>
-                            )}
+                            <span className="text-2xl font-bold text-white">€{sub.price}</span>
+                            <span className="text-gray-400">/month</span>
                           </div>
-                          {sub.price === 0 ? (
+                          {sub.duration === 3 ? (
                             <div className="text-[#EECE84] text-sm font-bold bg-[#EECE84]/20 px-3 py-1 rounded-full">
                               SPECIAL OFFER
                             </div>
@@ -249,12 +243,8 @@ const PricingPage = () => {
 
               <div className="bg-white/5 rounded-xl p-4">
                 <div className="flex justify-between items-baseline mb-1">
-                  {selectedPlan.subscription.price === 0 ? (
-                    <span className="text-xl font-bold text-[#EECE84]">FREE</span>
-                  ) : (
-                    <span className="text-xl font-bold text-white">€{selectedPlan.subscription.price}/month</span>
-                  )}
-                  {selectedPlan.subscription.price === 0 ? (
+                  <span className="text-xl font-bold text-white">€{selectedPlan.subscription.price}/month</span>
+                  {selectedPlan.subscription.duration === 3 ? (
                     <span className="text-[#EECE84] text-sm font-bold bg-[#EECE84]/20 px-3 py-1 rounded-full">SPECIAL OFFER</span>
                   ) : selectedPlan.subscription.saving > 0 && (
                     <span className="text-[#EECE84] text-sm">Save €{selectedPlan.subscription.saving}</span>

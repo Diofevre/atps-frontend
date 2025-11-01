@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -79,14 +80,14 @@ const Footer = () => {
 
   return (
     <footer className="relative bg-slate-800/50 backdrop-blur-xl border-t border-white/5">
-      {/* CTA Section - Right aligned */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      {/* CTA Section - Left aligned */}
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-right space-y-8 max-w-3xl ml-auto"
+          className="text-left space-y-6 max-w-3xl"
         >
           <motion.div 
             className="inline-flex items-center px-4 py-2 rounded-[24px] bg-[#EECE84]/10 border border-[#EECE84]/20 text-[#EECE84] text-sm"
@@ -97,22 +98,24 @@ const Footer = () => {
           </motion.div>
           <h2 className="text-4xl md:text-5xl font-bold text-white">
             {t.footer.ctaTitle}
-            <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-[#EECE84] to-amber-400">
+            <span className="block mt-1 text-transparent bg-clip-text bg-gradient-to-r from-[#EECE84] to-amber-400">
               {t.footer.ctaSubtitle}
             </span>
           </h2>
-          <div className="flex gap-4 justify-end">
-            <Button 
-              size="lg"
-              className="bg-gradient-to-r from-[#EECE84] to-amber-400 hover:from-[#EECE84]/90 hover:to-amber-400/90 text-slate-900 rounded-[24px] px-8 h-14 transition-all duration-300 group"
-            >
-              <span className="flex items-center font-semibold">
-                {t.footer.getStarted}
-                <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
-                  ⟶
+          <div className="flex gap-4 justify-start">
+            <Link href="/signup">
+              <Button 
+                size="lg"
+                className="bg-gradient-to-r from-[#EECE84] to-amber-400 hover:from-[#EECE84]/90 hover:to-amber-400/90 text-slate-900 rounded-[24px] px-8 h-14 transition-all duration-300 group"
+              >
+                <span className="flex items-center font-semibold">
+                  {t.footer.getStarted}
+                  <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
+                    ⟶
+                  </span>
                 </span>
-              </span>
-            </Button>
+              </Button>
+            </Link>
           </div>
         </motion.div>
       </div>
