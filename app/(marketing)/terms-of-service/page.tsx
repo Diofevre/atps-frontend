@@ -62,10 +62,9 @@ export default function TermsOfService() {
                 <FileText className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">1. Acceptance of Terms</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.termsOfService.section1Title}</h2>
                 <p className="text-gray-300 leading-relaxed">
-                  By accessing and using ATPS, you accept and agree to be bound by the terms and provisions of this agreement. 
-                  If you do not agree to abide by the above, please do not use this service.
+                  {t.termsOfService.section1Desc}
                 </p>
               </div>
             </div>
@@ -84,15 +83,15 @@ export default function TermsOfService() {
                 <Users className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">2. User Account</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.termsOfService.section2Title}</h2>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  When you create an account with us, you must provide accurate, complete, and current information. You are responsible for:
+                  {t.termsOfService.section2Intro}
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-                  <li>Maintaining the confidentiality of your account credentials</li>
-                  <li>All activities that occur under your account</li>
-                  <li>Notifying us immediately of any unauthorized use</li>
-                  <li>Compliance with all applicable laws and regulations</li>
+                  <li>{t.termsOfService.section2Item1}</li>
+                  <li>{t.termsOfService.section2Item2}</li>
+                  <li>{t.termsOfService.section2Item3}</li>
+                  <li>{t.termsOfService.section2Item4}</li>
                 </ul>
               </div>
             </div>
@@ -111,17 +110,17 @@ export default function TermsOfService() {
                 <AlertTriangle className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">3. Prohibited Uses</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.termsOfService.section3Title}</h2>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  You may not use our service:
+                  {t.termsOfService.section3Intro}
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-                  <li>For any unlawful purpose or to solicit others to perform unlawful acts</li>
-                  <li>To violate any international, federal, provincial, or state regulations, rules, or laws</li>
-                  <li>To infringe upon or violate our intellectual property rights or the intellectual property rights of others</li>
-                  <li>To harass, abuse, insult, harm, defame, slander, disparage, intimidate, or discriminate</li>
-                  <li>To submit false or misleading information</li>
-                  <li>To upload or transmit viruses or any other type of malicious code</li>
+                  <li>{t.termsOfService.section3Item1}</li>
+                  <li>{t.termsOfService.section3Item2}</li>
+                  <li>{t.termsOfService.section3Item3}</li>
+                  <li>{t.termsOfService.section3Item4}</li>
+                  <li>{t.termsOfService.section3Item5}</li>
+                  <li>{t.termsOfService.section3Item6}</li>
                 </ul>
               </div>
             </div>
@@ -140,17 +139,15 @@ export default function TermsOfService() {
                 <Shield className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">4. Subscription and Billing</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.termsOfService.section4Title}</h2>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  <strong className="text-white">Subscription Plans:</strong> We offer various subscription plans with different features and pricing.
+                  <strong className="text-white">{t.termsOfService.section4Label1}</strong> {t.termsOfService.section4Text1}
                 </p>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  <strong className="text-white">Billing:</strong> Subscriptions are billed on a recurring basis according to your selected plan. 
-                  You authorize us to charge your payment method for all subscription fees.
+                  <strong className="text-white">{t.termsOfService.section4Label2}</strong> {t.termsOfService.section4Text2}
                 </p>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  <strong className="text-white">Cancellation:</strong> You may cancel your subscription at any time. 
-                  Cancellation takes effect at the end of the current billing period.
+                  <strong className="text-white">{t.termsOfService.section4Label3}</strong> {t.termsOfService.section4Text3}
                 </p>
               </div>
             </div>
@@ -169,11 +166,9 @@ export default function TermsOfService() {
                 <Copyright className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">5. Intellectual Property</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.termsOfService.section5Title}</h2>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  The platform and its original content, features, and functionality are owned by ATPS and are protected by international 
-                  copyright, trademark, patent, trade secret, and other intellectual property laws. Our trademarks and trade dress may not 
-                  be used in connection with any product or service without our prior written consent.
+                  {t.termsOfService.section5Desc}
                 </p>
               </div>
             </div>
@@ -192,11 +187,9 @@ export default function TermsOfService() {
                 <Gavel className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">6. Limitation of Liability</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.termsOfService.section6Title}</h2>
                 <p className="text-gray-300 leading-relaxed">
-                  ATPS shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including 
-                  without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your use 
-                  of the service.
+                  {t.termsOfService.section6Desc}
                 </p>
               </div>
             </div>
@@ -215,10 +208,9 @@ export default function TermsOfService() {
                 <RefreshCw className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">7. Changes to Terms</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.termsOfService.section7Title}</h2>
                 <p className="text-gray-300 leading-relaxed">
-                  We reserve the right to modify these terms at any time. We will notify users of any material changes by posting the 
-                  new Terms of Service on this page.
+                  {t.termsOfService.section7Desc}
                 </p>
               </div>
             </div>
@@ -232,12 +224,12 @@ export default function TermsOfService() {
             transition={{ duration: 0.6, delay: 0.7 }}
             className="bg-gradient-to-br from-[#EECE84]/10 to-[#EECE84]/5 backdrop-blur-xl rounded-2xl p-8 border border-[#EECE84]/20"
           >
-            <h2 className="text-2xl font-bold text-white mb-3">8. Contact Us</h2>
+            <h2 className="text-2xl font-bold text-white mb-3">{t.termsOfService.contactTitle}</h2>
             <p className="text-gray-300 leading-relaxed mb-4">
-              If you have any questions about these Terms of Service, please contact us at:
+              {t.termsOfService.contactDesc}
             </p>
             <p className="text-[#EECE84] font-medium">
-              support@atps.com
+              {t.termsOfService.contactEmail}
             </p>
           </motion.section>
 
@@ -246,4 +238,3 @@ export default function TermsOfService() {
     </div>
   );
 }
-

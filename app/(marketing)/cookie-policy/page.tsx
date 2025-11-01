@@ -33,13 +33,13 @@ export default function CookiePolicy() {
               <Cookie className="w-8 h-8 text-[#EECE84]" />
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
-              Cookie Policy
+              {t.cookiePolicy.title}
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Learn about how we use cookies and similar technologies to enhance your experience.
+              {t.cookiePolicy.subtitle}
             </p>
             <div className="mt-6 inline-flex items-center gap-2 text-sm text-gray-400">
-              Last updated: {new Date(lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              {t.cookiePolicy.lastUpdated} {new Date(lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
             </div>
           </motion.div>
         </div>
@@ -62,10 +62,9 @@ export default function CookiePolicy() {
                 <Cookie className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">1. What Are Cookies?</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.cookiePolicy.section1Title}</h2>
                 <p className="text-gray-300 leading-relaxed">
-                  Cookies are small text files that are placed on your computer or mobile device when you visit a website. 
-                  They are widely used to make websites work more efficiently and to provide information to the website owners.
+                  {t.cookiePolicy.section1Desc}
                 </p>
               </div>
             </div>
@@ -84,16 +83,16 @@ export default function CookiePolicy() {
                 <Settings className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">2. How We Use Cookies</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.cookiePolicy.section2Title}</h2>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  We use cookies for various purposes to improve your experience on our platform:
+                  {t.cookiePolicy.section2Desc}
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-                  <li><strong className="text-white">Essential Cookies:</strong> Required for the platform to function properly</li>
-                  <li><strong className="text-white">Authentication:</strong> To identify you and keep you logged in</li>
-                  <li><strong className="text-white">Preferences:</strong> To remember your settings and preferences</li>
-                  <li><strong className="text-white">Analytics:</strong> To understand how visitors interact with our platform</li>
-                  <li><strong className="text-white">Performance:</strong> To improve the speed and reliability of the platform</li>
+                  <li>{t.cookiePolicy.section2Item1}</li>
+                  <li>{t.cookiePolicy.section2Item2}</li>
+                  <li>{t.cookiePolicy.section2Item3}</li>
+                  <li>{t.cookiePolicy.section2Item4}</li>
+                  <li>{t.cookiePolicy.section2Item5}</li>
                 </ul>
               </div>
             </div>
@@ -112,17 +111,16 @@ export default function CookiePolicy() {
                 <BarChart3 className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">3. Types of Cookies We Use</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.cookiePolicy.section3Title}</h2>
                 <div className="space-y-4">
                   <div>
-                    <h4 className="text-white font-semibold mb-2">Essential Cookies</h4>
+                    <h4 className="text-white font-semibold mb-2">{t.cookiePolicy.section3Desc1}</h4>
                     <p className="text-gray-300 text-sm">
-                      These cookies are necessary for the website to function and cannot be switched off. They are usually set 
-                      in response to actions made by you.
+                      {t.cookiePolicy.section3Desc2}
                     </p>
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold mb-2">Functional Cookies</h4>
+                    <h4 className="text-white font-semibold mb-2">{t.cookiePolicy.section3Desc3}</h4>
                     <p className="text-gray-300 text-sm">
                       These cookies enable the website to provide enhanced functionality and personalization. They may be set by 
                       us or by third-party providers.
@@ -152,11 +150,9 @@ export default function CookiePolicy() {
                 <Globe className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">4. Third-Party Cookies</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.cookiePolicy.section4Title}</h2>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  In addition to our own cookies, we may also use various third-party cookies to report usage statistics and deliver 
-                  advertisements on and through the service. These third parties may use cookies to collect information about your 
-                  online activities over time and across different websites.
+                  {t.cookiePolicy.section4Desc}
                 </p>
               </div>
             </div>
@@ -175,19 +171,18 @@ export default function CookiePolicy() {
                 <UserCircle className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">5. Managing Cookies</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.cookiePolicy.section5Title}</h2>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  You can control and manage cookies in various ways. Please keep in mind that removing or blocking cookies can 
-                  impact your user experience:
+                  {t.cookiePolicy.section5Intro}
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-                  <li>Most web browsers allow you to refuse or accept cookies through their settings</li>
-                  <li>You can configure your browser to notify you when cookies are being set</li>
-                  <li>You can delete cookies that have been set on your device</li>
-                  <li>You can use browser extensions to block cookies</li>
+                  <li>{t.cookiePolicy.section5Item1}</li>
+                  <li>{t.cookiePolicy.section5Item2}</li>
+                  <li>{t.cookiePolicy.section5Item3}</li>
+                  <li>{t.cookiePolicy.section5Item4}</li>
                 </ul>
                 <p className="text-gray-300 leading-relaxed mt-4">
-                  Note that disabling certain cookies may prevent you from accessing some features of our platform.
+                  {t.cookiePolicy.section5Note}
                 </p>
               </div>
             </div>
@@ -206,12 +201,11 @@ export default function CookiePolicy() {
                 <Clock className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">6. Duration of Cookies</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.cookiePolicy.section6Title}</h2>
                 <p className="text-gray-300 leading-relaxed">
-                  <strong className="text-white">Session Cookies:</strong> These are temporary cookies that expire when you close your browser.
+                  <strong className="text-white">{t.cookiePolicy.section6Label1}</strong> {t.cookiePolicy.section6Desc1}
                   <br/><br/>
-                  <strong className="text-white">Persistent Cookies:</strong> These cookies remain on your device for a longer period, 
-                  or until you delete them manually. They enable us to recognize you when you return to our platform.
+                  <strong className="text-white">{t.cookiePolicy.section6Label2}</strong> {t.cookiePolicy.section6Desc2}
                 </p>
               </div>
             </div>
@@ -225,10 +219,9 @@ export default function CookiePolicy() {
             transition={{ duration: 0.6, delay: 0.6 }}
             className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-8 border border-white/10"
           >
-            <h2 className="text-2xl font-bold text-white mb-3">7. Updates to This Policy</h2>
+            <h2 className="text-2xl font-bold text-white mb-3">{t.cookiePolicy.section7Title}</h2>
             <p className="text-gray-300 leading-relaxed">
-              We may update this Cookie Policy from time to time to reflect changes in our practices or for other operational, 
-              legal, or regulatory reasons. Please revisit this page periodically to stay informed about our use of cookies.
+              {t.cookiePolicy.section7Desc}
             </p>
           </motion.section>
 
@@ -245,12 +238,12 @@ export default function CookiePolicy() {
                 <Shield className="w-6 h-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-3">8. Contact Us</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t.cookiePolicy.contactTitle}</h2>
                 <p className="text-gray-300 leading-relaxed mb-4">
-                  If you have any questions about our use of cookies, please contact us at:
+                  {t.cookiePolicy.contactDesc}
                 </p>
                 <p className="text-[#EECE84] font-medium">
-                  support@atps.com
+                  {t.cookiePolicy.contactEmail}
                 </p>
               </div>
             </div>
@@ -261,4 +254,3 @@ export default function CookiePolicy() {
     </div>
   );
 }
-
