@@ -22,7 +22,7 @@ const AboutATPS = () => {
               <div className="space-y-8">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-[24px] bg-blue-500/10 border border-blue-500/20 text-blue-400">
                   <Shield className="w-4 h-4" />
-                  <span className="text-sm font-medium">Trusted Since 2024</span>
+                  <span className="text-sm font-medium">Innovative & Modern</span>
                 </div>
                 <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
                   Shaping the Future of
@@ -31,9 +31,7 @@ const AboutATPS = () => {
                   </span>
                 </h1>
                 <p className="text-xl text-gray-400 leading-relaxed max-w-2xl">
-                  For over two decades, ATPS Aviation has been at the forefront of aviation
-                  training, combining cutting-edge technology with world-class expertise to
-                  develop the next generation of aviation professionals.
+                  ATPS is revolutionizing aviation training through cutting-edge technology and innovative learning approaches. We provide comprehensive ATPL preparation with an extensive question bank, AI-powered assistance, and realistic flight simulation to help aspiring pilots achieve their aviation dreams.
                 </p>
               </div>
 

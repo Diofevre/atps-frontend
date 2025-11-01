@@ -120,7 +120,7 @@ const Footer = () => {
                 <span className="block text-[#EECE84]">Aviation Journey</span>
               </h2>
               <p className="text-gray-400 leading-relaxed">
-                Join thousands of successful pilots who started their career with ATPS. Our team is here to help you achieve your aviation goals.
+                Ready to take your aviation career to new heights? Get in touch with our team.
               </p>
             </div>
 
@@ -281,13 +281,19 @@ const Footer = () => {
           </div>
 
           {/* Links Sections */}
-          <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-8">
+          <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-[#EECE84] font-semibold mb-4">Products</h3>
+              <h3 className="text-[#EECE84] font-semibold mb-4 group">
+                <span className="flex items-center gap-2">
+                  <span className="h-0.5 w-8 bg-[#EECE84] opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                  Products
+                </span>
+              </h3>
               <ul className="space-y-3">
                 {products.map((item, index) => (
                   <li key={index}>
-                    <a href={item.href} className="text-gray-400 hover:text-white transition-colors duration-300">
+                    <a href={item.href} className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">
+                      <span className="h-1 w-1 rounded-full bg-[#EECE84] opacity-0 group-hover:opacity-100 transition-opacity"></span>
                       {item.name}
                     </a>
                   </li>
@@ -295,11 +301,17 @@ const Footer = () => {
               </ul>
             </div>
             <div>
-              <h3 className="text-[#EECE84] font-semibold mb-4">Resources</h3>
+              <h3 className="text-[#EECE84] font-semibold mb-4 group">
+                <span className="flex items-center gap-2">
+                  <span className="h-0.5 w-8 bg-[#EECE84] opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                  Resources
+                </span>
+              </h3>
               <ul className="space-y-3">
                 {resources.map((item, index) => (
                   <li key={index}>
-                    <a href={item.href} className="text-gray-400 hover:text-white transition-colors duration-300">
+                    <a href={item.href} className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">
+                      <span className="h-1 w-1 rounded-full bg-[#EECE84] opacity-0 group-hover:opacity-100 transition-opacity"></span>
                       {item.name}
                     </a>
                   </li>
@@ -307,30 +319,52 @@ const Footer = () => {
               </ul>
             </div>
             <div>
-              <h3 className="text-[#EECE84] font-semibold mb-4">Company</h3>
+              <h3 className="text-[#EECE84] font-semibold mb-4 group">
+                <span className="flex items-center gap-2">
+                  <span className="h-0.5 w-8 bg-[#EECE84] opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                  Company
+                </span>
+              </h3>
               <ul className="space-y-3">
                 {company.map((item, index) => (
                   <li key={index}>
-                    <a href={item.href} className="text-gray-400 hover:text-white transition-colors duration-300">
+                    <a href={item.href} className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">
+                      <span className="h-1 w-1 rounded-full bg-[#EECE84] opacity-0 group-hover:opacity-100 transition-opacity"></span>
                       {item.name}
                     </a>
                   </li>
                 ))}
               </ul>
+            </div>
+            <div className="sm:col-span-4 lg:col-span-1">
+              <h3 className="text-[#EECE84] font-semibold mb-4">Connect</h3>
+              <div className="flex gap-4">
+                {[Facebook, Twitter, Linkedin, Instagram].map((Icon, index) => (
+                  <a
+                    key={index}
+                    href="#"
+                    className="p-2.5 rounded-lg bg-white/5 text-[#EECE84] hover:bg-[#EECE84]/10 transition-all duration-300 group"
+                  >
+                    <Icon className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
         </div>
 
         {/* Copyright */}
-        <div className="mt-16 pt-8 border-t border-white/10">
+        <div className="mt-16 pt-8 border-t border-white/10 relative">
+          {/* Decorative gradient line */}
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#EECE84]/50 to-transparent"></div>
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-gray-400">
               © {currentYear} ATPS Aviation. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
-              <a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Terms of Service</a>
-              <a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Cookie Policy</a>
+              <a href="#" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">Privacy Policy</a>
+              <a href="#" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">Terms of Service</a>
+              <a href="#" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">Cookie Policy</a>
             </div>
           </div>
         </div>

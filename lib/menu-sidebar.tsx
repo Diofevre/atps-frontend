@@ -59,7 +59,7 @@ export const support: SupportItem[] = [
     id: 5,
     category: "Question Bank",
     title: "How often are new questions added?",
-    description: "New questions are added daily, including the latest seen-in-exam questions to help students stay ahead."
+    description: "New questions are added regularly, including the latest seen-in-exam questions to help students stay ahead with current exam trends."
   },
   {
     id: 6,
@@ -111,12 +111,12 @@ export const support: SupportItem[] = [
     id: 13,
     category: "Pricing & Payment",
     title: "Does ATPS offer a free trial?",
-    description: "Yes! ATPS provides a 24-hour free trial with limited access to the question bank and learning resources."
+    description: "Yes! We offer special promotions including 3-month free subscriptions. Check our pricing page for current offers and choose the plan that works best for you."
   },
   {
     id: 14,
     category: "Pricing & Payment",
     title: "What payment methods are accepted?",
-    description: "ATPS accepts credit/debit cards, PayPal, and bank transfers."
+    description: "ATPS accepts major credit/debit cards and secure online payment processors for your convenience."
   }
 ];

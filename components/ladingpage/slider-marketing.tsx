@@ -29,7 +29,7 @@ const features = [
   {
     icon: HelpCircle,
     title: "Questions bank",
-    description: `850+ verified real exam questions, updated regularly. With "Last Seen in Exam" questions and a Question Quality Score, it helps you focus on key topics to ace your ATPL exams efficiently.`,
+    description: `25,000+ verified real exam questions, updated regularly. With "Last Seen in Exam" questions and a Question Quality Score, it helps you focus on key topics to ace your ATPL exams efficiently.`,
     image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=1000",
     route: "/questions-bank"
   },

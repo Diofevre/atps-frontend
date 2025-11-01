@@ -39,7 +39,7 @@ export const features = [
 export const mainFeatures = [
   {
     icon: CheckCircle2,
-    title: "850+ Verified Exam Questions",
+    title: "25,000+ Verified Exam Questions",
     description: "Organized, structured, and continuously updated.",
     gradient: "from-emerald-500/20 to-teal-500/20",
     iconColor: "text-emerald-400"
@@ -69,14 +69,24 @@ export const mainFeatures = [
 
 export const stats_about = [
   {
-    value: "20+",
-    label: "Years of Excellence",
-    description: "Leading aviation education",
+    value: "25K+",
+    label: "Exam Questions",
+    description: "Comprehensive question bank",
   },
   {
-    value: "1000+",
-    label: "Certified Pilots",
-    description: "Flying worldwide",
+    value: "24/7",
+    label: "AI Support",
+    description: "Always available assistance",
+  },
+  {
+    value: "15+",
+    label: "Aviation Subjects",
+    description: "Complete ATPL coverage",
+  },
+  {
+    value: "Growing",
+    label: "Community",
+    description: "Join aspiring pilots",
   },
 ];
 
