@@ -29,16 +29,6 @@ const formSchema = z.object({
 
 const contactInfo = [
   {
-    icon: MapPin,
-    label: "Visit Our Campus",
-    value: "2360 Ch Ste-Foy, Québec, QC G1V 4H2"
-  },
-  {
-    icon: Phone,
-    label: "Call Us",
-    value: "+1 (418) 431-6999"
-  },
-  {
     icon: Mail,
     label: "Email Us",
     value: "contact@myatps.com"

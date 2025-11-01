@@ -72,10 +72,10 @@ const PricingPage = () => {
       description: "Unlimited access to our question bank from a single device—your go-to tool for exam preparation.",
       icon: BookOpen,
       subscriptions: [
-        { duration: 12, price: 10, saving: 180 },
-        { duration: 6, price: 15, saving: 60 },
-        { duration: 3, price: 20, saving: 15 },
-        { duration: 1, price: 25, saving: 0 }
+        { duration: 12, price: 5, saving: 60 },
+        { duration: 6, price: 7, saving: 36 },
+        { duration: 3, price: 0, saving: 0 },
+        { duration: 1, price: 10, saving: 0 }
       ],
       highlight: false,
       color: "from-blue-500/20 to-blue-600/20"
@@ -86,10 +86,10 @@ const PricingPage = () => {
       description: "Full access to our question bank, detailed courses, AI support, and an integrated aviation dictionary for a comprehensive learning experience.",
       icon: Sparkles,
       subscriptions: [
-        { duration: 12, price: 20, saving: 180 },
-        { duration: 6, price: 25, saving: 60 },
-        { duration: 3, price: 30, saving: 15 },
-        { duration: 1, price: 35, saving: 0 }
+        { duration: 12, price: 10, saving: 120 },
+        { duration: 6, price: 12, saving: 60 },
+        { duration: 3, price: 0, saving: 0 },
+        { duration: 1, price: 15, saving: 0 }
       ],
       highlight: true,
       color: "from-[#EECE84]/20 to-amber-500/20"
@@ -153,14 +153,24 @@ const PricingPage = () => {
                       className="relative group w-full text-left"
                     >
                       <div className={`p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all ${
-                        sub.duration === 12 ? 'ring-2 ring-[#EECE84]' : ''
+                        sub.duration === 3 ? 'ring-2 ring-[#EECE84] bg-gradient-to-br from-[#EECE84]/20 to-[#EECE84]/5' : sub.duration === 12 ? 'ring-2 ring-[#EECE84]' : ''
                       }`}>
                         <div className="flex justify-between items-center mb-2">
                           <div className="flex items-baseline gap-1">
-                            <span className="text-2xl font-bold text-white">€{sub.price}</span>
-                            <span className="text-gray-400">/month</span>
+                            {sub.price === 0 ? (
+                              <span className="text-2xl font-bold text-[#EECE84]">FREE</span>
+                            ) : (
+                              <>
+                                <span className="text-2xl font-bold text-white">€{sub.price}</span>
+                                <span className="text-gray-400">/month</span>
+                              </>
+                            )}
                           </div>
-                          {sub.saving > 0 && (
+                          {sub.price === 0 ? (
+                            <div className="text-[#EECE84] text-sm font-bold bg-[#EECE84]/20 px-3 py-1 rounded-full">
+                              SPECIAL OFFER
+                            </div>
+                          ) : sub.saving > 0 && (
                             <div className="text-[#EECE84] text-sm font-medium">
                               Save €{sub.saving}
                             </div>
@@ -239,8 +249,14 @@ const PricingPage = () => {
 
               <div className="bg-white/5 rounded-xl p-4">
                 <div className="flex justify-between items-baseline mb-1">
-                  <span className="text-xl font-bold text-white">€{selectedPlan.subscription.price}/month</span>
-                  {selectedPlan.subscription.saving > 0 && (
+                  {selectedPlan.subscription.price === 0 ? (
+                    <span className="text-xl font-bold text-[#EECE84]">FREE</span>
+                  ) : (
+                    <span className="text-xl font-bold text-white">€{selectedPlan.subscription.price}/month</span>
+                  )}
+                  {selectedPlan.subscription.price === 0 ? (
+                    <span className="text-[#EECE84] text-sm font-bold bg-[#EECE84]/20 px-3 py-1 rounded-full">SPECIAL OFFER</span>
+                  ) : selectedPlan.subscription.saving > 0 && (
                     <span className="text-[#EECE84] text-sm">Save €{selectedPlan.subscription.saving}</span>
                   )}
                 </div>

@@ -90,79 +90,42 @@ const Header = () => {
 
           {/* Desktop Auth Buttons - Fixed Width */}
           <div className="hidden lg:flex items-center gap-4 w-[180px] justify-end">
-            <SignedIn>
-              <div className="flex items-center gap-4">
-                <Link href="/dashboard">
-                  <button className="group relative px-6 py-2.5 bg-[#EECE84] text-black rounded-[24px] overflow-hidden transition-all duration-300">
-                    <div className="relative z-10 flex items-center text-sm font-medium">
-                      Dashboard
-                      <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
-                        ⟶
-                      </span>
-                    </div>
-                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                  </button>
-                </Link>
-                <UserButton 
-                  afterSignOutUrl="/"
-                  appearance={{
-                    elements: {
-                      avatarBox: "w-9 h-9"
-                    }
-                  }}
-                />
-              </div>
-            </SignedIn>
-            <SignedOut>
-              <div className="flex items-center gap-4">
-                <SignInButton mode="modal">
-                  <button className="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-300">
-                    Sign in
-                  </button>
-                </SignInButton>
-                <SignInButton mode="modal">
-                  <Button
-                    size="lg" 
-                    className="relative group bg-[#EECE84] hover:bg-[#EECE84]/90 text-slate-900 rounded-[24px] px-4 h-12 transition-all duration-300 overflow-hidden"
-                  >
-                    <span className="relative z-10 flex items-center font-medium">
-                      Join ATPS
-                      <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
-                        ⟶
-                      </span>
-                    </span>
-                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                  </Button>
-                </SignInButton>
-              </div>
-            </SignedOut>
-          </div>
-
-          {/* Mobile Menu Button & Auth */}
-          <div className="lg:hidden flex flex-1 items-center justify-end gap-4">
-            <SignedIn>
-              <UserButton 
-                afterSignOutUrl="/"
-                appearance={{
-                  elements: {
-                    avatarBox: "w-8 h-8"
-                  }
-                }}
-              />
-            </SignedIn>
-            <SignedOut>
-              <SignInButton mode="modal">
-                <button className="group relative px-4 py-2 bg-[#EECE84] text-black rounded-[24px] overflow-hidden transition-all duration-300">
-                  <span className="relative z-10 flex items-center font-medium text-sm">
-                    Sign in
+            <div className="flex items-center gap-4">
+              <Link href="/login">
+                <button className="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-300">
+                  Login
+                </button>
+              </Link>
+              <Link href="/login">
+                <Button
+                  size="lg" 
+                  className="relative group bg-[#EECE84] hover:bg-[#EECE84]/90 text-slate-900 rounded-[24px] px-4 h-12 transition-all duration-300 overflow-hidden"
+                >
+                  <span className="relative z-10 flex items-center font-medium">
+                    Sign Up
                     <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
                       ⟶
                     </span>
                   </span>
                   <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                </button>
-              </SignInButton>
-            </SignedOut>
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Mobile Menu Button & Auth */}
+          <div className="lg:hidden flex flex-1 items-center justify-end gap-4">
+            <Link href="/login">
+              <button className="group relative px-4 py-2 bg-[#EECE84] text-black rounded-[24px] overflow-hidden transition-all duration-300">
+                <span className="relative z-10 flex items-center font-medium text-sm">
+                  Login
+                  <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
+                    ⟶
+                  </span>
+                </span>
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+              </button>
+            </Link>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 rounded-full hover:bg-white/5 transition-colors duration-300"
@@ -201,29 +164,17 @@ const Header = () => {
               ))}
             </ul>
             <div className="mt-6 pt-6 border-t border-white/5">
-              <SignedIn>
-                <Link href="/dashboard">
-                  <button className="w-full group relative px-6 py-3 bg-[#EECE84] text-black rounded-[12px] overflow-hidden transition-all duration-300">
-                    <div className="relative z-10 flex items-center justify-center text-sm font-medium">
-                      Go to Dashboard
-                    </div>
-                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                  </button>
-                </Link>
-              </SignedIn>
-              <SignedOut>
-                <SignInButton mode="modal">
-                  <button className="w-full group relative px-6 py-4 bg-[#EECE84] text-black rounded-[24px] overflow-hidden transition-all duration-300">
-                    <div className="relative z-10 flex items-center justify-center text-sm font-medium">
-                      Join ATPS
-                      <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
-                        ⟶
-                      </span>
-                    </div>
-                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                  </button>
-                </SignInButton>
-              </SignedOut>
+              <Link href="/login">
+                <button className="w-full group relative px-6 py-4 bg-[#EECE84] text-black rounded-[24px] overflow-hidden transition-all duration-300">
+                  <div className="relative z-10 flex items-center justify-center text-sm font-medium">
+                    Join ATPS
+                    <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
+                      ⟶
+                    </span>
+                  </div>
+                  <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                </button>
+              </Link>
             </div>
           </div>
         </div>
