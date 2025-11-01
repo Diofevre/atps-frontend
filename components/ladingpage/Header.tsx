@@ -90,7 +90,7 @@ const Header = () => {
                 { title: t.header.faqs, path: '/faqs' },
                 { title: t.header.pricing, path: '/pricing' },
                 { title: t.header.community, path: '/community' },
-                { title: t.header.latestNews, path: '/latest_news' },
+                { title: t.header.latestNews, path: '/news' },
               ].map((menu, index) => (
                 <li key={index} className="relative group">
                   <Link href={menu.path}>
@@ -238,7 +238,7 @@ const Header = () => {
                 { title: t.header.faqs, path: '/faqs' },
                 { title: t.header.pricing, path: '/pricing' },
                 { title: t.header.community, path: '/community' },
-                { title: t.header.latestNews, path: '/latest_news' },
+                { title: t.header.latestNews, path: '/news' },
               ].map((menu, index) => (
                 <li key={index}>
                   <Link href={menu.path}>

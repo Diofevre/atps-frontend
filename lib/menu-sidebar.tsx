@@ -18,7 +18,7 @@ export const LandingMenues = [
   { title: 'FAQs', path: '/faqs'},
   { title: 'Pricing', path: '/pricing'},
   { title: 'Community', path: '/community'},
-  { title: 'Latest News', path: '/latest_news'},
+  { title: 'Latest News', path: '/news'},
 ];
 
 export interface SupportItem {

@@ -122,10 +122,16 @@ const Footer = () => {
 
       {/* Main Footer Content */}
       <div className="relative border-t border-white/5">
-        {/* Giant ATPS background */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-5">
+        {/* Giant ATPS background - Artistic Silhouette */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-10">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <span className="text-[400px] font-black text-white tracking-wider">ATPS</span>
+            <span className="text-[600px] font-black text-white tracking-[40px] leading-none" style={{
+              textShadow: '0 0 200px rgba(255,255,255,0.3), 0 0 400px rgba(238,206,132,0.2)',
+              WebkitTextStroke: '2px rgba(255,255,255,0.5)',
+              filter: 'blur(1px)'
+            }}>
+              ATPS
+            </span>
           </div>
         </div>
 
@@ -232,9 +238,9 @@ const Footer = () => {
                 {t.footer.allRightsReserved}
               </p>
               <div className="flex items-center gap-6">
-                <a href="#" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">{t.footer.privacyPolicy}</a>
-                <a href="#" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">{t.footer.termsOfService}</a>
-                <a href="#" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">{t.footer.cookiePolicy}</a>
+                <Link href="/privacy-policy" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">{t.footer.privacyPolicy}</Link>
+                <Link href="/terms-of-service" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">{t.footer.termsOfService}</Link>
+                <Link href="/cookie-policy" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">{t.footer.cookiePolicy}</Link>
               </div>
             </div>
           </motion.div>
