@@ -69,7 +69,9 @@ const Dashboard = () => {
   const { data: dashboardData, error, isLoading } = useSWR<DashboardData>(
     '/api/dashboard', // Use relative URL to leverage Next.js rewrites
     async (url: string) => {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        credentials: 'include',
+      });
       if (!response.ok) throw new Error('Failed to fetch dashboard data');
       return response.json();
     }
