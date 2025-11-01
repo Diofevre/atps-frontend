@@ -8,9 +8,11 @@ import { features, mainFeatures } from '@/lib/marketing_page/constant';
 import { Users } from 'lucide-react';
 import { useUser } from '@/lib/mock-clerk';
 import { motion, useInView } from 'framer-motion';
+import { useI18n } from '@/lib/i18n/context';
 
 const Heroes = () => {
   const { user, isLoaded } = useUser();
+  const { t } = useI18n();
   const router = useRouter();
   const introRef = useRef(null);
   const introInView = useInView(introRef, { once: true, amount: 0.2 });
@@ -66,7 +68,7 @@ const Heroes = () => {
                 className="inline-flex items-center px-4 py-2 rounded-[24px] bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-sm"
               >
                 <span className="animate-pulse mr-2 h-2 w-2 rounded-full bg-[#EECE84]"></span>
-                Start Your Aviation Journey Today
+                {t.heroes.badge}
               </motion.div>
               <div className="space-y-4">
                 <motion.h1 
@@ -75,9 +77,9 @@ const Heroes = () => {
                   transition={{ duration: 0.8, delay: 0.2 }}
                   className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white"
                 >
-                  Soar into knowledge
+                  {t.heroes.title}
                   <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#EECE84] via-amber-500 to-amber-400 mt-2 animate-gradient">
-                    with ATPS
+                    {t.heroes.titleHighlight}
                   </span>
                 </motion.h1>
                 <motion.div 
@@ -88,7 +90,7 @@ const Heroes = () => {
                 >
                   <div className="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-[#EECE84] to-transparent opacity-50" />
                   <p className="text-xl text-gray-300/90 max-w-2xl leading-relaxed pl-4">
-                    ATPS is the most performant aviation training platform, designed to provide the most precise, efficient, and high-quality ATPL preparation available today.
+                    {t.heroes.description}
                   </p>
                 </motion.div>
                 
@@ -141,7 +143,7 @@ const Heroes = () => {
                   className="relative group bg-[#EECE84] hover:bg-[#EECE84]/90 text-slate-900 rounded-[24px] px-8 h-12 transition-all duration-300 overflow-hidden"
                 >
                   <span className="relative z-10 flex items-center font-medium">
-                    TRY FOR FREE
+                    {t.heroes.tryForFree}
                     <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
                       ⟶
                     </span>
@@ -189,7 +191,7 @@ const Heroes = () => {
                     <Users className="w-6 h-6 text-[#EECE84]" />
                   </motion.div>
                   <div>
-                    <p className="text-white font-medium">Join Our Community</p>
+                    <p className="text-white font-medium">{t.heroes.joinCommunity}</p>
                     <p className="text-sm text-gray-400 mt-1">Connect with fellow aviation enthusiasts and industry experts</p>
                   </div>
                 </div>
@@ -244,7 +246,7 @@ const Heroes = () => {
                   className="group bg-white/10 hover:bg-white/20 text-white rounded-[24px] px-6 h-12 text-sm transition-all duration-300"
                 >
                   <span className="flex items-center">
-                    Join Our Community
+                    {t.heroes.joinCommunity}
                     <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
                       ⟶
                     </span>

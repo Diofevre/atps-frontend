@@ -5,6 +5,7 @@ import React, { useRef } from 'react';
 import { Shield, GraduationCap, Target, Award, Users, TrendingUp, Zap, CheckCircle2, Rocket } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { useI18n } from '@/lib/i18n/context';
 
 const benefits = [
   {
@@ -51,6 +52,7 @@ const features = [
 ];
 
 const Partnerships = () => {
+  const { t } = useI18n();
   const heroRef = useRef(null);
   const benefitsRef = useRef(null);
   const featuresRef = useRef(null);
@@ -89,16 +91,16 @@ const Partnerships = () => {
               whileHover={{ scale: 1.05 }}
             >
               <Rocket className="w-4 h-4" />
-              <span className="font-medium">Partner with ATPS</span>
+              <span className="font-medium">{t.partnerships.badge}</span>
             </motion.div>
             <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-              Empowering Aviation Schools
+              {t.partnerships.title}
               <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-[#EECE84]/40 via-[#EECE84]/50 to-[#EECE84]/60">
-                Through Innovation
+                {t.partnerships.titleHighlight}
               </span>
             </h1>
             <p className="text-xl text-gray-300 leading-relaxed">
-              ATPS provides cutting-edge ATPL preparation tools, comprehensive learning resources, and advanced analytics designed to elevate student success rates and streamline training programs.
+              {t.partnerships.subtitle}
             </p>
             <div className="flex flex-wrap gap-4">
               <Button 
@@ -107,7 +109,7 @@ const Partnerships = () => {
                 className="bg-gradient-to-r from-[#EECE84] to-amber-400 hover:from-[#EECE84]/90 hover:to-amber-400/90 text-slate-900 rounded-[24px] px-8 h-14 transition-all duration-300 group"
               >
                 <span className="flex items-center font-semibold">
-                  Contact Partnership Team
+                  {t.partnerships.contactPartnership}
                   <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
                     ⟶
                   </span>
@@ -162,13 +164,13 @@ const Partnerships = () => {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-[24px] bg-[#EECE84]/10 border border-[#EECE84]/20 text-[#EECE84] text-sm mb-6">
               <Shield className="w-4 h-4" />
-              Why Partner with ATPS
+              {t.partnerships.whyPartner}
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Benefits for Aviation Schools
+              {t.partnerships.benefitsTitle}
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Transform your ATPL training program with comprehensive resources and cutting-edge technology
+              {t.partnerships.benefitsSubtitle}
             </p>
           </motion.div>
 
@@ -206,10 +208,10 @@ const Partnerships = () => {
               transition={{ duration: 0.8 }}
             >
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Platform Features
+                {t.partnerships.platformFeatures}
               </h2>
               <p className="text-xl text-gray-300 leading-relaxed mb-8">
-                Everything you need to deliver exceptional ATPL training and track student success
+                {t.partnerships.platformSubtitle}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {features.map((feature, index) => (
@@ -257,13 +259,13 @@ const Partnerships = () => {
             className="space-y-8"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-white">
-              Ready to Transform Your
+              {t.partnerships.readyToTransform}
               <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-[#EECE84] to-amber-400">
-                ATPL Training Program?
+                {t.partnerships.readyHighlight}
               </span>
             </h2>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Get in touch with our partnership team to learn how ATPS can elevate your aviation training program.
+              {t.partnerships.readyDescription}
             </p>
             <div className="flex flex-wrap gap-4 justify-center pt-4">
               <Button 

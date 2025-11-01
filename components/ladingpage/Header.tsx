@@ -1,18 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
-import { LandingMenues } from '@/lib/menu-sidebar';
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@/lib/mock-clerk';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/button';
+import { useI18n } from '@/lib/i18n/context';
 
 const Header = () => {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false);
+  const { language, setLanguage, t } = useI18n();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,6 +28,23 @@ const Header = () => {
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.language-dropdown')) {
+        setLanguageDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const languages = [
+    { code: 'en' as const, label: 'English', flag: '🇬🇧' },
+    { code: 'fr' as const, label: 'Français', flag: '🇫🇷' },
+    { code: 'es' as const, label: 'Español', flag: '🇪🇸' },
+  ];
 
   return (
     <header 
@@ -65,7 +84,14 @@ const Header = () => {
           {/* Desktop Navigation - Centered */}
           <div className="hidden lg:flex flex-1 justify-center">
             <ul className="flex items-center gap-8">
-              {LandingMenues.map((menu, index) => (
+              {[
+                { title: t.header.partnerships, path: '/partnerships' },
+                { title: t.header.blog, path: '/blog' },
+                { title: t.header.faqs, path: '/faqs' },
+                { title: t.header.pricing, path: '/pricing' },
+                { title: t.header.community, path: '/community' },
+                { title: t.header.latestNews, path: '/latest_news' },
+              ].map((menu, index) => (
                 <li key={index} className="relative group">
                   <Link href={menu.path}>
                     <span
@@ -88,12 +114,43 @@ const Header = () => {
             </ul>
           </div>
 
+          {/* Language Switcher - Desktop */}
+          <div className="hidden lg:flex items-center justify-end mr-4 relative language-dropdown">
+            <button
+              onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-gray-300 hover:text-white"
+            >
+              <Globe className="w-4 h-4" />
+              <span className="text-sm font-medium">{languages.find(l => l.code === language)?.flag}</span>
+            </button>
+            {languageDropdownOpen && (
+              <div className="absolute top-full right-0 mt-2 w-48 bg-slate-900 rounded-xl border border-white/10 overflow-hidden shadow-xl">
+                {languages.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => {
+                      setLanguage(lang.code);
+                      setLanguageDropdownOpen(false);
+                    }}
+                    className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors ${
+                      language === lang.code ? 'bg-[#EECE84]/10' : ''
+                    }`}
+                  >
+                    <span className="text-xl">{lang.flag}</span>
+                    <span className="text-sm font-medium text-white">{lang.label}</span>
+                    {language === lang.code && <span className="ml-auto text-[#EECE84]">✓</span>}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Desktop Auth Buttons - Fixed Width */}
           <div className="hidden lg:flex items-center gap-4 w-[180px] justify-end">
             <div className="flex items-center gap-4">
               <Link href="/login">
                 <button className="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-300">
-                  Login
+                  {t.header.login}
                 </button>
               </Link>
               <Link href="/signup">
@@ -102,7 +159,7 @@ const Header = () => {
                   className="relative group bg-[#EECE84] hover:bg-[#EECE84]/90 text-slate-900 rounded-[24px] px-4 h-12 transition-all duration-300 overflow-hidden"
                 >
                   <span className="relative z-10 flex items-center font-medium">
-                    Sign Up
+                    {t.header.signUp}
                     <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
                       ⟶
                     </span>
@@ -114,11 +171,41 @@ const Header = () => {
           </div>
 
           {/* Mobile Menu Button & Auth */}
-          <div className="lg:hidden flex flex-1 items-center justify-end gap-4">
+          <div className="lg:hidden flex flex-1 items-center justify-end gap-2">
+            {/* Mobile Language Switcher */}
+            <div className="relative language-dropdown">
+              <button
+                onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-gray-300"
+              >
+                <Globe className="w-4 h-4" />
+                <span className="text-sm">{languages.find(l => l.code === language)?.flag}</span>
+              </button>
+              {languageDropdownOpen && (
+                <div className="absolute top-full right-0 mt-2 w-40 bg-slate-900 rounded-xl border border-white/10 overflow-hidden shadow-xl z-50">
+                  {languages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => {
+                        setLanguage(lang.code);
+                        setLanguageDropdownOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors ${
+                        language === lang.code ? 'bg-[#EECE84]/10' : ''
+                      }`}
+                    >
+                      <span className="text-xl">{lang.flag}</span>
+                      <span className="text-sm font-medium text-white">{lang.label}</span>
+                      {language === lang.code && <span className="ml-auto text-[#EECE84]">✓</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             <Link href="/login">
               <button className="group relative px-4 py-2 bg-[#EECE84] text-black rounded-[24px] overflow-hidden transition-all duration-300">
                 <span className="relative z-10 flex items-center font-medium text-sm">
-                  Login
+                  {t.header.login}
                   <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
                     ⟶
                   </span>
@@ -147,7 +234,14 @@ const Header = () => {
         >
           <div className="max-w-[1440px] mx-auto px-6 py-6">
             <ul className="flex flex-col gap-4">
-              {LandingMenues.map((menu, index) => (
+              {[
+                { title: t.header.partnerships, path: '/partnerships' },
+                { title: t.header.blog, path: '/blog' },
+                { title: t.header.faqs, path: '/faqs' },
+                { title: t.header.pricing, path: '/pricing' },
+                { title: t.header.community, path: '/community' },
+                { title: t.header.latestNews, path: '/latest_news' },
+              ].map((menu, index) => (
                 <li key={index}>
                   <Link href={menu.path}>
                     <span

@@ -5,6 +5,7 @@ import React, { useRef } from 'react';
 import { Newspaper, TrendingUp, AlertTriangle, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, useInView } from 'framer-motion';
+import { useI18n } from '@/lib/i18n/context';
 
 const journalCategories = [
   {
@@ -28,6 +29,7 @@ const journalCategories = [
 ];
 
 function App() {
+  const { t } = useI18n();
   const heroRef = useRef(null);
   const categoriesRef = useRef(null);
   const featuredRef = useRef(null);
@@ -234,7 +236,7 @@ function App() {
                   className="group bg-white/10 hover:bg-white/20 text-white rounded-[24px] px-6 h-12 text-sm transition-all duration-300"
                 >
                   <span className="flex items-center">
-                    Read the ATPS Aviation Journal
+                    {t.heroes.readJournal}
                     <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
                       ⟶
                     </span>

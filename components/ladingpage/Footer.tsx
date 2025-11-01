@@ -20,6 +20,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+import { useI18n } from '@/lib/i18n/context';
 
 const formSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
@@ -29,27 +30,8 @@ const formSchema = z.object({
   message: z.string().min(10, 'Message must be at least 10 characters'),
 });
 
-const products = [
-  { name: "ATPL Question Bank", href: "/questions-bank" },
-  { name: "Flight Simulator", href: "/atc-simulator" },
-  { name: "Courses", href: "/courses" },
-  { name: "Progress Tracking", href: "/dashboard" }
-];
-
-const resources = [
-  { name: "Student Success Stories", href: "/community" },
-  { name: "Aviation Blog", href: "/news" },
-  { name: "Career Guidance", href: "#" },
-  { name: "Training Calendar", href: "#" }
-];
-
-const company = [
-  { name: "Partnerships", href: "/partnerships" },
-  { name: "Our Instructors", href: "#" },
-  { name: "Contact Us", href: "#" }
-];
-
 const Footer = () => {
+  const { t } = useI18n();
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -111,12 +93,12 @@ const Footer = () => {
             whileHover={{ scale: 1.05 }}
           >
             <Zap className="w-4 h-4 mr-2" />
-            Start Your Aviation Journey
+            {t.footer.ctaBanner}
           </motion.div>
           <h2 className="text-4xl md:text-5xl font-bold text-white">
-            Ready to soar into
+            {t.footer.ctaTitle}
             <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-[#EECE84] to-amber-400">
-              Knowledge with ATPS?
+              {t.footer.ctaSubtitle}
             </span>
           </h2>
           <div className="flex gap-4 justify-end">
@@ -125,7 +107,7 @@ const Footer = () => {
               className="bg-gradient-to-r from-[#EECE84] to-amber-400 hover:from-[#EECE84]/90 hover:to-amber-400/90 text-slate-900 rounded-[24px] px-8 h-14 transition-all duration-300 group"
             >
               <span className="flex items-center font-semibold">
-                Get Started
+                {t.footer.getStarted}
                 <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
                   ⟶
                 </span>
@@ -166,7 +148,7 @@ const Footer = () => {
                 <span className="text-3xl font-bold text-white">ATPS.</span>
               </div>
               <p className="text-gray-400 text-base max-w-md leading-relaxed">
-                Master aviation effortlessly. Your complete ATPL training platform with AI-powered learning and comprehensive resources.
+                {t.footer.description}
               </p>
               {/* Social Icons */}
               <div className="flex gap-3">
@@ -191,9 +173,14 @@ const Footer = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.1 }}
             >
-              <h4 className="text-white font-semibold mb-6 text-lg">Quick Links</h4>
+              <h4 className="text-white font-semibold mb-6 text-lg">{t.footer.quickLinks}</h4>
               <ul className="space-y-4">
-                {products.map((item, index) => (
+                {[
+                  { name: "ATPL Question Bank", href: "/questions-bank" },
+                  { name: "Flight Simulator", href: "/atc-simulator" },
+                  { name: "Courses", href: "/courses" },
+                  { name: "Progress Tracking", href: "/dashboard" }
+                ].map((item, index) => (
                   <li key={index}>
                     <a href={item.href} className="text-gray-400 hover:text-[#EECE84] transition-colors text-sm flex items-center gap-3 group">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#EECE84] opacity-0 group-hover:opacity-100 transition-opacity"></span>
@@ -211,9 +198,13 @@ const Footer = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <h4 className="text-white font-semibold mb-6 text-lg">Company</h4>
+              <h4 className="text-white font-semibold mb-6 text-lg">{t.footer.company}</h4>
               <ul className="space-y-4">
-                {company.map((item, index) => (
+                {[
+                  { name: "Partnerships", href: "/partnerships" },
+                  { name: "Our Instructors", href: "#" },
+                  { name: "Contact Us", href: "#" }
+                ].map((item, index) => (
                   <li key={index}>
                     <a href={item.href} className="text-gray-400 hover:text-[#EECE84] transition-colors text-sm flex items-center gap-3 group">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#EECE84] opacity-0 group-hover:opacity-100 transition-opacity"></span>
@@ -235,12 +226,12 @@ const Footer = () => {
           >
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <p className="text-sm text-gray-500">
-                © All rights reserved. ATPS Aviation. Powered by innovation.
+                {t.footer.allRightsReserved}
               </p>
               <div className="flex items-center gap-6">
-                <a href="#" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">Privacy Policy</a>
-                <a href="#" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">Terms of Service</a>
-                <a href="#" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">Cookie Policy</a>
+                <a href="#" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">{t.footer.privacyPolicy}</a>
+                <a href="#" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">{t.footer.termsOfService}</a>
+                <a href="#" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">{t.footer.cookiePolicy}</a>
               </div>
             </div>
           </motion.div>
