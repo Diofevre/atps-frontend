@@ -25,40 +25,42 @@ import {
 } from "@/components/ui/carousel";
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-
-const features = [
-  {
-    icon: HelpCircle,
-    title: "Questions bank",
-    description: `25,000+ verified real exam questions, updated regularly. With "Last Seen in Exam" questions and a Question Quality Score, it helps you focus on key topics to ace your ATPL exams efficiently.`,
-    image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=1000",
-    route: "/questions-bank"
-  },
-  {
-    icon: BookOpen,
-    title: "Courses",
-    description: "Our courses provide expert-designed, structured lessons with detailed explanations to help you master aviation theory and excel in your ATPL exams.",
-    image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=1000",
-    route: "/courses"
-  },
-  {
-    icon: Brain,
-    title: "AI",
-    description: "The ATPS AI provides instant explanations, personalized study guidance, and real-time support, helping you master aviation concepts and optimize your learning efficiently.",
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1000",
-    route: "/questions-bank" // Chat is in questions bank
-  },
-  {
-    icon: MonitorPlay,
-    title: "Simulator",
-    description: "Enhance your training with the ATPS Simulator, featuring realistic scenarios that build practical skills and reinforce your aviation knowledge for real-world readiness.",
-    image: "https://images.unsplash.com/photo-1530973428-5bf2db2e4d71?auto=format&fit=crop&q=80&w=1000",
-    route: "/atc-simulator"
-  }
-];
+import { useI18n } from '@/lib/i18n/context';
 
 const MarketingSlider = () => {
   const router = useRouter();
+  const { t } = useI18n();
+  
+  const features = [
+    {
+      icon: HelpCircle,
+      title: t.slider.questionsBank,
+      description: t.slider.questionsBankDesc,
+      image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=1000",
+      route: "/questions-bank"
+    },
+    {
+      icon: BookOpen,
+      title: t.slider.courses,
+      description: t.slider.coursesDesc,
+      image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=1000",
+      route: "/courses"
+    },
+    {
+      icon: Brain,
+      title: t.slider.ai,
+      description: t.slider.aiDesc,
+      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1000",
+      route: "/questions-bank"
+    },
+    {
+      icon: MonitorPlay,
+      title: t.slider.simulator,
+      description: t.slider.simulatorDesc,
+      image: "https://images.unsplash.com/photo-1530973428-5bf2db2e4d71?auto=format&fit=crop&q=80&w=1000",
+      route: "/atc-simulator"
+    }
+  ];
   
   return (
     <div className="min-h-screen bg-slate-900">
@@ -76,19 +78,16 @@ const MarketingSlider = () => {
               whileHover={{ scale: 1.05 }}
             >
               <span className="animate-pulse mr-2 h-2 w-2 rounded-full bg-[#EECE84]"></span>
-              Why Choose Us
+              {t.slider.whyChooseUs}
             </motion.div>
             <h2 className="text-4xl font-bold text-white mb-4">
-              WHY STUDY
+              {t.slider.whyStudyTitle}
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#EECE84] to-amber-400 mt-2">
-                WITH ATPS?
+                {t.slider.whyStudySubtitle}
               </span>
             </h2>
             <p className="max-w-2xl mx-auto text-gray-300 leading-relaxed">
-              Vitae sapien pellentesque habitant morbi tristique senectus et netus et. Feugiat 
-              nibh sed pulvinar proin gravida hendrerit lectus. Mi sit amet mauris commodo 
-              quis imperdiet massa tincidunt nunc. Viverra aliquet eget sit amet tellus. Ornare 
-              lectus sit amet est placerat in. Lectus magna fringilla urna porttitor rhoncus vitae.
+              {t.slider.whyStudyDescription}
             </p>
           </motion.div>
 
@@ -147,7 +146,7 @@ const MarketingSlider = () => {
                             className="w-full group h-12 bg-gradient-to-r from-[#EECE84] to-amber-400 hover:from-[#EECE84]/90 hover:to-amber-400/90 text-black rounded-[24px] transition-all duration-300"
                           >
                             <span className="flex items-center justify-center">
-                              TRY IT NOW
+                              {t.slider.tryItNow}
                             </span>
                             <span className="ml-2 h-5 w-5 mt-1 group-hover:translate-x-1 transition-transform">
                               ⟶

@@ -7,6 +7,7 @@ import { subscriptionService } from '@/lib/subscription/service/subscription-ser
 import { useAuth } from '@/lib/mock-clerk';
 import { BookOpen, Plane, Sparkles, X } from 'lucide-react';
 import { features_pricing } from '@/lib/marketing_page/constant';
+import { useI18n } from '@/lib/i18n/context';
 
 interface Subscription {
   duration: number;
@@ -27,6 +28,7 @@ interface Plan {
 const PricingPage = () => {
   const { getToken } = useAuth();
   const router = useRouter();
+  const { t } = useI18n();
   const [isLoading, setIsLoading] = React.useState(false);
   const [showConfirmModal, setShowConfirmModal] = React.useState(false);
   const [selectedPlan, setSelectedPlan] = React.useState<{
@@ -107,13 +109,13 @@ const PricingPage = () => {
         >
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#EECE84]/10 border border-[#EECE84]/20 backdrop-blur-sm mb-6">
             <Plane className="h-4 w-4 text-[#EECE84] mr-2 transform -rotate-45" />
-            <span className="text-[#EECE84] text-sm font-medium">Training Programs</span>
+            <span className="text-[#EECE84] text-sm font-medium">{t.pricing.badge}</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-4">
-            Choose Your Plan
+            {t.pricing.title}
           </h1>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-            Select the perfect plan for your aviation journey
+            {t.pricing.subtitle}
           </p>
         </motion.div>
 

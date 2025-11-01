@@ -101,7 +101,7 @@ ${values.additionalInfo || 'None'}`,
         throw new Error('Failed to submit form');
       }
 
-      toast.success('Your partnership request has been submitted successfully. We will contact you soon!');
+      toast.success(t.partnershipForm.submit);
       form.reset();
       onClose();
     } catch (error) {
@@ -139,8 +139,8 @@ ${values.additionalInfo || 'None'}`,
               {/* Header */}
               <div className="sticky top-0 bg-slate-900/95 backdrop-blur-sm border-b border-white/10 p-6 flex items-center justify-between z-10">
                 <div>
-                  <h2 className="text-2xl font-bold text-white">Partnership Inquiry</h2>
-                  <p className="text-gray-400 text-sm mt-1">Fill out the form below and we'll get back to you</p>
+                  <h2 className="text-2xl font-bold text-white">{t.partnershipForm.title}</h2>
+                  <p className="text-gray-400 text-sm mt-1">{t.partnershipForm.subtitle}</p>
                 </div>
                 <button
                   onClick={onClose}
@@ -161,7 +161,7 @@ ${values.additionalInfo || 'None'}`,
                         name="schoolName"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-white">School Name *</FormLabel>
+                            <FormLabel className="text-white">{t.partnershipForm.schoolName}</FormLabel>
                             <FormControl>
                               <Input
                                 placeholder="Aviation Academy"
@@ -180,7 +180,7 @@ ${values.additionalInfo || 'None'}`,
                         name="contactPerson"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-white">Contact Person *</FormLabel>
+                            <FormLabel className="text-white">{t.partnershipForm.contactPerson}</FormLabel>
                             <FormControl>
                               <Input
                                 placeholder="John Doe"
@@ -199,7 +199,7 @@ ${values.additionalInfo || 'None'}`,
                         name="email"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-white">Email Address *</FormLabel>
+                            <FormLabel className="text-white">{t.partnershipForm.email}</FormLabel>
                             <FormControl>
                               <Input
                                 type="email"
@@ -219,7 +219,7 @@ ${values.additionalInfo || 'None'}`,
                         name="phone"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-white">Phone Number *</FormLabel>
+                            <FormLabel className="text-white">{t.partnershipForm.phone}</FormLabel>
                             <FormControl>
                               <Input
                                 type="tel"
@@ -239,7 +239,7 @@ ${values.additionalInfo || 'None'}`,
                         name="country"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-white">Country *</FormLabel>
+                            <FormLabel className="text-white">{t.partnershipForm.country}</FormLabel>
                             <FormControl>
                               <Input
                                 placeholder="United States"
@@ -258,7 +258,7 @@ ${values.additionalInfo || 'None'}`,
                         name="city"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-white">City *</FormLabel>
+                            <FormLabel className="text-white">{t.partnershipForm.city}</FormLabel>
                             <FormControl>
                               <Input
                                 placeholder="New York"
@@ -277,7 +277,7 @@ ${values.additionalInfo || 'None'}`,
                         name="studentsNumber"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-white">Number of Students *</FormLabel>
+                            <FormLabel className="text-white">{t.partnershipForm.studentsNumber}</FormLabel>
                             <FormControl>
                               <Input
                                 placeholder="50-100"
@@ -296,7 +296,7 @@ ${values.additionalInfo || 'None'}`,
                         name="timeline"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-white">Expected Timeline *</FormLabel>
+                            <FormLabel className="text-white">{t.partnershipForm.timeline}</FormLabel>
                             <FormControl>
                               <Input
                                 placeholder="Within 3 months"
@@ -316,10 +316,10 @@ ${values.additionalInfo || 'None'}`,
                       name="currentTraining"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-white">Current Training Setup *</FormLabel>
+                          <FormLabel className="text-white">{t.partnershipForm.currentTraining}</FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="Describe your current ATPL training program, curriculum, and any existing learning platforms..."
+                              placeholder={t.partnershipForm.currentTrainingPlaceholder}
                               className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 min-h-[100px]"
                               {...field}
                             />
@@ -335,10 +335,10 @@ ${values.additionalInfo || 'None'}`,
                       name="integrationNeeds"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-white">Integration Needs *</FormLabel>
+                          <FormLabel className="text-white">{t.partnershipForm.integrationNeeds}</FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="Describe how you would like to integrate ATPS into your training program..."
+                              placeholder={t.partnershipForm.integrationPlaceholder}
                               className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 min-h-[100px]"
                               {...field}
                             />
@@ -354,7 +354,7 @@ ${values.additionalInfo || 'None'}`,
                       name="additionalInfo"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-white">Additional Information</FormLabel>
+                          <FormLabel className="text-white">{t.partnershipForm.additionalInfo}</FormLabel>
                           <FormControl>
                             <Textarea
                               placeholder="Any other relevant information..."
@@ -373,17 +373,17 @@ ${values.additionalInfo || 'None'}`,
                         type="button"
                         variant="outline"
                         onClick={onClose}
-                        className="flex-1 border-white/10 text-white hover:bg-white/5"
+                        className="flex-1 border-white/10 text-gray-300 hover:bg-white/5 hover:text-white"
                         disabled={isLoading}
                       >
-                        Cancel
+                        {t.partnershipForm.cancel}
                       </Button>
                       <Button
                         type="submit"
                         disabled={isLoading}
                         className="flex-1 bg-gradient-to-r from-[#EECE84] to-amber-400 hover:from-[#EECE84]/90 hover:to-amber-400/90 text-slate-900"
                       >
-                        {isLoading ? 'Submitting...' : 'Submit Inquiry'}
+                        {isLoading ? t.partnershipForm.submitting : t.partnershipForm.submit}
                       </Button>
                     </div>
                   </form>

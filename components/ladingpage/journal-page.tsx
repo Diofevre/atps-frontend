@@ -7,29 +7,29 @@ import { Button } from '@/components/ui/button';
 import { motion, useInView } from 'framer-motion';
 import { useI18n } from '@/lib/i18n/context';
 
-const journalCategories = [
-  {
-    icon: TrendingUp,
-    title: "Airline Hiring Updates",
-    description: "Stay ahead in your career planning with the latest recruitment trends and opportunities in aviation.",
-    image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=600&q=80"
-  },
-  {
-    icon: AlertTriangle,
-    title: "Safety Reports & Analysis",
-    description: "Comprehensive analysis of aviation incidents and safety recommendations for pilots.",
-    image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=600&q=80"
-  },
-  {
-    icon: BookOpen,
-    title: "Regulatory Updates",
-    description: "Stay compliant with the latest aviation regulations and industry standards.",
-    image: "https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?auto=format&fit=crop&w=600&q=80"
-  }
-];
-
 function App() {
   const { t } = useI18n();
+  
+  const journalCategories = [
+    {
+      icon: TrendingUp,
+      title: t.journal.hiringUpdates,
+      description: t.journal.hiringUpdatesDesc,
+      image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      icon: AlertTriangle,
+      title: t.journal.safetyReports,
+      description: t.journal.safetyReportsDesc,
+      image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      icon: BookOpen,
+      title: t.journal.regulatoryUpdates,
+      description: t.journal.regulatoryUpdatesDesc,
+      image: "https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?auto=format&fit=crop&w=600&q=80"
+    }
+  ];
   const heroRef = useRef(null);
   const categoriesRef = useRef(null);
   const featuredRef = useRef(null);
@@ -54,13 +54,13 @@ function App() {
               whileHover={{ scale: 1.05 }}
             >
               <Newspaper className="w-4 h-4 mr-2" />
-              Aviation Industry Insights
+              {t.journal.badge}
             </motion.div>
             <h1 className="text-4xl md:text-5xl font-bold text-white">
-              ATPS Aviation Journal
+              {t.journal.title}
             </h1>
             <p className="text-xl text-gray-300 leading-relaxed">
-              Stay informed with the latest aviation industry news, hiring trends, and safety updates through our comprehensive journal.
+              {t.journal.subtitle}
             </p>
           </motion.div>
         </div>
@@ -149,8 +149,8 @@ function App() {
                     <TrendingUp className="w-6 h-6 text-[#EECE84]" />
                   </motion.div>
                   <div>
-                    <p className="text-white font-medium">Latest Industry Trends</p>
-                    <p className="text-gray-400 mt-1">Updated weekly with fresh insights</p>
+                    <p className="text-white font-medium">{t.journal.latestTrends}</p>
+                    <p className="text-gray-400 mt-1">{t.journal.updatedWeekly}</p>
                   </div>
                 </div>
               </motion.div>
@@ -164,10 +164,10 @@ function App() {
             >
               <div>
                 <h2 className="text-3xl font-bold text-white mb-4">
-                  Your Source for Aviation Excellence
+                  {t.journal.sourceExcellence}
                 </h2>
                 <p className="text-gray-300 leading-relaxed">
-                  The ATPS Aviation Journal aggregates insights from trusted aviation sources to keep you informed on the latest developments in the industry. From career opportunities to safety protocols, we provide comprehensive coverage of everything that matters in aviation.
+                  {t.journal.sourceDescription}
                 </p>
               </div>
 
@@ -177,7 +177,7 @@ function App() {
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <h3 className="text-lg font-semibold text-white mb-2">Weekly Updates Include:</h3>
+                  <h3 className="text-lg font-semibold text-white mb-2">{t.journal.weeklyUpdates}</h3>
                   <ul className="space-y-3">
                     <motion.li 
                       initial={{ opacity: 0, x: -20 }}
@@ -191,7 +191,7 @@ function App() {
                       >
                         <TrendingUp className="w-4 h-4 text-[#EECE84]" />
                       </motion.div>
-                      <span className="text-gray-300">Latest airline hiring updates and career opportunities</span>
+                      <span className="text-gray-300">{t.journal.update1}</span>
                     </motion.li>
                     <motion.li 
                       initial={{ opacity: 0, x: -20 }}
@@ -205,7 +205,7 @@ function App() {
                       >
                         <AlertTriangle className="w-4 h-4 text-[#EECE84]" />
                       </motion.div>
-                      <span className="text-gray-300">Comprehensive accident & safety reports analysis</span>
+                      <span className="text-gray-300">{t.journal.update2}</span>
                     </motion.li>
                     <motion.li 
                       initial={{ opacity: 0, x: -20 }}
@@ -219,7 +219,7 @@ function App() {
                       >
                         <BookOpen className="w-4 h-4 text-[#EECE84]" />
                       </motion.div>
-                      <span className="text-gray-300">Industry trends & regulatory changes coverage</span>
+                      <span className="text-gray-300">{t.journal.update3}</span>
                     </motion.li>
                   </ul>
                 </motion.div>
