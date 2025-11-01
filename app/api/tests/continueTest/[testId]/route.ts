@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getTokensFromCookie } from '@/lib/utils';
 
 export async function GET(
   request: NextRequest,
@@ -12,11 +13,9 @@ export async function GET(
     // Try to get token from cookies
     const tokensCookie = cookies.get('keycloak_tokens');
     if (tokensCookie) {
-      try {
-        const tokens = JSON.parse(tokensCookie.value);
+      const tokens = getTokensFromCookie(tokensCookie.value);
+      if (tokens) {
         token = tokens.access_token;
-      } catch (e) {
-        console.error('Error parsing tokens cookie:', e);
       }
     }
     

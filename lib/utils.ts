@@ -8,6 +8,22 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
+ * Decode and parse a keycloak tokens cookie
+ * @param cookieValue - The encoded cookie value
+ * @returns The parsed tokens object or null if parsing fails
+ */
+export function getTokensFromCookie(cookieValue: string): any | null {
+  try {
+    const decodedValue = decodeURIComponent(cookieValue);
+    const tokens = JSON.parse(decodedValue);
+    return tokens;
+  } catch (e) {
+    console.error('Error parsing tokens cookie:', e);
+    return null;
+  }
+}
+
+/**
  * Format a date string into a human-readable format.
  *
  * @param dateString - The date string in ISO 8601 format.
