@@ -142,6 +142,7 @@ function App() {
               </div>
               
               <Button 
+                onClick={() => window.location.href = '/news'}
                 size="lg"
                 className="group bg-white/10 hover:bg-white/20 text-white rounded-[24px] px-6 h-12 text-sm transition-all duration-300"
               >

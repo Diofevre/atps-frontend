@@ -96,7 +96,7 @@ const Header = () => {
                   Login
                 </button>
               </Link>
-              <Link href="/login">
+              <Link href="/signup">
                 <Button
                   size="lg" 
                   className="relative group bg-[#EECE84] hover:bg-[#EECE84]/90 text-slate-900 rounded-[24px] px-4 h-12 transition-all duration-300 overflow-hidden"

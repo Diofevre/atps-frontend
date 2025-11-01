@@ -81,12 +81,12 @@ const Heroes = () => {
               </div>
               <div className="flex flex-wrap gap-4 pt-4">
                 <Button 
-                  onClick={() => router.push('/dashboard')}
+                  onClick={() => router.push('/signup')}
                   size="lg" 
                   className="relative group bg-[#EECE84] hover:bg-[#EECE84]/90 text-slate-900 rounded-[24px] px-8 h-12 transition-all duration-300 overflow-hidden"
                 >
                   <span className="relative z-10 flex items-center font-medium">
-                    {user ? "Dashboard" : "TRY FOR FREE"}
+                    TRY FOR FREE
                     <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
                       ⟶
                     </span>
@@ -154,7 +154,7 @@ const Heroes = () => {
               </div>
 
               <Button 
-                onClick={() => router.push('questions-bank/community')}
+                onClick={() => router.push('/community')}
                 size="lg"
                 className="group bg-white/10 hover:bg-white/20 text-white rounded-[24px] px-6 h-12 text-sm transition-all duration-300"
               >

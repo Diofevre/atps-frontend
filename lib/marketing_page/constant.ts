@@ -39,7 +39,7 @@ export const features = [
 export const mainFeatures = [
   {
     icon: CheckCircle2,
-    title: "25,000+ Verified Exam Questions",
+    title: "850+ Verified Exam Questions",
     description: "Organized, structured, and continuously updated.",
     gradient: "from-emerald-500/20 to-teal-500/20",
     iconColor: "text-emerald-400"

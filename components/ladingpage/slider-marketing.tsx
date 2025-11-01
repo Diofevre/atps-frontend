@@ -23,35 +23,42 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { useRouter } from 'next/navigation';
 
 const features = [
   {
     icon: HelpCircle,
     title: "Questions bank",
-    description: `50,000+ verified real exam questions, updated daily. With "Last Seen in Exam" questions and a Question Quality Score, it helps you focus on key topics to ace your ATPL exams efficiently.`,
-    image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=1000"
+    description: `850+ verified real exam questions, updated regularly. With "Last Seen in Exam" questions and a Question Quality Score, it helps you focus on key topics to ace your ATPL exams efficiently.`,
+    image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=1000",
+    route: "/questions-bank"
   },
   {
     icon: BookOpen,
     title: "Courses",
     description: "Our courses provide expert-designed, structured lessons with detailed explanations to help you master aviation theory and excel in your ATPL exams.",
-    image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=1000"
+    image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=1000",
+    route: "/courses"
   },
   {
     icon: Brain,
     title: "AI",
     description: "The ATPS AI provides instant explanations, personalized study guidance, and real-time support, helping you master aviation concepts and optimize your learning efficiently.",
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1000"
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1000",
+    route: "/questions-bank" // Chat is in questions bank
   },
   {
     icon: MonitorPlay,
     title: "Simulator",
     description: "Enhance your training with the ATPS Simulator, featuring realistic scenarios that build practical skills and reinforce your aviation knowledge for real-world readiness.",
-    image: "https://images.unsplash.com/photo-1530973428-5bf2db2e4d71?auto=format&fit=crop&q=80&w=1000"
+    image: "https://images.unsplash.com/photo-1530973428-5bf2db2e4d71?auto=format&fit=crop&q=80&w=1000",
+    route: "/atc-simulator"
   }
 ];
 
 const MarketingSlider = () => {
+  const router = useRouter();
+  
   return (
     <div className="min-h-screen bg-slate-900">
       <section className="relative py-28 overflow-hidden">
@@ -111,6 +118,7 @@ const MarketingSlider = () => {
                       </CardContent>
                       <CardFooter className="relative">
                         <Button 
+                          onClick={() => router.push(feature.route)}
                           size="sm"
                           className="w-full group h-12 bg-gradient-to-r from-[#EECE84] to-amber-400 hover:from-[#EECE84]/90 hover:to-amber-400/90 text-black rounded-[24px] transition-all duration-300"
                         >
