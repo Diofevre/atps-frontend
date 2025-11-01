@@ -44,9 +44,8 @@ const resources = [
 ];
 
 const company = [
-  { name: "About ATPS", href: "/about-atps" },
+  { name: "Partnerships", href: "/partnerships" },
   { name: "Our Instructors", href: "#" },
-  { name: "Partnerships", href: "/about-atps" },
   { name: "Contact Us", href: "#" }
 ];
 
@@ -98,14 +97,14 @@ const Footer = () => {
 
   return (
     <footer className="relative bg-slate-800/50 backdrop-blur-xl border-t border-white/5">
-      {/* CTA Section */}
+      {/* CTA Section - Right aligned */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center space-y-8"
+          className="text-right space-y-8 max-w-3xl ml-auto"
         >
           <motion.div 
             className="inline-flex items-center px-4 py-2 rounded-[24px] bg-[#EECE84]/10 border border-[#EECE84]/20 text-[#EECE84] text-sm"
@@ -120,25 +119,13 @@ const Footer = () => {
               Knowledge with ATPS?
             </span>
           </h2>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex gap-4 justify-end">
             <Button 
               size="lg"
               className="bg-gradient-to-r from-[#EECE84] to-amber-400 hover:from-[#EECE84]/90 hover:to-amber-400/90 text-slate-900 rounded-[24px] px-8 h-14 transition-all duration-300 group"
             >
               <span className="flex items-center font-semibold">
                 Get Started
-                <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
-                  ⟶
-                </span>
-              </span>
-            </Button>
-            <Button 
-              size="lg"
-              variant="outline"
-              className="bg-white/5 hover:bg-white/10 text-white border-white/20 rounded-[24px] px-8 h-14 transition-all duration-300 group"
-            >
-              <span className="flex items-center font-semibold">
-                Book a Demo
                 <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
                   ⟶
                 </span>

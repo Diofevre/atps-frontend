@@ -13,7 +13,7 @@ export const MenuSidebar = [
 ];
 
 export const LandingMenues = [
-  { title: 'About ATPS', path: '/about-atps'},
+  { title: 'Partnerships', path: '/partnerships'},
   { title: 'Blog', path: '/blog'},
   { title: 'FAQs', path: '/faqs'},
   { title: 'Pricing', path: '/pricing'},
