@@ -5,8 +5,7 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { subscriptionService } from '@/lib/subscription/service/subscription-service';
 import { useAuth } from '@/lib/mock-clerk';
-import { BookOpen, Plane, Sparkles, X } from 'lucide-react';
-import { features_pricing } from '@/lib/marketing_page/constant';
+import { BookOpen, Plane, Sparkles, X, Shield, Clock, Users } from 'lucide-react';
 import { useI18n } from '@/lib/i18n/context';
 
 interface Subscription {
@@ -66,12 +65,35 @@ const PricingPage = () => {
     setSelectedPlan({ plan, subscription });
     setShowConfirmModal(true);
   };
+  
+  const features_pricing = [
+    {
+      icon: Shield,
+      title: t.pricing.safetyFirst,
+      description: t.pricing.safetyFirstDesc
+    },
+    {
+      icon: Clock,
+      title: t.pricing.flexibleSchedule,
+      description: t.pricing.flexibleScheduleDesc
+    },
+    {
+      icon: Users,
+      title: t.pricing.expertInstructors,
+      description: t.pricing.expertInstructorsDesc
+    },
+    {
+      icon: BookOpen,
+      title: t.pricing.comprehensiveMaterial,
+      description: t.pricing.comprehensiveMaterialDesc
+    }
+  ];
 
   const plans: Plan[] = [
     {
       id: "standard",
-      name: "Standard Offer",
-      description: "Unlimited access to our question bank from a single device—your go-to tool for exam preparation.",
+      name: t.pricing.standardOffer,
+      description: t.pricing.standardDesc,
       icon: BookOpen,
       subscriptions: [
         { duration: 12, price: 5, saving: 60 },
@@ -84,8 +106,8 @@ const PricingPage = () => {
     },
     {
       id: "premium",
-      name: "Premium Offer",
-      description: "Full access to our question bank, detailed courses, AI support, and an integrated aviation dictionary for a comprehensive learning experience.",
+      name: t.pricing.premiumOffer,
+      description: t.pricing.premiumDesc,
       icon: Sparkles,
       subscriptions: [
         { duration: 12, price: 10, saving: 120 },
@@ -131,7 +153,7 @@ const PricingPage = () => {
               {plan.highlight && (
                 <div className="absolute z-10 -top-1 left-1/2 -translate-x-1/2">
                   <div className="bg-[#EECE84] text-black px-6 py-2 rounded-full font-medium shadow-lg shadow-[#EECE84]/20 text-sm">
-                    Most Popular
+                    {t.pricing.mostPopular}
                   </div>
                 </div>
               )}
@@ -164,16 +186,16 @@ const PricingPage = () => {
                           </div>
                           {sub.duration === 3 ? (
                             <div className="text-[#EECE84] text-sm font-bold bg-[#EECE84]/20 px-3 py-1 rounded-full">
-                              SPECIAL OFFER
+                              {t.pricing.specialOffer}
                             </div>
                           ) : sub.saving > 0 && (
                             <div className="text-[#EECE84] text-sm font-medium">
-                              Save €{sub.saving}
+                              {t.pricing.save}{sub.saving}
                             </div>
                           )}
                         </div>
                         <div className="text-gray-400 text-sm">
-                          billed for {sub.duration} {sub.duration === 1 ? 'month' : 'months'}
+                          {t.pricing.billedFor} {sub.duration} {sub.duration === 1 ? t.pricing.month : t.pricing.months}
                         </div>
                       </div>
                     </motion.button>
@@ -227,12 +249,12 @@ const PricingPage = () => {
             <button
               onClick={() => setShowConfirmModal(false)}
               className="absolute right-4 top-4 text-gray-400 hover:text-white"
-              title="Close"
+              title={t.pricing.close}
             >
               <X className="w-5 h-5" />
             </button>
 
-            <h3 className="text-2xl font-bold text-white mb-4">Confirm Your Plan</h3>
+            <h3 className="text-2xl font-bold text-white mb-4">{t.pricing.confirmTitle}</h3>
             
             <div className="space-y-4">
               <div className="bg-white/5 rounded-xl p-4">
@@ -247,13 +269,13 @@ const PricingPage = () => {
                 <div className="flex justify-between items-baseline mb-1">
                   <span className="text-xl font-bold text-white">€{selectedPlan.subscription.price}/month</span>
                   {selectedPlan.subscription.duration === 3 ? (
-                    <span className="text-[#EECE84] text-sm font-bold bg-[#EECE84]/20 px-3 py-1 rounded-full">SPECIAL OFFER</span>
+                    <span className="text-[#EECE84] text-sm font-bold bg-[#EECE84]/20 px-3 py-1 rounded-full">{t.pricing.specialOffer}</span>
                   ) : selectedPlan.subscription.saving > 0 && (
-                    <span className="text-[#EECE84] text-sm">Save €{selectedPlan.subscription.saving}</span>
+                    <span className="text-[#EECE84] text-sm">{t.pricing.save}{selectedPlan.subscription.saving}</span>
                   )}
                 </div>
                 <p className="text-sm text-gray-400">
-                  Billed for {selectedPlan.subscription.duration} {selectedPlan.subscription.duration === 1 ? 'month' : 'months'}
+                  {t.pricing.billedFor} {selectedPlan.subscription.duration} {selectedPlan.subscription.duration === 1 ? t.pricing.month : t.pricing.months}
                 </p>
               </div>
 
@@ -262,7 +284,7 @@ const PricingPage = () => {
                 disabled={isLoading}
                 className="w-full bg-[#EECE84] hover:bg-[#EECE84]/90 text-black font-medium py-3 px-6 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? 'Processing...' : 'Confirm Subscription'}
+                {isLoading ? t.pricing.processing : t.pricing.confirmButton}
               </button>
             </div>
           </motion.div>

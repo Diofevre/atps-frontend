@@ -5,8 +5,10 @@ import { ChevronRight, Search } from 'lucide-react';
 import React, { useState } from 'react';
 import { support } from '@/lib/menu-sidebar';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useI18n } from '@/lib/i18n/context';
 
 const SupportPageMarketing = () => {
+  const { t } = useI18n();
   const [activeId, setActiveId] = useState<number | null>(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string>("all");
@@ -32,7 +34,7 @@ const SupportPageMarketing = () => {
               </div>
               <input
                 type="text"
-                placeholder="Search questions..."
+                placeholder={t.faqs.searchPlaceholder}
                 className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#EECE84]/50 focus:border-transparent transition-all"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -49,7 +51,7 @@ const SupportPageMarketing = () => {
                     : "bg-white/5 text-gray-300 hover:bg-white/10"
                 }`}
               >
-                All
+                {t.faqs.all}
               </button>
               {categories.map((category) => (
                 <button

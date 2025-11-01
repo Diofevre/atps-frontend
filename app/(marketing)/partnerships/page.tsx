@@ -8,52 +8,59 @@ import { Button } from '@/components/ui/button';
 import { useI18n } from '@/lib/i18n/context';
 import { PartnershipFormOverlay } from '@/components/partnership-form-overlay';
 
-const benefits = [
-  {
-    icon: GraduationCap,
-    title: "Comprehensive Training Content",
-    description: "Access to 25,000+ verified exam questions covering all ATPL subjects, ensuring your students are thoroughly prepared for their exams."
-  },
-  {
-    icon: Target,
-    title: "Real-Time Progress Tracking",
-    description: "Monitor student performance, identify knowledge gaps, and adjust teaching strategies with detailed analytics and insights."
-  },
-  {
-    icon: Award,
-    title: "Industry-Validated Questions",
-    description: "Questions tagged with 'Last Seen in Exam' dates and quality scores help students focus on what matters most for success."
-  },
-  {
-    icon: Users,
-    title: "Collaborative Learning Environment",
-    description: "Foster peer-to-peer learning with community features, study groups, and expert moderation from aviation professionals."
-  },
-  {
-    icon: TrendingUp,
-    title: "Performance Analytics",
-    description: "Advanced reporting tools that track student progress, exam readiness, and provide actionable insights for curriculum improvement."
-  },
-  {
-    icon: Zap,
-    title: "AI-Powered Assistance",
-    description: "24/7 AI support provides instant explanations, personalized study guidance, and helps students master complex aviation concepts."
-  }
-];
-
-const features = [
-  "Customizable curriculum integration",
-  "White-label solution for schools",
-  "Bulk student management",
-  "Instructor dashboard and analytics",
-  "Automated progress reports",
-  "Integration with existing LMS systems",
-  "Mobile-first responsive design",
-  "Multi-language support"
-];
-
 const Partnerships = () => {
   const { t } = useI18n();
+  
+  const benefits = [
+    {
+      icon: GraduationCap,
+      title: t.partnerships.comprehensiveTraining,
+      description: t.partnerships.comprehensiveTrainingDesc
+    },
+    {
+      icon: Target,
+      title: t.partnerships.realTimeTracking,
+      description: t.partnerships.realTimeTrackingDesc
+    },
+    {
+      icon: Award,
+      title: t.partnerships.industryValidated,
+      description: t.partnerships.industryValidatedDesc
+    },
+    {
+      icon: Users,
+      title: t.partnerships.collaborativeLearning,
+      description: t.partnerships.collaborativeLearningDesc
+    },
+    {
+      icon: TrendingUp,
+      title: t.partnerships.performanceAnalytics,
+      description: t.partnerships.performanceAnalyticsDesc
+    },
+    {
+      icon: Zap,
+      title: t.partnerships.aiPoweredAssistance,
+      description: t.partnerships.aiPoweredAssistanceDesc
+    }
+  ];
+
+  const features = [
+    t.partnerships.customizableCurriculum,
+    t.partnerships.whiteLabelSolution,
+    t.partnerships.bulkStudentManagement,
+    t.partnerships.instructorDashboard,
+    t.partnerships.automatedReports,
+    t.partnerships.lmsIntegration,
+    t.partnerships.mobileFirstDesign,
+    t.partnerships.multiLanguageSupport
+  ];
+
+  const stats = [
+    { value: "25K+", label: t.partnerships.examQuestions, icon: Target },
+    { value: "98%", label: t.partnerships.satisfactionRate, icon: Award },
+    { value: "24/7", label: t.partnerships.aiSupport, icon: Zap },
+    { value: "100%", label: t.partnerships.cloudBased, icon: Rocket }
+  ];
   const heroRef = useRef(null);
   const benefitsRef = useRef(null);
   const featuresRef = useRef(null);
@@ -128,12 +135,7 @@ const Partnerships = () => {
       <div className="relative bg-slate-900 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { value: "25K+", label: "Exam Questions", icon: Target },
-              { value: "98%", label: "Satisfaction Rate", icon: Award },
-              { value: "24/7", label: "AI Support", icon: Zap },
-              { value: "100%", label: "Cloud Based", icon: Rocket }
-            ].map((stat, index) => {
+            {stats.map((stat, index) => {
               const Icon = stat.icon;
               return (
                 <motion.div

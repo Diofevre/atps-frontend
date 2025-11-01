@@ -39,6 +39,30 @@ export interface Translations {
     readyToTransform: string;
     readyHighlight: string;
     readyDescription: string;
+    examQuestions: string;
+    satisfactionRate: string;
+    aiSupport: string;
+    cloudBased: string;
+    comprehensiveTraining: string;
+    comprehensiveTrainingDesc: string;
+    realTimeTracking: string;
+    realTimeTrackingDesc: string;
+    industryValidated: string;
+    industryValidatedDesc: string;
+    collaborativeLearning: string;
+    collaborativeLearningDesc: string;
+    performanceAnalytics: string;
+    performanceAnalyticsDesc: string;
+    aiPoweredAssistance: string;
+    aiPoweredAssistanceDesc: string;
+    customizableCurriculum: string;
+    whiteLabelSolution: string;
+    bulkStudentManagement: string;
+    instructorDashboard: string;
+    automatedReports: string;
+    lmsIntegration: string;
+    mobileFirstDesign: string;
+    multiLanguageSupport: string;
   };
   heroes: {
     badge: string;
@@ -47,6 +71,7 @@ export interface Translations {
     description: string;
     tryForFree: string;
     joinCommunity: string;
+    joinCommunityDesc: string;
     readJournal: string;
     globalNetwork: string;
     globalNetworkDesc: string;
@@ -104,11 +129,35 @@ export interface Translations {
     badge: string;
     title: string;
     subtitle: string;
+    searchPlaceholder: string;
+    all: string;
   };
   pricing: {
     badge: string;
     title: string;
     subtitle: string;
+    mostPopular: string;
+    specialOffer: string;
+    save: string;
+    billedFor: string;
+    month: string;
+    months: string;
+    confirmTitle: string;
+    confirmButton: string;
+    processing: string;
+    standardOffer: string;
+    standardDesc: string;
+    premiumOffer: string;
+    premiumDesc: string;
+    close: string;
+    safetyFirst: string;
+    safetyFirstDesc: string;
+    flexibleSchedule: string;
+    flexibleScheduleDesc: string;
+    expertInstructors: string;
+    expertInstructorsDesc: string;
+    comprehensiveMaterial: string;
+    comprehensiveMaterialDesc: string;
   };
   partnershipForm: {
     title: string;
@@ -172,6 +221,30 @@ export const translations: Record<Language, Translations> = {
       readyToTransform: 'Ready to Transform Your',
       readyHighlight: 'ATPL Training Program?',
       readyDescription: 'Get in touch with our partnership team to learn how ATPS can elevate your aviation training program.',
+      examQuestions: 'Exam Questions',
+      satisfactionRate: 'Satisfaction Rate',
+      aiSupport: 'AI Support',
+      cloudBased: 'Cloud Based',
+      comprehensiveTraining: 'Comprehensive Training Content',
+      comprehensiveTrainingDesc: 'Access to 25,000+ verified exam questions covering all ATPL subjects, ensuring your students are thoroughly prepared for their exams.',
+      realTimeTracking: 'Real-Time Progress Tracking',
+      realTimeTrackingDesc: 'Monitor student performance, identify knowledge gaps, and adjust teaching strategies with detailed analytics and insights.',
+      industryValidated: 'Industry-Validated Questions',
+      industryValidatedDesc: 'Questions tagged with "Last Seen in Exam" dates and quality scores help students focus on what matters most for success.',
+      collaborativeLearning: 'Collaborative Learning Environment',
+      collaborativeLearningDesc: 'Foster peer-to-peer learning with community features, study groups, and expert moderation from aviation professionals.',
+      performanceAnalytics: 'Performance Analytics',
+      performanceAnalyticsDesc: 'Advanced reporting tools that track student progress, exam readiness, and provide actionable insights for curriculum improvement.',
+      aiPoweredAssistance: 'AI-Powered Assistance',
+      aiPoweredAssistanceDesc: '24/7 AI support provides instant explanations, personalized study guidance, and helps students master complex aviation concepts.',
+      customizableCurriculum: 'Customizable curriculum integration',
+      whiteLabelSolution: 'White-label solution for schools',
+      bulkStudentManagement: 'Bulk student management',
+      instructorDashboard: 'Instructor dashboard and analytics',
+      automatedReports: 'Automated progress reports',
+      lmsIntegration: 'Integration with existing LMS systems',
+      mobileFirstDesign: 'Mobile-first responsive design',
+      multiLanguageSupport: 'Multi-language support',
     },
     heroes: {
       badge: 'Start Your Aviation Journey Today',
@@ -180,23 +253,24 @@ export const translations: Record<Language, Translations> = {
       description: 'ATPS is the most performant aviation training platform, designed to provide the most precise, efficient, and high-quality ATPL preparation available today.',
       tryForFree: 'TRY FOR FREE',
       joinCommunity: 'Join Our Community',
+      joinCommunityDesc: 'Connect with fellow aviation enthusiasts and industry experts',
       readJournal: 'Read the ATPS Aviation Journal',
       globalNetwork: 'Global Pilot Network',
-      globalNetworkDesc: 'Connect with 5,000+ pilots worldwide, share experiences, and build professional relationships.',
-      studyDiscussions: 'Active Study Groups',
-      studyDiscussionsDesc: 'Join real-time discussions, exchange notes, and study together with motivated aspiring pilots.',
+      globalNetworkDesc: 'Connect with pilots worldwide. Share insights and grow your network.',
+      studyDiscussions: 'Study & Discussions',
+      studyDiscussionsDesc: 'Exchange strategies, discuss topics, and boost your learning.',
       industryUpdates: 'Industry Updates',
-      industryUpdatesDesc: 'Get the latest aviation news, hiring trends, and regulatory changes delivered weekly.',
-      communityTitle: 'Join Our Global Community',
-      communityDescription: 'Connect with fellow aviation enthusiasts, share experiences, and accelerate your journey to becoming a certified pilot.',
-      aviationAssistant: 'AI-Powered Aviation Assistant',
-      aviationAssistantDesc: 'Get instant explanations, personalized study guidance, and real-time support.',
-      expertCourses: 'Expert-Designed Courses',
-      expertCoursesDesc: 'Master aviation theory with structured lessons and detailed explanations.',
-      simulator: 'ATPS Simulator',
-      simulatorDesc: 'Enhance your training with realistic scenarios and practical skills building.',
+      industryUpdatesDesc: 'Stay informed on aviation news, trends, and regulations.',
+      communityTitle: 'Join the ATPS Aviation Community',
+      communityDescription: 'The ATPS community brings together aspiring and professional pilots to exchange knowledge, discuss strategies, and stay informed on industry developments. Join a network designed to support your aviation journey.',
+      aviationAssistant: 'Aviation Assistant',
+      aviationAssistantDesc: 'Instant support for aviation concepts, question explanations, and study optimization.',
+      expertCourses: 'Expert-Led Courses',
+      expertCoursesDesc: 'Aviation professionals ensure the highest standard of learning materials.',
+      simulator: 'Realistic ATC & Flight Simulator',
+      simulatorDesc: 'Train with real-world scenarios and enhance your aviation skills',
       verifiedQuestions: '25,000+ Verified Exam Questions',
-      verifiedQuestionsDesc: 'With "Last Seen in Exam" markers and quality scores to focus your studies.',
+      verifiedQuestionsDesc: 'Organized, structured, and continuously updated.',
     },
     slider: {
       whyChooseUs: 'Why Choose Us',
@@ -237,11 +311,35 @@ export const translations: Record<Language, Translations> = {
       badge: 'Support Center',
       title: 'Frequently Asked Questions',
       subtitle: 'Find answers to common questions about ATPS - Your complete aviation training platform',
+      searchPlaceholder: 'Search questions...',
+      all: 'All',
     },
     pricing: {
       badge: 'Choose Your Plan',
       title: 'Simple, Transparent Pricing',
       subtitle: 'Select the plan that best fits your ATPL preparation needs',
+      mostPopular: 'Most Popular',
+      specialOffer: 'SPECIAL OFFER',
+      save: 'Save €',
+      billedFor: 'billed for',
+      month: 'month',
+      months: 'months',
+      confirmTitle: 'Confirm Your Plan',
+      confirmButton: 'Confirm Subscription',
+      processing: 'Processing...',
+      standardOffer: 'Standard Offer',
+      standardDesc: 'Unlimited access to our question bank from a single device—your go-to tool for exam preparation.',
+      premiumOffer: 'Premium Offer',
+      premiumDesc: 'Full access to our question bank, detailed courses, AI support, and an integrated aviation dictionary for a comprehensive learning experience.',
+      close: 'Close',
+      safetyFirst: 'Safety First',
+      safetyFirstDesc: 'Top-rated safety protocols and modern aircraft fleet',
+      flexibleSchedule: 'Flexible Schedule',
+      flexibleScheduleDesc: 'Train at your own pace with 24/7 ground school access',
+      expertInstructors: 'Expert Instructors',
+      expertInstructorsDesc: 'Learn from experienced commercial airline pilots',
+      comprehensiveMaterial: 'Comprehensive Material',
+      comprehensiveMaterialDesc: 'Access to all study materials and practice tests',
     },
     partnershipForm: {
       title: 'Contact Partnership Team',
@@ -303,6 +401,30 @@ export const translations: Record<Language, Translations> = {
       readyToTransform: 'Prêt à Transformer Votre',
       readyHighlight: 'Programme de Formation ATPL?',
       readyDescription: 'Contactez notre équipe partenariats pour découvrir comment ATPS peut améliorer votre programme de formation aéronautique.',
+      examQuestions: 'Questions d\'Examen',
+      satisfactionRate: 'Taux de Satisfaction',
+      aiSupport: 'Support IA',
+      cloudBased: 'Cloud Based',
+      comprehensiveTraining: 'Contenu de Formation Complet',
+      comprehensiveTrainingDesc: 'Accès à plus de 25 000 questions d\'examen vérifiées couvrant tous les sujets ATPL, garantissant que vos étudiants sont parfaitement préparés pour leurs examens.',
+      realTimeTracking: 'Suivi en Temps Réel',
+      realTimeTrackingDesc: 'Surveillez les performances des étudiants, identifiez les lacunes de connaissances et ajustez les stratégies d\'enseignement avec des analyses et des informations détaillées.',
+      industryValidated: 'Questions Validées par l\'Industrie',
+      industryValidatedDesc: 'Les questions étiquetées avec des dates "Vu Dernièrement à l\'Examen" et des scores de qualité aident les étudiants à se concentrer sur ce qui compte le plus pour réussir.',
+      collaborativeLearning: 'Environnement d\'Apprentissage Collaboratif',
+      collaborativeLearningDesc: 'Favorisez l\'apprentissage entre pairs avec des fonctionnalités communautaires, des groupes d\'étude et une modération experte par des professionnels de l\'aviation.',
+      performanceAnalytics: 'Analyses de Performance',
+      performanceAnalyticsDesc: 'Outils de reporting avancés qui suivent les progrès des étudiants, la préparation aux examens et fournissent des informations exploitables pour l\'amélioration du curriculum.',
+      aiPoweredAssistance: 'Assistance Alimentée par l\'IA',
+      aiPoweredAssistanceDesc: 'Le support IA 24/7 fournit des explications instantanées, des conseils d\'étude personnalisés et aide les étudiants à maîtriser des concepts complexes d\'aviation.',
+      customizableCurriculum: 'Intégration du curriculum personnalisable',
+      whiteLabelSolution: 'Solution white-label pour les écoles',
+      bulkStudentManagement: 'Gestion groupée des étudiants',
+      instructorDashboard: 'Tableau de bord et analyses de l\'instructeur',
+      automatedReports: 'Rapports de progression automatisés',
+      lmsIntegration: 'Intégration avec les systèmes LMS existants',
+      mobileFirstDesign: 'Design responsive mobile-first',
+      multiLanguageSupport: 'Support multilingue',
     },
     heroes: {
       badge: 'Commencez Votre Voyage Aéronautique Aujourd\'hui',
@@ -311,23 +433,24 @@ export const translations: Record<Language, Translations> = {
       description: 'ATPS est la plateforme de formation aéronautique la plus performante, conçue pour fournir la préparation ATPL la plus précise, efficace et de haute qualité disponible aujourd\'hui.',
       tryForFree: 'ESSAYEZ GRATUITEMENT',
       joinCommunity: 'Rejoignez Notre Communauté',
+      joinCommunityDesc: 'Connectez-vous avec d\'autres passionnés d\'aviation et des experts de l\'industrie',
       readJournal: 'Lisez le Journal Aéronautique ATPS',
       globalNetwork: 'Réseau Mondial de Pilotes',
-      globalNetworkDesc: 'Connectez-vous avec plus de 5 000 pilotes dans le monde, partagez vos expériences et développez votre réseau professionnel.',
-      studyDiscussions: 'Groupes d\'Étude Actifs',
-      studyDiscussionsDesc: 'Rejoignez des discussions en temps réel, échangez des notes et étudiez ensemble avec des aspirants pilotes motivés.',
+      globalNetworkDesc: 'Connectez-vous avec des pilotes du monde entier. Partagez des idées et développez votre réseau.',
+      studyDiscussions: 'Études & Discussions',
+      studyDiscussionsDesc: 'Échangez des stratégies, discutez de sujets et stimulez votre apprentissage.',
       industryUpdates: 'Actualités de l\'Industrie',
-      industryUpdatesDesc: 'Recevez les dernières actualités de l\'aviation, les tendances d\'embauche et les changements réglementaires chaque semaine.',
-      communityTitle: 'Rejoignez Notre Communauté Mondiale',
-      communityDescription: 'Connectez-vous avec d\'autres passionnés d\'aviation, partagez vos expériences et accélérez votre parcours pour devenir pilote certifié.',
-      aviationAssistant: 'Assistant Aéronautique IA',
-      aviationAssistantDesc: 'Obtenez des explications instantanées, des conseils d\'étude personnalisés et un support en temps réel.',
-      expertCourses: 'Cours Créés par des Experts',
-      expertCoursesDesc: 'Maîtrisez la théorie aéronautique avec des leçons structurées et des explications détaillées.',
-      simulator: 'Simulateur ATPS',
-      simulatorDesc: 'Améliorez votre formation avec des scénarios réalistes et le développement de compétences pratiques.',
+      industryUpdatesDesc: 'Restez informé des actualités aéronautiques, des tendances et des réglementations.',
+      communityTitle: 'Rejoignez la Communauté Aéronautique ATPS',
+      communityDescription: 'La communauté ATPS rassemble des pilotes en devenir et des professionnels pour échanger des connaissances, discuter de stratégies et rester informés des développements de l\'industrie. Rejoignez un réseau conçu pour soutenir votre parcours aéronautique.',
+      aviationAssistant: 'Assistant Aéronautique',
+      aviationAssistantDesc: 'Support instantané pour les concepts aéronautiques, explications de questions et optimisation de l\'étude.',
+      expertCourses: 'Cours Dirigés par des Experts',
+      expertCoursesDesc: 'Les professionnels de l\'aviation garantissent la meilleure qualité de matériel pédagogique.',
+      simulator: 'Simulateur ATC & Vol Réaliste',
+      simulatorDesc: 'Entraînez-vous avec des scénarios du monde réel et améliorez vos compétences aéronautiques',
       verifiedQuestions: '25 000+ Questions d\'Examen Vérifiées',
-      verifiedQuestionsDesc: 'Avec des marqueurs "Vu Dernièrement à l\'Examen" et des scores de qualité pour cibler vos études.',
+      verifiedQuestionsDesc: 'Organisées, structurées et continuellement mises à jour.',
     },
     slider: {
       whyChooseUs: 'Pourquoi Nous Choisir',
@@ -368,11 +491,35 @@ export const translations: Record<Language, Translations> = {
       badge: 'Centre de Support',
       title: 'Questions Fréquemment Posées',
       subtitle: 'Trouvez des réponses aux questions courantes sur ATPS - Votre plateforme complète de formation aéronautique',
+      searchPlaceholder: 'Rechercher des questions...',
+      all: 'Tous',
     },
     pricing: {
       badge: 'Choisissez Votre Plan',
       title: 'Tarification Simple et Transparente',
       subtitle: 'Sélectionnez le plan qui correspond le mieux à vos besoins de préparation ATPL',
+      mostPopular: 'Le Plus Populaire',
+      specialOffer: 'OFFRE SPÉCIALE',
+      save: 'Économiser ',
+      billedFor: 'facturé pour',
+      month: 'mois',
+      months: 'mois',
+      confirmTitle: 'Confirmez Votre Plan',
+      confirmButton: 'Confirmer l\'Abonnement',
+      processing: 'Traitement en cours...',
+      standardOffer: 'Offre Standard',
+      standardDesc: 'Accès illimité à notre banque de questions depuis un seul appareil—votre outil incontournable pour la préparation aux examens.',
+      premiumOffer: 'Offre Premium',
+      premiumDesc: 'Accès complet à notre banque de questions, cours détaillés, support IA et dictionnaire aéronautique intégré pour une expérience d\'apprentissage complète.',
+      close: 'Fermer',
+      safetyFirst: 'Sécurité d\'Abord',
+      safetyFirstDesc: 'Protocoles de sécurité de premier plan et flotte d\'aéronefs moderne',
+      flexibleSchedule: 'Horaires Flexibles',
+      flexibleScheduleDesc: 'Entraînez-vous à votre rythme avec un accès 24/7 à l\'école au sol',
+      expertInstructors: 'Instructeurs Experts',
+      expertInstructorsDesc: 'Apprenez auprès de pilotes expérimentés de compagnies aériennes commerciales',
+      comprehensiveMaterial: 'Matériel Complet',
+      comprehensiveMaterialDesc: 'Accès à tous les matériels d\'étude et tests pratiques',
     },
     partnershipForm: {
       title: 'Contacter l\'Équipe Partenariats',
@@ -434,6 +581,30 @@ export const translations: Record<Language, Translations> = {
       readyToTransform: '¿Listo para Transformar Tu',
       readyHighlight: 'Programa de Entrenamiento ATPL?',
       readyDescription: 'Ponte en contacto con nuestro equipo de asociaciones para descubrir cómo ATPS puede elevar tu programa de entrenamiento de aviación.',
+      examQuestions: 'Preguntas de Examen',
+      satisfactionRate: 'Tasa de Satisfacción',
+      aiSupport: 'Soporte IA',
+      cloudBased: 'Basado en la Nube',
+      comprehensiveTraining: 'Contenido de Entrenamiento Integral',
+      comprehensiveTrainingDesc: 'Acceso a más de 25,000 preguntas de examen verificadas que cubren todos los temas ATPL, garantizando que tus estudiantes estén completamente preparados para sus exámenes.',
+      realTimeTracking: 'Seguimiento de Progreso en Tiempo Real',
+      realTimeTrackingDesc: 'Monitorea el rendimiento de los estudiantes, identifica brechas de conocimiento y ajusta las estrategias de enseñanza con análisis detallados e información.',
+      industryValidated: 'Preguntas Validadas por la Industria',
+      industryValidatedDesc: 'Las preguntas etiquetadas con fechas "Visto Últimamente en Examen" y puntajes de calidad ayudan a los estudiantes a enfocarse en lo que más importa para el éxito.',
+      collaborativeLearning: 'Entorno de Aprendizaje Colaborativo',
+      collaborativeLearningDesc: 'Fomenta el aprendizaje entre pares con funciones de comunidad, grupos de estudio y moderación experta por parte de profesionales de la aviación.',
+      performanceAnalytics: 'Análisis de Rendimiento',
+      performanceAnalyticsDesc: 'Herramientas de informes avanzadas que rastrean el progreso de los estudiantes, la preparación para exámenes y proporcionan información accionable para la mejora del currículo.',
+      aiPoweredAssistance: 'Asistencia Impulsada por IA',
+      aiPoweredAssistanceDesc: 'El soporte IA 24/7 proporciona explicaciones instantáneas, orientación de estudio personalizada y ayuda a los estudiantes a dominar conceptos complejos de aviación.',
+      customizableCurriculum: 'Integración de currículo personalizable',
+      whiteLabelSolution: 'Solución de marca blanca para escuelas',
+      bulkStudentManagement: 'Gestión masiva de estudiantes',
+      instructorDashboard: 'Tablero e informes del instructor',
+      automatedReports: 'Informes de progreso automatizados',
+      lmsIntegration: 'Integración con sistemas LMS existentes',
+      mobileFirstDesign: 'Diseño responsive móvil primero',
+      multiLanguageSupport: 'Soporte multilingüe',
     },
     heroes: {
       badge: 'Comienza Tu Viaje Aviatorio Hoy',
@@ -442,23 +613,24 @@ export const translations: Record<Language, Translations> = {
       description: 'ATPS es la plataforma de entrenamiento de aviación más eficiente, diseñada para brindar la preparación ATPL más precisa, eficiente y de alta calidad disponible hoy.',
       tryForFree: 'PRUÉBALO GRATIS',
       joinCommunity: 'Únete a Nuestra Comunidad',
+      joinCommunityDesc: 'Conéctate con otros entusiastas de la aviación y expertos de la industria',
       readJournal: 'Lee el Diario de Aviación ATPS',
       globalNetwork: 'Red Global de Pilotos',
-      globalNetworkDesc: 'Conéctate con más de 5,000 pilotos en todo el mundo, comparte experiencias y desarrolla relaciones profesionales.',
-      studyDiscussions: 'Grupos de Estudio Activos',
-      studyDiscussionsDesc: 'Únete a discusiones en tiempo real, intercambia notas y estudia junto con aspirantes a pilotos motivados.',
+      globalNetworkDesc: 'Conéctate con pilotos de todo el mundo. Comparte ideas y haz crecer tu red.',
+      studyDiscussions: 'Estudio y Discusiones',
+      studyDiscussionsDesc: 'Intercambia estrategias, discute temas y potencia tu aprendizaje.',
       industryUpdates: 'Actualizaciones de la Industria',
-      industryUpdatesDesc: 'Recibe las últimas noticias de aviación, tendencias de contratación y cambios regulatorios entregados semanalmente.',
-      communityTitle: 'Únete a Nuestra Comunidad Global',
-      communityDescription: 'Conéctate con otros entusiastas de la aviación, comparte experiencias y acelera tu viaje para convertirte en piloto certificado.',
-      aviationAssistant: 'Asistente de Aviación con IA',
-      aviationAssistantDesc: 'Obtén explicaciones instantáneas, orientación de estudio personalizada y soporte en tiempo real.',
-      expertCourses: 'Cursos Diseñados por Expertos',
-      expertCoursesDesc: 'Domina la teoría de aviación con lecciones estructuradas y explicaciones detalladas.',
-      simulator: 'Simulador ATPS',
-      simulatorDesc: 'Mejora tu entrenamiento con escenarios realistas y construcción de habilidades prácticas.',
+      industryUpdatesDesc: 'Mantente informado sobre noticias, tendencias y regulaciones de aviación.',
+      communityTitle: 'Únete a la Comunidad de Aviación ATPS',
+      communityDescription: 'La comunidad ATPS reúne a pilotos aspirantes y profesionales para intercambiar conocimientos, discutir estrategias y mantenerse informados sobre los desarrollos de la industria. Únete a una red diseñada para apoyar tu viaje de aviación.',
+      aviationAssistant: 'Asistente de Aviación',
+      aviationAssistantDesc: 'Soporte instantáneo para conceptos de aviación, explicaciones de preguntas y optimización del estudio.',
+      expertCourses: 'Cursos Dirigidos por Expertos',
+      expertCoursesDesc: 'Los profesionales de aviación garantizan el más alto estándar de materiales de aprendizaje.',
+      simulator: 'Simulador de ATC y Vuelo Realista',
+      simulatorDesc: 'Entrena con escenarios del mundo real y mejora tus habilidades de aviación',
       verifiedQuestions: '25,000+ Preguntas de Examen Verificadas',
-      verifiedQuestionsDesc: 'Con marcadores "Visto Últimamente en Examen" y puntajes de calidad para enfocar tus estudios.',
+      verifiedQuestionsDesc: 'Organizadas, estructuradas y actualizadas continuamente.',
     },
     slider: {
       whyChooseUs: 'Por Qué Elegirnos',
@@ -499,11 +671,35 @@ export const translations: Record<Language, Translations> = {
       badge: 'Centro de Soporte',
       title: 'Preguntas Frecuentes',
       subtitle: 'Encuentra respuestas a preguntas comunes sobre ATPS - Tu plataforma completa de entrenamiento de aviación',
+      searchPlaceholder: 'Buscar preguntas...',
+      all: 'Todos',
     },
     pricing: {
       badge: 'Elige Tu Plan',
       title: 'Precios Simples y Transparentes',
       subtitle: 'Selecciona el plan que mejor se adapte a tus necesidades de preparación ATPL',
+      mostPopular: 'Más Popular',
+      specialOffer: 'OFERTA ESPECIAL',
+      save: 'Ahorrar ',
+      billedFor: 'facturado por',
+      month: 'mes',
+      months: 'meses',
+      confirmTitle: 'Confirma Tu Plan',
+      confirmButton: 'Confirmar Suscripción',
+      processing: 'Procesando...',
+      standardOffer: 'Oferta Estándar',
+      standardDesc: 'Acceso ilimitado a nuestro banco de preguntas desde un solo dispositivo—tu herramienta ideal para la preparación de exámenes.',
+      premiumOffer: 'Oferta Premium',
+      premiumDesc: 'Acceso completo a nuestro banco de preguntas, cursos detallados, soporte de IA y diccionario de aviación integrado para una experiencia de aprendizaje completa.',
+      close: 'Cerrar',
+      safetyFirst: 'Seguridad Primero',
+      safetyFirstDesc: 'Protocolos de seguridad de primer nivel y flota de aviones moderna',
+      flexibleSchedule: 'Horario Flexible',
+      flexibleScheduleDesc: 'Entrena a tu ritmo con acceso 24/7 a la escuela terrestre',
+      expertInstructors: 'Instructores Expertos',
+      expertInstructorsDesc: 'Aprende de pilotos experimentados de aerolíneas comerciales',
+      comprehensiveMaterial: 'Material Integral',
+      comprehensiveMaterialDesc: 'Acceso a todos los materiales de estudio y exámenes de práctica',
     },
     partnershipForm: {
       title: 'Contactar Equipo de Asociaciones',

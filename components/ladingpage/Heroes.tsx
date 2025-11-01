@@ -4,8 +4,7 @@
 import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { features, mainFeatures } from '@/lib/marketing_page/constant';
-import { Users } from 'lucide-react';
+import { Users, CheckCircle2, Headphones, BookOpenCheck, Gamepad2, BookOpen, Laptop } from 'lucide-react';
 import { useUser } from '@/lib/mock-clerk';
 import { motion, useInView } from 'framer-motion';
 import { useI18n } from '@/lib/i18n/context';
@@ -16,6 +15,55 @@ const Heroes = () => {
   const router = useRouter();
   const introRef = useRef(null);
   const introInView = useInView(introRef, { once: true, amount: 0.2 });
+  
+  const mainFeatures = [
+    {
+      icon: CheckCircle2,
+      title: t.heroes.verifiedQuestions,
+      description: t.heroes.verifiedQuestionsDesc,
+      gradient: "from-emerald-500/20 to-teal-500/20",
+      iconColor: "text-emerald-400"
+    },
+    {
+      icon: Headphones,
+      title: t.heroes.aviationAssistant,
+      description: t.heroes.aviationAssistantDesc,
+      gradient: "from-blue-500/20 to-cyan-500/20",
+      iconColor: "text-blue-400"
+    },
+    {
+      icon: BookOpenCheck,
+      title: t.heroes.expertCourses,
+      description: t.heroes.expertCoursesDesc,
+      gradient: "from-purple-500/20 to-pink-500/20",
+      iconColor: "text-purple-400"
+    },
+    {
+      icon: Gamepad2,
+      title: t.heroes.simulator,
+      description: t.heroes.simulatorDesc,
+      gradient: "from-orange-500/20 to-red-500/20",
+      iconColor: "text-orange-400"
+    }
+  ];
+  
+  const features = [
+    {
+      icon: BookOpen,
+      title: t.heroes.globalNetwork,
+      description: t.heroes.globalNetworkDesc
+    },
+    {
+      icon: Laptop,
+      title: t.heroes.studyDiscussions,
+      description: t.heroes.studyDiscussionsDesc
+    },
+    {
+      icon: Users,
+      title: t.heroes.industryUpdates,
+      description: t.heroes.industryUpdatesDesc
+    }
+  ];
   
   // Éviter l'erreur d'hydratation en attendant que Clerk soit chargé
   if (!isLoaded) {
@@ -192,7 +240,7 @@ const Heroes = () => {
                   </motion.div>
                   <div>
                     <p className="text-white font-medium">{t.heroes.joinCommunity}</p>
-                    <p className="text-sm text-gray-400 mt-1">Connect with fellow aviation enthusiasts and industry experts</p>
+                    <p className="text-sm text-gray-400 mt-1">{t.heroes.joinCommunityDesc}</p>
                   </div>
                 </div>
               </motion.div>
@@ -206,10 +254,10 @@ const Heroes = () => {
             >
               <motion.div variants={fadeInUp}>
                 <h2 className="text-3xl font-bold text-white mb-4">
-                  Join the ATPS Aviation Community  
+                  {t.heroes.communityTitle}
                 </h2>
                 <p className="text-gray-400 leading-relaxed">
-                  The ATPS community brings together aspiring and professional pilots to exchange knowledge, discuss strategies, and stay informed on industry developments. Join a network designed to support your aviation journey.
+                  {t.heroes.communityDescription}
                 </p>
               </motion.div>
 
