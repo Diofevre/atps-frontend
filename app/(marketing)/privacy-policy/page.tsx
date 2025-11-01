@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Shield, Eye, Lock, FileText, Calendar } from 'lucide-react';
+import { Shield, Eye, Lock, FileText, Calendar, UserCheck, Cookie, RefreshCw } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n/context';
 
@@ -144,19 +144,26 @@ export default function PrivacyPolicy() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-8 border border-white/10"
           >
-            <h2 className="text-2xl font-bold text-white mb-3">4. Your Rights</h2>
-            <p className="text-gray-300 leading-relaxed mb-4">
-              You have the right to:
-            </p>
-            <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
-              <li>Access and receive a copy of your personal data</li>
-              <li>Correct inaccurate or incomplete information</li>
-              <li>Request deletion of your personal data</li>
-              <li>Object to processing of your personal data</li>
-              <li>Request restriction of processing</li>
-              <li>Data portability</li>
-              <li>Withdraw consent at any time</li>
-            </ul>
+            <div className="flex items-start gap-4 mb-6">
+              <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-[#EECE84]/10 flex items-center justify-center">
+                <UserCheck className="w-6 h-6 text-[#EECE84]" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white mb-3">4. Your Rights</h2>
+                <p className="text-gray-300 leading-relaxed mb-4">
+                  You have the right to:
+                </p>
+                <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
+                  <li>Access and receive a copy of your personal data</li>
+                  <li>Correct inaccurate or incomplete information</li>
+                  <li>Request deletion of your personal data</li>
+                  <li>Object to processing of your personal data</li>
+                  <li>Request restriction of processing</li>
+                  <li>Data portability</li>
+                  <li>Withdraw consent at any time</li>
+                </ul>
+              </div>
+            </div>
           </motion.section>
 
           {/* Section 5 */}
@@ -167,11 +174,18 @@ export default function PrivacyPolicy() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-8 border border-white/10"
           >
-            <h2 className="text-2xl font-bold text-white mb-3">5. Cookies and Tracking</h2>
-            <p className="text-gray-300 leading-relaxed">
-              We use cookies and similar tracking technologies to enhance your experience on our platform. 
-              For detailed information about our use of cookies, please refer to our Cookie Policy.
-            </p>
+            <div className="flex items-start gap-4 mb-6">
+              <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-[#EECE84]/10 flex items-center justify-center">
+                <Cookie className="w-6 h-6 text-[#EECE84]" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white mb-3">5. Cookies and Tracking</h2>
+                <p className="text-gray-300 leading-relaxed">
+                  We use cookies and similar tracking technologies to enhance your experience on our platform. 
+                  For detailed information about our use of cookies, please refer to our Cookie Policy.
+                </p>
+              </div>
+            </div>
           </motion.section>
 
           {/* Section 6 */}
@@ -182,11 +196,18 @@ export default function PrivacyPolicy() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-8 border border-white/10"
           >
-            <h2 className="text-2xl font-bold text-white mb-3">6. Changes to This Policy</h2>
-            <p className="text-gray-300 leading-relaxed">
-              We may update this Privacy Policy from time to time. We will notify you of any changes by posting 
-              the new Privacy Policy on this page and updating the "Last updated" date.
-            </p>
+            <div className="flex items-start gap-4 mb-6">
+              <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-[#EECE84]/10 flex items-center justify-center">
+                <RefreshCw className="w-6 h-6 text-[#EECE84]" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white mb-3">6. Changes to This Policy</h2>
+                <p className="text-gray-300 leading-relaxed">
+                  We may update this Privacy Policy from time to time. We will notify you of any changes by posting 
+                  the new Privacy Policy on this page and updating the "Last updated" date.
+                </p>
+              </div>
+            </div>
           </motion.section>
 
           {/* Contact Section */}

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { FileText, Scale, AlertTriangle, Users, Shield, Gavel } from 'lucide-react';
+import { FileText, Scale, AlertTriangle, Users, Shield, Gavel, Copyright, RefreshCw } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n/context';
 
@@ -164,12 +164,19 @@ export default function TermsOfService() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-8 border border-white/10"
           >
-            <h2 className="text-2xl font-bold text-white mb-3">5. Intellectual Property</h2>
-            <p className="text-gray-300 leading-relaxed mb-4">
-              The platform and its original content, features, and functionality are owned by ATPS and are protected by international 
-              copyright, trademark, patent, trade secret, and other intellectual property laws. Our trademarks and trade dress may not 
-              be used in connection with any product or service without our prior written consent.
-            </p>
+            <div className="flex items-start gap-4 mb-6">
+              <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-[#EECE84]/10 flex items-center justify-center">
+                <Copyright className="w-6 h-6 text-[#EECE84]" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white mb-3">5. Intellectual Property</h2>
+                <p className="text-gray-300 leading-relaxed mb-4">
+                  The platform and its original content, features, and functionality are owned by ATPS and are protected by international 
+                  copyright, trademark, patent, trade secret, and other intellectual property laws. Our trademarks and trade dress may not 
+                  be used in connection with any product or service without our prior written consent.
+                </p>
+              </div>
+            </div>
           </motion.section>
 
           {/* Section 6 */}
@@ -203,11 +210,18 @@ export default function TermsOfService() {
             transition={{ duration: 0.6, delay: 0.6 }}
             className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-8 border border-white/10"
           >
-            <h2 className="text-2xl font-bold text-white mb-3">7. Changes to Terms</h2>
-            <p className="text-gray-300 leading-relaxed">
-              We reserve the right to modify these terms at any time. We will notify users of any material changes by posting the 
-              new Terms of Service on this page.
-            </p>
+            <div className="flex items-start gap-4 mb-6">
+              <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-[#EECE84]/10 flex items-center justify-center">
+                <RefreshCw className="w-6 h-6 text-[#EECE84]" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white mb-3">7. Changes to Terms</h2>
+                <p className="text-gray-300 leading-relaxed">
+                  We reserve the right to modify these terms at any time. We will notify users of any material changes by posting the 
+                  new Terms of Service on this page.
+                </p>
+              </div>
+            </div>
           </motion.section>
 
           {/* Contact Section */}

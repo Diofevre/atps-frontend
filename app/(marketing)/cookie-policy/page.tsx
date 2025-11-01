@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Cookie, Settings, BarChart3, UserCircle, Shield } from 'lucide-react';
+import { Cookie, Settings, BarChart3, UserCircle, Shield, Globe, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n/context';
 
@@ -147,12 +147,19 @@ export default function CookiePolicy() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-8 border border-white/10"
           >
-            <h2 className="text-2xl font-bold text-white mb-3">4. Third-Party Cookies</h2>
-            <p className="text-gray-300 leading-relaxed mb-4">
-              In addition to our own cookies, we may also use various third-party cookies to report usage statistics and deliver 
-              advertisements on and through the service. These third parties may use cookies to collect information about your 
-              online activities over time and across different websites.
-            </p>
+            <div className="flex items-start gap-4 mb-6">
+              <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-[#EECE84]/10 flex items-center justify-center">
+                <Globe className="w-6 h-6 text-[#EECE84]" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white mb-3">4. Third-Party Cookies</h2>
+                <p className="text-gray-300 leading-relaxed mb-4">
+                  In addition to our own cookies, we may also use various third-party cookies to report usage statistics and deliver 
+                  advertisements on and through the service. These third parties may use cookies to collect information about your 
+                  online activities over time and across different websites.
+                </p>
+              </div>
+            </div>
           </motion.section>
 
           {/* Section 5 */}
@@ -194,13 +201,20 @@ export default function CookiePolicy() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-8 border border-white/10"
           >
-            <h2 className="text-2xl font-bold text-white mb-3">6. Duration of Cookies</h2>
-            <p className="text-gray-300 leading-relaxed">
-              <strong className="text-white">Session Cookies:</strong> These are temporary cookies that expire when you close your browser.
-              <br/><br/>
-              <strong className="text-white">Persistent Cookies:</strong> These cookies remain on your device for a longer period, 
-              or until you delete them manually. They enable us to recognize you when you return to our platform.
-            </p>
+            <div className="flex items-start gap-4 mb-6">
+              <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-[#EECE84]/10 flex items-center justify-center">
+                <Clock className="w-6 h-6 text-[#EECE84]" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white mb-3">6. Duration of Cookies</h2>
+                <p className="text-gray-300 leading-relaxed">
+                  <strong className="text-white">Session Cookies:</strong> These are temporary cookies that expire when you close your browser.
+                  <br/><br/>
+                  <strong className="text-white">Persistent Cookies:</strong> These cookies remain on your device for a longer period, 
+                  or until you delete them manually. They enable us to recognize you when you return to our platform.
+                </p>
+              </div>
+            </div>
           </motion.section>
 
           {/* Section 7 */}
