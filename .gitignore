@@ -46,7 +46,8 @@ docker-compose.override.yml
 docker-compose.prod.yml
 .dockerignore
 Dockerfile
-Dockerfile.*
+# Allow Dockerfile.marketing for deployment
+# Dockerfile.*
 
 # Testing
 /jest-test-results.json
