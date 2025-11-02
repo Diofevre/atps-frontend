@@ -26,8 +26,8 @@ const nextConfig = {
     ],
   },
   async rewrites() {
-    // Utiliser l'URL du backend depuis les variables d'environnement
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.BACKEND_URL || 'http://myatps-backend:3000';
+    // Utiliser l'URL du backend DEPUIS LA VARIABLE BACKEND_URL (pas NEXT_PUBLIC pour éviter les boucles)
+    const backendUrl = process.env.BACKEND_URL || 'http://myatps-backend:3000';
     
     return [
       {
