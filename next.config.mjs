@@ -7,6 +7,8 @@ const nextConfig = {
     ignoreBuildErrors: true, // Permettre le build malgré les erreurs TypeScript
   },
   output: 'standalone', // Pour le déploiement Docker optimisé
+  // Timeout increased for static page generation
+  staticPageGenerationTimeout: 180,
   // Permettre le build même avec des erreurs de prérendu
   onDemandEntries: {
     maxInactiveAge: 25 * 1000,
