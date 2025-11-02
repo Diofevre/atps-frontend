@@ -12,14 +12,6 @@ const nextConfig = {
     maxInactiveAge: 25 * 1000,
     pagesBufferLength: 2,
   },
-  // Skip static generation errors
-  experimental: {
-    missingSuspenseWithCSRBailout: false,
-  },
-  // Skip static exports for problematic pages
-  generateBuildId: async () => {
-    return 'build-id';
-  },
   images: {
     unoptimized: true,
     remotePatterns: [
