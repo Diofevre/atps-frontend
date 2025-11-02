@@ -296,6 +296,37 @@ export interface Translations {
     contactDesc: string;
     contactEmail: string;
   };
+  cookieConsent: {
+    title: string;
+    description: string;
+    learnMore: string;
+    privacyPolicy: string;
+    rejectAll: string;
+    customize: string;
+    acceptAll: string;
+    settingsTitle: string;
+    settingsDescription: string;
+    cancel: string;
+    savePreferences: string;
+    categories: {
+      necessary: {
+        title: string;
+        description: string;
+      };
+      analytics: {
+        title: string;
+        description: string;
+      };
+      marketing: {
+        title: string;
+        description: string;
+      };
+      preferences: {
+        title: string;
+        description: string;
+      };
+    };
+  };
 }
 
 export const translations: Record<Language, Translations> = {
@@ -595,6 +626,37 @@ export const translations: Record<Language, Translations> = {
       contactDesc: 'If you have any questions about our use of cookies, please contact us at:',
       contactEmail: 'support@atps.com',
     },
+    cookieConsent: {
+      title: 'Cookie Preferences',
+      description: 'We use cookies to enhance your browsing experience, analyze site traffic, and personalize content. By clicking "Accept All", you consent to our use of cookies.',
+      learnMore: 'Learn More',
+      privacyPolicy: 'Privacy Policy',
+      rejectAll: 'Reject All',
+      customize: 'Customize',
+      acceptAll: 'Accept All',
+      settingsTitle: 'Cookie Settings',
+      settingsDescription: 'Customize your cookie preferences. Necessary cookies are required for the website to function and cannot be disabled.',
+      cancel: 'Cancel',
+      savePreferences: 'Save Preferences',
+      categories: {
+        necessary: {
+          title: 'Necessary Cookies',
+          description: 'These cookies are essential for the website to function and cannot be disabled. They are usually set in response to actions you take such as logging in or filling in forms.',
+        },
+        analytics: {
+          title: 'Analytics Cookies',
+          description: 'These cookies help us understand how visitors interact with our website by collecting and reporting information anonymously. This helps us improve our platform.',
+        },
+        marketing: {
+          title: 'Marketing Cookies',
+          description: 'These cookies are used to track visitors across websites for marketing purposes. They may be used to provide relevant content and advertisements.',
+        },
+        preferences: {
+          title: 'Preference Cookies',
+          description: 'These cookies remember your choices (language, region, etc.) and provide enhanced, personalized features.',
+        },
+      },
+    },
   },
   fr: {
     header: {
@@ -892,6 +954,37 @@ export const translations: Record<Language, Translations> = {
       contactDesc: 'Si vous avez des questions sur notre utilisation des cookies, veuillez nous contacter à:',
       contactEmail: 'support@atps.com',
     },
+    cookieConsent: {
+      title: 'Préférences de Cookies',
+      description: 'Nous utilisons des cookies pour améliorer votre expérience de navigation, analyser le trafic du site et personnaliser le contenu. En cliquant sur "Tout accepter", vous consentez à notre utilisation des cookies.',
+      learnMore: 'En savoir plus',
+      privacyPolicy: 'Politique de Confidentialité',
+      rejectAll: 'Tout refuser',
+      customize: 'Personnaliser',
+      acceptAll: 'Tout accepter',
+      settingsTitle: 'Paramètres de Cookies',
+      settingsDescription: 'Personnalisez vos préférences de cookies. Les cookies nécessaires sont requis pour le fonctionnement du site web et ne peuvent pas être désactivés.',
+      cancel: 'Annuler',
+      savePreferences: 'Enregistrer les Préférences',
+      categories: {
+        necessary: {
+          title: 'Cookies Nécessaires',
+          description: 'Ces cookies sont essentiels au fonctionnement du site web et ne peuvent pas être désactivés. Ils sont généralement définis en réponse aux actions que vous effectuez comme la connexion ou le remplissage de formulaires.',
+        },
+        analytics: {
+          title: 'Cookies Analytiques',
+          description: 'Ces cookies nous aident à comprendre comment les visiteurs interagissent avec notre site web en collectant et en signalant des informations de manière anonyme. Cela nous aide à améliorer notre plateforme.',
+        },
+        marketing: {
+          title: 'Cookies Marketing',
+          description: 'Ces cookies sont utilisés pour suivre les visiteurs sur différents sites web à des fins marketing. Ils peuvent être utilisés pour fournir un contenu et des publicités pertinents.',
+        },
+        preferences: {
+          title: 'Cookies de Préférences',
+          description: 'Ces cookies mémorisent vos choix (langue, région, etc.) et fournissent des fonctionnalités améliorées et personnalisées.',
+        },
+      },
+    },
   },
   es: {
     header: {
@@ -1188,6 +1281,37 @@ export const translations: Record<Language, Translations> = {
       contactTitle: '8. Contáctanos',
       contactDesc: 'Si tienes alguna pregunta sobre nuestro uso de cookies, contáctanos en:',
       contactEmail: 'support@atps.com',
+    },
+    cookieConsent: {
+      title: 'Preferencias de Cookies',
+      description: 'Utilizamos cookies para mejorar tu experiencia de navegación, analizar el tráfico del sitio y personalizar el contenido. Al hacer clic en "Aceptar todo", consientes nuestro uso de cookies.',
+      learnMore: 'Más Información',
+      privacyPolicy: 'Política de Privacidad',
+      rejectAll: 'Rechazar Todo',
+      customize: 'Personalizar',
+      acceptAll: 'Aceptar Todo',
+      settingsTitle: 'Configuración de Cookies',
+      settingsDescription: 'Personaliza tus preferencias de cookies. Las cookies necesarias son requeridas para que el sitio web funcione y no se pueden desactivar.',
+      cancel: 'Cancelar',
+      savePreferences: 'Guardar Preferencias',
+      categories: {
+        necessary: {
+          title: 'Cookies Necesarias',
+          description: 'Estas cookies son esenciales para el funcionamiento del sitio web y no se pueden desactivar. Por lo general, se establecen en respuesta a acciones que realizas como iniciar sesión o completar formularios.',
+        },
+        analytics: {
+          title: 'Cookies Analíticas',
+          description: 'Estas cookies nos ayudan a entender cómo los visitantes interactúan con nuestro sitio web recopilando e informando información de forma anónima. Esto nos ayuda a mejorar nuestra plataforma.',
+        },
+        marketing: {
+          title: 'Cookies de Marketing',
+          description: 'Estas cookies se utilizan para rastrear a los visitantes en diferentes sitios web con fines de marketing. Pueden usarse para proporcionar contenido y anuncios relevantes.',
+        },
+        preferences: {
+          title: 'Cookies de Preferencias',
+          description: 'Estas cookies recuerdan tus elecciones (idioma, región, etc.) y proporcionan funcionalidades mejoradas y personalizadas.',
+        },
+      },
     },
   },
 };

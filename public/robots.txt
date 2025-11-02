@@ -1,0 +1,42 @@
+# robots.txt for ATPS Aviation
+# Marketing Site: https://myatps.com
+# Application: https://app.myatps.com
+
+User-agent: *
+Allow: /
+
+# Marketing public pages
+Allow: /
+Allow: /faqs
+Allow: /pricing
+Allow: /partnerships
+Allow: /cookie-policy
+Allow: /privacy-policy
+Allow: /terms-of-service
+
+# Sitemap
+Sitemap: https://myatps.com/sitemap.xml
+Sitemap: https://app.myatps.com/sitemap.xml
+
+# Disallow private app pages (require authentication)
+User-agent: *
+Disallow: /dashboard
+Disallow: /questions-bank
+Disallow: /courses
+Disallow: /user-profile
+Disallow: /settings
+Disallow: /community
+Disallow: /news
+Disallow: /blog
+Disallow: /api/
+
+# Crawl-delay for aggressive bots
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: DotBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+

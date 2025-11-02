@@ -2,6 +2,7 @@
 
 import Footer from '@/components/ladingpage/Footer';
 import Header from '@/components/ladingpage/Header';
+import CookieConsent from '@/components/CookieConsent';
 import React, { ReactNode } from 'react';
 import { I18nProvider } from '@/lib/i18n/context';
 
@@ -29,6 +30,9 @@ const Layout = ({children} : Props) => {
             <Footer />
           </div>
         </div>
+        
+        {/* Cookie Consent Banner */}
+        <CookieConsent />
       </div>
     </I18nProvider>
   );
