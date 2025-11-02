@@ -24,7 +24,8 @@ export async function GET(request: NextRequest) {
     }
     
     if (!token) {
-      console.log('[Dashboard API] No token found');
+      console.log('[Dashboard API] No token found - returning 401');
+      console.log('[Dashboard API] All cookies:', Array.from(cookies.getAll()).map(c => ({ name: c.name, hasValue: !!c.value })));
       return NextResponse.json(
         { success: false, message: 'Not authenticated' },
         { status: 401 }
@@ -34,6 +35,7 @@ export async function GET(request: NextRequest) {
     // Get the backend URL from environment (use internal Docker network)
     const backendUrl = process.env.BACKEND_URL || 'http://myatps-backend:3000';
     console.log('[Dashboard API] Calling backend:', backendUrl);
+    console.log('[Dashboard API] Token length:', token.length);
     
     // Forward the request to the backend with authentication
     const response = await fetch(`${backendUrl}/api/dashboard`, {
