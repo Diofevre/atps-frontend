@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-export const dynamic = 'force-dynamic';
 
 const Articles = () => {
   const router = useRouter();

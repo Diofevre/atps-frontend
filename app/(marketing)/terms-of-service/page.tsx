@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { FileText, Scale, AlertTriangle, Users, Shield, Gavel, Copyright, RefreshCw } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n/context';
-export const dynamic = 'force-dynamic';
 
 export default function TermsOfService() {
   const { t } = useI18n();

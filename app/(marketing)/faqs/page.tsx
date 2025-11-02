@@ -4,7 +4,6 @@ import React from 'react';
 import SupportPageMarketing from '../_components/faqs_details';
 import { motion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n/context';
-export const dynamic = 'force-dynamic';
 
 const FAQs = () => {
   const { t } = useI18n();

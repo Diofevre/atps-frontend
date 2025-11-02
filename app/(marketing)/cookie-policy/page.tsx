@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { Cookie, Settings, BarChart3, UserCircle, Shield, Globe, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n/context';
-export const dynamic = 'force-dynamic';
 
 
 export default function CookiePolicy() {
