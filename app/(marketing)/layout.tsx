@@ -6,6 +6,8 @@ import CookieConsent from '@/components/CookieConsent';
 import React, { ReactNode } from 'react';
 import { I18nProvider } from '@/lib/i18n/context';
 
+export const dynamic = 'force-dynamic';
+
 interface Props {
   children: ReactNode;
 }

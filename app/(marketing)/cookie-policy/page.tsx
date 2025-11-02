@@ -5,6 +5,7 @@ import { Cookie, Settings, BarChart3, UserCircle, Shield, Globe, Clock } from 'l
 import { motion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n/context';
 
+export const dynamic = 'force-dynamic';
 
 export default function CookiePolicy() {
   const { t } = useI18n();
