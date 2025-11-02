@@ -7,6 +7,7 @@ import { motion, useInView } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useI18n } from '@/lib/i18n/context';
 import { PartnershipFormOverlay } from '@/components/partnership-form-overlay';
+export const dynamic = 'force-dynamic';
 
 const Partnerships = () => {
   const { t } = useI18n();

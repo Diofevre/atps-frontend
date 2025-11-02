@@ -7,6 +7,7 @@ import { subscriptionService } from '@/lib/subscription/service/subscription-ser
 import { useAuth } from '@/lib/mock-clerk';
 import { BookOpen, Plane, Sparkles, X, Shield, Clock, Users } from 'lucide-react';
 import { useI18n } from '@/lib/i18n/context';
+export const dynamic = 'force-dynamic';
 
 interface Subscription {
   duration: number;
