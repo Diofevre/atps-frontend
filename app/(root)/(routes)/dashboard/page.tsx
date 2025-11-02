@@ -69,10 +69,16 @@ const Dashboard = () => {
   const { data: dashboardData, error, isLoading } = useSWR<DashboardData>(
     '/api/dashboard', // Use relative URL to leverage Next.js rewrites
     async (url: string) => {
+      console.log('[Dashboard] Fetching from:', url);
       const response = await fetch(url, {
         credentials: 'include',
       });
-      if (!response.ok) throw new Error('Failed to fetch dashboard data');
+      console.log('[Dashboard] Response status:', response.status);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('[Dashboard] Error response:', errorText);
+        throw new Error(`Failed to fetch dashboard data: ${response.status} - ${errorText}`);
+      }
       return response.json();
     }
   );
@@ -82,11 +88,13 @@ const Dashboard = () => {
   }
 
   if (error || !dashboardData) {
+    console.error('[Dashboard] Error or no data:', error);
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Error Loading Dashboard</h2>
           <p className="text-gray-600">Please try refreshing the page.</p>
+          {error && <p className="text-red-500 text-sm mt-2">{error.message}</p>}
         </div>
       </div>
     );
