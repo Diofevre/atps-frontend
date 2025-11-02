@@ -1,41 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getTokensFromCookie } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 
+/**
+ * Client-side auth: This API route cannot access cookies set by document.cookie
+ * The fetch from the client should include the token in the headers
+ */
 export async function GET(request: NextRequest) {
   try {
-    console.log('[Dashboard API] Request received');
+    // Get token from Authorization header (set by client-side fetch)
+    const authHeader = request.headers.get('authorization');
     
-    // Get the access token from cookies
-    const cookies = request.cookies;
-    let token: string | null = null;
-    
-    // Try to get token from cookies
-    const tokensCookie = cookies.get('keycloak_tokens');
-    console.log('[Dashboard API] Cookie found:', !!tokensCookie);
-    
-    if (tokensCookie) {
-      const tokens = getTokensFromCookie(tokensCookie.value);
-      if (tokens) {
-        token = tokens.access_token;
-        console.log('[Dashboard API] Token extracted:', !!token);
-      }
-    }
-    
-    if (!token) {
-      console.log('[Dashboard API] No token found - returning 401');
-      console.log('[Dashboard API] All cookies:', Array.from(cookies.getAll()).map(c => ({ name: c.name, hasValue: !!c.value })));
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
         { success: false, message: 'Not authenticated' },
         { status: 401 }
       );
     }
 
+    const token = authHeader.substring(7);
+
     // Get the backend URL from environment (use internal Docker network)
     const backendUrl = process.env.BACKEND_URL || 'http://myatps-backend:3000';
-    console.log('[Dashboard API] Calling backend:', backendUrl);
-    console.log('[Dashboard API] Token length:', token.length);
     
     // Forward the request to the backend with authentication
     const response = await fetch(`${backendUrl}/api/dashboard`, {
@@ -45,8 +31,6 @@ export async function GET(request: NextRequest) {
       },
       cache: 'no-store',
     });
-
-    console.log('[Dashboard API] Backend response status:', response.status);
 
     const data = await response.json();
 

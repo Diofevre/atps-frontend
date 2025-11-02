@@ -70,8 +70,30 @@ const Dashboard = () => {
     '/api/dashboard', // Use relative URL to leverage Next.js rewrites
     async (url: string) => {
       console.log('[Dashboard] Fetching from:', url);
+      
+      // Get token from localStorage (set during login)
+      let token: string | null = null;
+      try {
+        const tokensStr = localStorage.getItem('keycloak_tokens');
+        if (tokensStr) {
+          const tokens = JSON.parse(tokensStr);
+          // Check if token is expired
+          if (tokens.expires_at && tokens.expires_at > Date.now()) {
+            token = tokens.access_token;
+          }
+        }
+      } catch (e) {
+        console.error('[Dashboard] Error reading tokens:', e);
+      }
+      
+      if (!token) {
+        throw new Error('Not authenticated - please login again');
+      }
+      
       const response = await fetch(url, {
-        credentials: 'include',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
       });
       console.log('[Dashboard] Response status:', response.status);
       if (!response.ok) {
