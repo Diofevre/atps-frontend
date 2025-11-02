@@ -15,6 +15,9 @@ export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [language, setLanguageState] = useState<Language>('en');
 
   useEffect(() => {
+    // Only run on client-side
+    if (typeof window === 'undefined') return;
+    
     // Load language from localStorage first
     const savedLang = localStorage.getItem('language') as Language;
     if (savedLang && (savedLang === 'en' || savedLang === 'fr' || savedLang === 'es')) {
