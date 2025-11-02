@@ -3,6 +3,8 @@ import JournalPage from '@/components/ladingpage/journal-page'
 import SliderMarketing from '@/components/ladingpage/slider-marketing'
 import type { Metadata } from "next"
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'ATPS Aviation - Premier ATPL Training Platform | 25,000+ Exam Questions',
   description: 'Master aviation effortlessly with ATPS. Your complete ATPL training platform featuring 25,000+ verified exam questions, AI-powered learning, comprehensive courses, flight simulator, and advanced analytics for aspiring pilots.',
