@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     console.log('✅ Token extracted, length:', accessToken.length);
     
     // Appeler le backend
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+    const backendUrl = process.env.BACKEND_URL || 'http://myatps-backend:3000';
     console.log('📡 Calling backend:', `${backendUrl}/api/users/me`);
     
     const response = await fetch(`${backendUrl}/api/users/me`, {

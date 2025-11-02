@@ -10,7 +10,7 @@ export async function GET(
     const { subjectCode } = params;
     
     // Récupérer le PDF depuis le backend
-    const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+    const API_URL = process.env.BACKEND_URL || 'http://myatps-backend:3000';
     const response = await fetch(`${API_URL}/api/course-pdf/${subjectCode}`);
     
     if (!response.ok) {

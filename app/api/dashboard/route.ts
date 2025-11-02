@@ -25,8 +25,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get the backend URL from environment
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+    // Get the backend URL from environment (use internal Docker network)
+    const backendUrl = process.env.BACKEND_URL || 'http://myatps-backend:3000';
     
     // Forward the request to the backend with authentication
     const response = await fetch(`${backendUrl}/api/dashboard`, {

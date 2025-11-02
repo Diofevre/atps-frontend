@@ -17,7 +17,7 @@ export async function GET(
     }
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/news/${params.slug}`,
+      `${process.env.BACKEND_URL}/api/news/${params.slug}`,
       {
         headers,
       }
