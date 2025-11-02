@@ -1,6 +1,8 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
-import { Compass, Home, Dashboard, ArrowLeft } from 'lucide-react';
+import { Compass, Home, LayoutDashboard, ArrowLeft } from 'lucide-react';
 
 export default function NotFound() {
   return (
@@ -38,7 +40,7 @@ export default function NotFound() {
               href="/dashboard"
               className="group inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-all duration-300 hover:scale-105 shadow-lg"
             >
-              <Dashboard className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <LayoutDashboard className="w-5 h-5 group-hover:scale-110 transition-transform" />
               Go to Dashboard
             </Link>
 
