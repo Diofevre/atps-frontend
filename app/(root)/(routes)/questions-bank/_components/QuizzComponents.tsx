@@ -282,12 +282,16 @@ const QuizzComponents = () => {
           
           console.log('📤 Sending request to /api/tests/start:', bodyData);
   
+          // Get token from localStorage
+          const accessToken = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+          
           const response = await fetch(
             `/api/tests/start`,
             {
               method: 'POST',
               headers: { 
-                'Content-Type': 'application/json' 
+                'Content-Type': 'application/json',
+                ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
               },
               body: JSON.stringify(bodyData),
             }
