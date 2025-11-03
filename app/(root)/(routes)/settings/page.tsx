@@ -58,20 +58,20 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] bg-white text-gray-800 border border-gray-200 shadow-lg">
+      <DialogContent className="sm:max-w-[425px] bg-card text-card-foreground border border-border shadow-lg">
         <DialogHeader>
           <div className="flex items-center gap-4">
-            <Icon className={`w-8 h-8 ${type === 'warning' ? 'text-red-500' : 'text-blue-600'}`} />
+            <Icon className={`w-8 h-8 ${type === 'warning' ? 'text-red-500 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'}`} />
             <DialogTitle className="text-xl font-semibold">{title}</DialogTitle>
           </div>
-          <DialogDescription className="text-gray-600 mt-4">
+          <DialogDescription className="text-muted-foreground mt-4">
             {description}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="mt-6">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors"
+            className="px-4 py-2 text-sm font-medium text-text-secondary hover:text-foreground transition-colors"
           >
             Cancel
           </button>
@@ -79,8 +79,8 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
             onClick={onConfirm}
             className={`px-4 py-2 rounded-lg text-sm font-medium ${
               type === 'warning'
-                ? 'bg-red-500 hover:bg-red-600 text-white'
-                : 'bg-blue-600 hover:bg-blue-700 text-white'
+                ? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white'
+                : 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white'
             } transition-colors`}
           >
             {actionLabel}
@@ -93,32 +93,32 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 
 const SubscriptionSkeleton = () => {
   return (
-    <div className="min-h-screen pt-4 pb-16">
+    <div className="min-h-screen pt-4 pb-16 bg-background">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Skeleton */}
         <div className="mb-8">
-          <Skeleton className="h-8 w-64 mb-2" />
-          <Skeleton className="h-5 w-96" />
+          <Skeleton className="h-8 w-64 mb-2 bg-muted" />
+          <Skeleton className="h-5 w-96 bg-muted" />
         </div>
 
         {/* Current Subscription Status Skeleton */}
-        <div className="bg-white rounded-2xl border border-white shadow-md p-8 mb-12">
+        <div className="bg-card rounded-2xl border border-border shadow-md p-8 mb-12">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
-              <Skeleton className="h-12 w-12 rounded-full" />
+              <Skeleton className="h-12 w-12 rounded-full bg-muted" />
               <div>
-                <Skeleton className="h-6 w-48 mb-2" />
-                <Skeleton className="h-4 w-36" />
+                <Skeleton className="h-6 w-48 mb-2 bg-muted" />
+                <Skeleton className="h-4 w-36 bg-muted" />
               </div>
             </div>
-            <Skeleton className="h-10 w-32" />
+            <Skeleton className="h-10 w-32 bg-muted" />
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                <Skeleton className="h-4 w-20 mb-2" />
-                <Skeleton className="h-6 w-32" />
+              <div key={i} className="bg-muted rounded-xl p-4 border border-border">
+                <Skeleton className="h-4 w-20 mb-2 bg-card" />
+                <Skeleton className="h-6 w-32 bg-card" />
               </div>
             ))}
           </div>
@@ -127,16 +127,16 @@ const SubscriptionSkeleton = () => {
         {/* Plans Section Skeleton */}
         <div className="grid gap-8">
           <div className="text-start">
-            <Skeleton className="h-8 w-48 mb-2" />
-            <Skeleton className="h-5 w-96" />
+            <Skeleton className="h-8 w-48 mb-2 bg-muted" />
+            <Skeleton className="h-5 w-96 bg-muted" />
           </div>
 
           {/* Billing Cycle Selector Skeleton */}
-          <div className="bg-white rounded-xl border border-white shadow-sm p-6">
-            <Skeleton className="h-6 w-48 mb-4" />
+          <div className="bg-card rounded-xl border border-border shadow-sm p-6">
+            <Skeleton className="h-6 w-48 mb-4 bg-muted" />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[...Array(4)].map((_, i) => (
-                <Skeleton key={i} className="h-20 w-full rounded-lg" />
+                <Skeleton key={i} className="h-20 w-full rounded-lg bg-muted" />
               ))}
             </div>
           </div>
@@ -144,29 +144,29 @@ const SubscriptionSkeleton = () => {
           {/* Plans Grid Skeleton */}
           <div className="grid md:grid-cols-2 gap-8">
             {[...Array(2)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-white shadow-md p-8">
+              <div key={i} className="bg-card rounded-2xl border border-border shadow-md p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <Skeleton className="h-6 w-6" />
-                  <Skeleton className="h-8 w-32" />
+                  <Skeleton className="h-6 w-6 bg-muted" />
+                  <Skeleton className="h-8 w-32 bg-muted" />
                 </div>
 
                 <div className="mb-6">
-                  <Skeleton className="h-10 w-32 mb-2" />
-                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-10 w-32 mb-2 bg-muted" />
+                  <Skeleton className="h-4 w-24 bg-muted" />
                 </div>
 
-                <Skeleton className="h-4 w-full mb-6" />
+                <Skeleton className="h-4 w-full mb-6 bg-muted" />
 
                 <div className="space-y-4 mb-8">
                   {[...Array(4)].map((_, j) => (
                     <div key={j} className="flex items-center gap-3">
-                      <Skeleton className="h-5 w-5" />
-                      <Skeleton className="h-4 w-48" />
+                      <Skeleton className="h-5 w-5 bg-muted" />
+                      <Skeleton className="h-4 w-48 bg-muted" />
                     </div>
                   ))}
                 </div>
 
-                <Skeleton className="h-12 w-full rounded-xl" />
+                <Skeleton className="h-12 w-full rounded-xl bg-muted" />
               </div>
             ))}
           </div>
@@ -385,10 +385,10 @@ const SubscriptionPage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center">
-        <div className="bg-white p-8 rounded-xl shadow-xl">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">Error</h2>
-          <p className="text-gray-600">{error.message}</p>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="bg-card p-8 rounded-xl shadow-xl border border-border">
+          <h2 className="text-2xl font-bold text-red-500 dark:text-red-400 mb-4">Error</h2>
+          <p className="text-text-secondary">{error.message}</p>
         </div>
       </div>
     );
@@ -399,30 +399,30 @@ const SubscriptionPage = () => {
   }
 
   return (
-    <div className="min-h-screen pt-4 pb-16">
+    <div className="min-h-screen pt-4 pb-16 bg-background">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-gray-900 mb-1">Subscription Management</h1>
-          <p className="text-gray-600">
+          <h1 className="text-2xl font-semibold text-foreground mb-1">Subscription Management</h1>
+          <p className="text-text-secondary">
             Manage your subscription settings and choose the perfect plan for your aviation journey
           </p>
         </div>
         {/* Current Subscription Status */}
-        <div className="bg-white rounded-2xl border border-white shadow-md p-8 mb-12">
+        <div className="bg-card rounded-2xl border border-border shadow-md p-8 mb-12">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
               <div className="h-12 w-12 rounded-full bg-[#EECE84]/10 border border-[#EECE84] flex items-center justify-center">
                 <CreditCard className="h-6 w-6 text-[#EECE84]" />
               </div>
               <div>
-                <h2 className="text-xl text-gray-800">Current Subscription</h2>
-                <p className="text-gray-600 text-sm">Manage your subscription settings</p>
+                <h2 className="text-xl text-card-foreground">Current Subscription</h2>
+                <p className="text-text-secondary text-sm">Manage your subscription settings</p>
               </div>
             </div>
             {userSubscription.subscription_status === 'active' ? (
               <button
                 onClick={handleCancel}
-                className="px-4 py-2 bg-red-50 text-red-600 text-sm rounded-lg hover:bg-red-100 transition-colors"
+                className="px-4 py-2 bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 text-sm rounded-lg hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors"
               >
                 Cancel Subscription
               </button>
@@ -437,32 +437,32 @@ const SubscriptionPage = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-              <h3 className="text-sm text-gray-500 mb-1">Plan</h3>
-              <p className="text-xl text-gray-800 capitalize">{userSubscription.subscription_plan}</p>
+            <div className="bg-muted rounded-xl p-4 border border-border">
+              <h3 className="text-sm text-muted-foreground mb-1">Plan</h3>
+              <p className="text-xl text-card-foreground capitalize">{userSubscription.subscription_plan}</p>
             </div>
-            <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-              <h3 className="text-sm text-gray-500 mb-1">Status</h3>
+            <div className="bg-muted rounded-xl p-4 border border-border">
+              <h3 className="text-sm text-muted-foreground mb-1">Status</h3>
               <div className="flex items-center gap-2">
                 <div className={`w-2 h-2 rounded-full ${
                   userSubscription.subscription_status === 'active' 
-                    ? 'bg-green-500' 
-                    : 'bg-red-500'
+                    ? 'bg-green-500 dark:bg-green-400' 
+                    : 'bg-red-500 dark:bg-red-400'
                 }`} />
-                <p className="text-xl text-gray-800 capitalize">
+                <p className="text-xl text-card-foreground capitalize">
                   {userSubscription.subscription_status}
                 </p>
               </div>
             </div>
-            <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-              <h3 className="text-sm text-gray-500 mb-1">Billing Cycle</h3>
-              <p className="text-xl text-gray-800">
+            <div className="bg-muted rounded-xl p-4 border border-border">
+              <h3 className="text-sm text-muted-foreground mb-1">Billing Cycle</h3>
+              <p className="text-xl text-card-foreground">
                 {billingCycles.find(c => c.id === userSubscription.billing_cycle)?.label}
               </p>
             </div>
-            <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-              <h3 className="text-sm text-gray-500 mb-1">Price</h3>
-              <p className="text-xl text-gray-800">€{userSubscription.price_per_month}/month</p>
+            <div className="bg-muted rounded-xl p-4 border border-border">
+              <h3 className="text-sm text-muted-foreground mb-1">Price</h3>
+              <p className="text-xl text-card-foreground">€{userSubscription.price_per_month}/month</p>
             </div>
           </div>
 
@@ -478,15 +478,15 @@ const SubscriptionPage = () => {
         {/* Plans Comparison */}
         <div className="grid gap-8">
           <div className="text-start">
-            <h2 className="text-2xl font-bold text-gray-800 mb-1">Available Plans</h2>
-            <p className="text-gray-600">
+            <h2 className="text-2xl font-bold text-foreground mb-1">Available Plans</h2>
+            <p className="text-text-secondary">
               Choose the perfect plan for your needs. All plans include access to our comprehensive question bank.
             </p>
           </div>
 
           {/* Billing Cycle Selector */}
-          <div className="bg-white rounded-xl border border-white shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Select Billing Cycle</h3>
+          <div className="bg-card rounded-xl border border-border shadow-sm p-6">
+            <h3 className="text-lg font-semibold text-card-foreground mb-4">Select Billing Cycle</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {billingCycles.map((cycle) => (
                 <button
@@ -495,10 +495,10 @@ const SubscriptionPage = () => {
                   className={`p-4 rounded-lg border ${
                     selectedCycle === cycle.id
                       ? 'border-[#EECE84] bg-[#EECE84]/10'
-                      : 'border-gray-200 bg-white hover:bg-gray-50'
+                      : 'border-border bg-card hover:bg-muted'
                   } transition-all`}
                 >
-                  <h4 className="text-gray-800 font-medium">{cycle.label}</h4>
+                  <h4 className="text-card-foreground font-medium">{cycle.label}</h4>
                   {cycle.discount > 0 && (
                     <p className="text-sm text-[#EECE84]">Save {cycle.discount}%</p>
                   )}
@@ -516,39 +516,39 @@ const SubscriptionPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className={`relative ${plan.highlight ? 'md:-mt-4' : ''}`}
               >
-                <div className={`h-full bg-white rounded-2xl border ${
-                  plan.highlight ? 'border-[#EECE84] shadow-lg' : 'border-white shadow-md'
+                <div className={`h-full bg-card rounded-2xl border ${
+                  plan.highlight ? 'border-[#EECE84] shadow-lg' : 'border-border shadow-md'
                 } p-8`}>
                   <div className="flex items-center gap-3 mb-6">
                     <plan.icon className={`w-6 h-6 ${
                       plan.highlight ? 'text-[#EECE84]' : 'text-[#EECE84]/80'
                     }`} />
-                    <h3 className="text-2xl font-bold text-gray-800">{plan.name}</h3>
+                    <h3 className="text-2xl font-bold text-card-foreground">{plan.name}</h3>
                   </div>
 
                   <div className="mb-6">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-4xl font-bold text-gray-800">
+                      <span className="text-4xl font-bold text-card-foreground">
                         €{plan.price[selectedCycle === 12 ? 'annual' : 
                           selectedCycle === 6 ? 'biannual' : 
                           selectedCycle === 3 ? 'quarterly' : 'monthly']}
                       </span>
-                      <span className="text-gray-500">/month</span>
+                      <span className="text-muted-foreground">/month</span>
                     </div>
-                    <p className="text-sm text-gray-500 mt-2">
+                    <p className="text-sm text-muted-foreground mt-2">
                       Billed {selectedCycle === 1 ? 'monthly' : 
                         selectedCycle === 3 ? 'quarterly' :
                         selectedCycle === 6 ? 'bi-annually' : 'annually'}
                     </p>
                   </div>
 
-                  <p className="text-gray-600 mb-6">{plan.description}</p>
+                  <p className="text-text-secondary mb-6">{plan.description}</p>
 
                   <div className="space-y-4 mb-8">
                     {plan.features.map((feature, index) => (
                       <div key={index} className="flex items-center gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-green-500" />
-                        <span className="text-gray-700">{feature}</span>
+                        <CheckCircle2 className="w-5 h-5 text-green-500 dark:text-green-400" />
+                        <span className="text-text-secondary">{feature}</span>
                       </div>
                     ))}
                   </div>
@@ -558,10 +558,10 @@ const SubscriptionPage = () => {
                     disabled={isLoading || (plan.id === userSubscription.subscription_plan && selectedCycle === userSubscription.billing_cycle)}
                     className={`w-full py-3 px-6 rounded-xl font-medium transition-all ${
                       plan.id === userSubscription.subscription_plan && selectedCycle === userSubscription.billing_cycle
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        ? 'bg-muted text-muted-foreground cursor-not-allowed'
                         : plan.highlight
                         ? 'bg-[#EECE84]/80 text-black hover:bg-[#EECE84]'
-                        : 'bg-[#EECE84]/10 text-[#EECE84] hover:bg-[#EECE84]/10 border border-[#EECE84]'
+                        : 'bg-[#EECE84]/10 text-[#EECE84] hover:bg-[#EECE84]/20 border border-[#EECE84]'
                     }`}
                   >
                     {plan.id === userSubscription.subscription_plan && selectedCycle === userSubscription.billing_cycle
@@ -592,14 +592,16 @@ const SubscriptionPage = () => {
       {notification && (
         <div
           className={`fixed bottom-4 right-4 max-w-md p-4 rounded-xl shadow-lg ${
-            notification.type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'
+            notification.type === 'success' 
+              ? 'bg-green-100 dark:bg-green-950/30 text-green-800 dark:text-green-300 border border-green-200 dark:border-green-800' 
+              : 'bg-red-100 dark:bg-red-950/30 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-800'
           }`}
         >
           <div className="flex items-center gap-2">
             <span>{notification.message}</span>
             <button
               onClick={() => setNotification(null)}
-              className="ml-auto hover:text-gray-600"
+              className="ml-auto hover:text-foreground"
               title='Close'
             >
               <X className="h-5 w-5" />
