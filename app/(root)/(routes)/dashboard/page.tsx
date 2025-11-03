@@ -121,10 +121,10 @@ const Dashboard = () => {
   if (error || !dashboardData) {
     console.error('[Dashboard] Error or no data:', error);
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Error Loading Dashboard</h2>
-          <p className="text-gray-600">Please try refreshing the page.</p>
+          <h2 className="text-2xl font-bold text-foreground mb-2">Error Loading Dashboard</h2>
+          <p className="text-text-secondary">Please try refreshing the page.</p>
           {error && <p className="text-red-500 text-sm mt-2">{error.message}</p>}
         </div>
       </div>
@@ -132,7 +132,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 p-6">
+    <div className="min-h-screen bg-main-gradient p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         
         {/* Section 1 - Welcome Message */}
@@ -142,7 +142,7 @@ const Dashboard = () => {
           transition={{ duration: 0.5 }}
           className="mb-6"
         >
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-foreground">
             Welcome back, {dashboardData.user?.username || dashboardData.user?.name || 'John'}! 👋
           </h1>
         </motion.div>
@@ -155,7 +155,7 @@ const Dashboard = () => {
           className="mb-6 cursor-pointer"
           onClick={() => window.open(dashboardData.latestArticle.link, '_blank')}
         >
-          <div className="flex h-80 bg-white rounded-2xl border border-blue-200 shadow-lg overflow-hidden">
+          <div className="flex h-80 bg-card rounded-2xl border border-border-blue shadow-lg overflow-hidden">
             {/* Image - Left (3/8 = 37.5%) */}
             <div className="w-[37.5%] relative">
               <img
@@ -165,8 +165,8 @@ const Dashboard = () => {
               />
               {/* Time on image */}
               <div className="absolute bottom-4 left-4">
-                <div className="bg-black/70 backdrop-blur-sm px-3 py-1 rounded-full">
-                  <div className="text-white text-sm">
+                <div className="bg-foreground/70 backdrop-blur-sm px-3 py-1 rounded-full">
+                  <div className="text-white dark:text-slate-900 text-sm">
                     {dashboardData.latestArticle.pubDate ? new Date(dashboardData.latestArticle.pubDate).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : 'Time not available'}
         </div>
         </div>
@@ -175,12 +175,12 @@ const Dashboard = () => {
             
             {/* Content - Right (5/8 = 62.5%) */}
             <div className="w-[62.5%] px-8 py-2 flex flex-col h-full">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 leading-tight">
+              <h3 className="text-lg font-bold text-card-foreground mb-2 leading-tight">
                 {dashboardData.latestArticle.title}
               </h3>
               
               <div 
-                className="text-gray-700 leading-relaxed text-sm overflow-hidden flex-1 relative"
+                className="text-text-secondary leading-relaxed text-sm overflow-hidden flex-1 relative"
                 style={{
                   fontSize: '0.875rem',
                   lineHeight: '1.5rem',
@@ -193,25 +193,25 @@ const Dashboard = () => {
                 />
               </div>
               <style jsx global>{`
-                .text-gray-700 p {
+                .text-text-secondary p {
                   margin-bottom: 0.5rem !important;
-                  color: #374151 !important;
+                  color: hsl(var(--text-secondary)) !important;
                 }
-                .text-gray-700 strong {
+                .text-text-secondary strong {
                   font-weight: 600 !important;
-                  color: #111827 !important;
+                  color: hsl(var(--foreground)) !important;
                 }
-                .text-gray-700 ul, 
-                .text-gray-700 ol {
+                .text-text-secondary ul, 
+                .text-text-secondary ol {
                   margin-bottom: 0.5rem !important;
                   padding-left: 1.5rem !important;
                 }
-                .text-gray-700 li {
+                .text-text-secondary li {
                   margin-bottom: 0.25rem !important;
                 }
               `}</style>
               
-              <div className="flex items-center text-blue-600 text-sm font-medium pt-2">
+              <div className="flex items-center text-blue-600 dark:text-blue-400 text-sm font-medium pt-2">
                 <span>Read more</span>
                 <ChevronRight className="w-4 h-4 ml-1" />
             </div>
@@ -226,26 +226,26 @@ const Dashboard = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-white rounded-2xl p-6 border border-blue-200 shadow-lg"
+            className="bg-card rounded-2xl p-6 border border-border-blue shadow-lg"
           >
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Today's courses</h2>
+            <h2 className="text-xl font-bold text-card-foreground mb-6">Today's courses</h2>
             
             {/* Courses Completed */}
             <div className="mb-6">
-              <div className="text-4xl font-bold text-gray-900 mb-2">
+              <div className="text-4xl font-bold text-card-foreground mb-2">
                 {dashboardData.statistics.questions.seen || 0}
               </div>
-              <div className="text-gray-600 text-sm mb-1">Courses completed</div>
-              <div className="text-red-500 text-xs">▼ {Math.floor(Math.random() * 30 + 20)}% vs last week</div>
+              <div className="text-text-secondary text-sm mb-1">Courses completed</div>
+              <div className="text-red-500 dark:text-red-400 text-xs">▼ {Math.floor(Math.random() * 30 + 20)}% vs last week</div>
             </div>
 
             {/* Tests Completed */}
                 <div>
-              <div className="text-4xl font-bold text-gray-900 mb-2">
+              <div className="text-4xl font-bold text-card-foreground mb-2">
                 {dashboardData.statistics.tests.finished || 0}
               </div>
-              <div className="text-gray-600 text-sm mb-1">Number of tests</div>
-              <div className="text-red-500 text-xs">▼ {Math.floor(Math.random() * 30 + 20)}% vs last week</div>
+              <div className="text-text-secondary text-sm mb-1">Number of tests</div>
+              <div className="text-red-500 dark:text-red-400 text-xs">▼ {Math.floor(Math.random() * 30 + 20)}% vs last week</div>
             </div>
           </motion.div>
 
@@ -254,23 +254,23 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="bg-white rounded-2xl p-6 border border-blue-200 shadow-lg"
+            className="bg-card rounded-2xl p-6 border border-border-blue shadow-lg"
           >
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Performance</h2>
+            <h2 className="text-xl font-bold text-card-foreground mb-6">Performance</h2>
             
             {/* Win Rate Gauge */}
             <div className="mb-6">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-600 text-sm">Success Rate</span>
-                <span className="text-gray-900 font-bold">{dashboardData.statistics.questions.generalScore?.toFixed(0) || 37}%</span>
+                <span className="text-text-secondary text-sm">Success Rate</span>
+                <span className="text-card-foreground font-bold">{dashboardData.statistics.questions.generalScore?.toFixed(0) || 37}%</span>
               </div>
-              <div className="relative h-3 bg-gray-200 rounded-full overflow-hidden">
+              <div className="relative h-3 bg-muted rounded-full overflow-hidden">
                 <div 
-                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-green-500 to-green-400 rounded-full"
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-green-500 to-green-400 dark:from-green-400 dark:to-green-300 rounded-full"
                   style={{ width: `${Math.min(dashboardData.statistics.questions.generalScore || 37, 100)}%` }}
                 />
               </div>
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
+              <div className="flex justify-between text-xs text-muted-foreground mt-1">
                 <span>0%</span>
                 <span>100%</span>
               </div>
@@ -279,16 +279,16 @@ const Dashboard = () => {
             {/* Avg Score Gauge */}
             <div className="mb-6">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-600 text-sm">Avg. Score</span>
-                <span className="text-gray-900 font-bold">{dashboardData.statistics.questions.generalScore?.toFixed(0) || 54}%</span>
+                <span className="text-text-secondary text-sm">Avg. Score</span>
+                <span className="text-card-foreground font-bold">{dashboardData.statistics.questions.generalScore?.toFixed(0) || 54}%</span>
               </div>
-              <div className="relative h-3 bg-gray-200 rounded-full overflow-hidden">
+              <div className="relative h-3 bg-muted rounded-full overflow-hidden">
                 <div 
-                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-green-500 to-green-400 rounded-full"
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-green-500 to-green-400 dark:from-green-400 dark:to-green-300 rounded-full"
                   style={{ width: `${Math.min(dashboardData.statistics.questions.generalScore || 54, 100)}%` }}
                 />
               </div>
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
+              <div className="flex justify-between text-xs text-muted-foreground mt-1">
                 <span>0%</span>
                 <span>100%</span>
               </div>
@@ -297,16 +297,16 @@ const Dashboard = () => {
             {/* Avg. Study Time */}
             <div>
               <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-600 text-sm">Avg. Study Time</span>
-                <span className="text-gray-900 font-bold">13 min</span>
+                <span className="text-text-secondary text-sm">Avg. Study Time</span>
+                <span className="text-card-foreground font-bold">13 min</span>
               </div>
-              <div className="relative h-3 bg-gray-200 rounded-full overflow-hidden">
+              <div className="relative h-3 bg-muted rounded-full overflow-hidden">
                 <div 
-                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-red-500 to-red-400 rounded-full"
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-red-500 to-red-400 dark:from-red-400 dark:to-red-300 rounded-full"
                   style={{ width: '65%' }}
                 />
               </div>
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
+              <div className="flex justify-between text-xs text-muted-foreground mt-1">
                 <span>0 min</span>
                 <span>20 min</span>
               </div>
@@ -318,9 +318,9 @@ const Dashboard = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="bg-white rounded-2xl p-6 border border-blue-200 shadow-lg"
+            className="bg-card rounded-2xl p-6 border border-border-blue shadow-lg"
           >
-            <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-card-foreground mb-6 flex items-center gap-2">
               <Bell className="w-5 h-5" />
               Notifications
             </h2>
@@ -336,14 +336,14 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
-            className="lg:col-span-3 bg-white rounded-2xl p-6 border border-blue-200 shadow-lg"
+            className="lg:col-span-3 bg-card rounded-2xl p-6 border border-border-blue shadow-lg"
           >
             <div className="mb-6">
-              <div className="text-4xl font-bold text-gray-900 mb-2">
+              <div className="text-4xl font-bold text-card-foreground mb-2">
                 {(dashboardData.statistics.tests.seen || 0) + (dashboardData.statistics.exams.seen || 0)}
               </div>
-              <div className="text-gray-600 text-sm mb-1">Test and exam this week</div>
-              <div className="text-red-500 text-xs">▼ {Math.floor(Math.random() * 5 + 2)}% vs last week</div>
+              <div className="text-text-secondary text-sm mb-1">Test and exam this week</div>
+              <div className="text-red-500 dark:text-red-400 text-xs">▼ {Math.floor(Math.random() * 5 + 2)}% vs last week</div>
             </div>
 
             {/* Line Chart */}
@@ -357,7 +357,7 @@ const Dashboard = () => {
                     y1={y + 10}
                     x2="380"
                     y2={y + 10}
-                    stroke="#e5e7eb"
+                    stroke="hsl(var(--border))"
                     strokeWidth="1"
                   />
                 ))}
@@ -366,6 +366,7 @@ const Dashboard = () => {
                   fill="none"
                   stroke="#3b82f6"
                   strokeWidth="3"
+                  className="dark:stroke-blue-400"
                   points="50,130 100,70 150,70 200,50 250,30 300,100 350,120"
                 />
                 {/* Exam line (yellow) */}
@@ -373,6 +374,7 @@ const Dashboard = () => {
                   fill="none"
                   stroke="#eab308"
                   strokeWidth="3"
+                  className="dark:stroke-yellow-400"
                   points="50,100 100,80 150,60 200,70 250,80 300,60 350,50"
                 />
                 {/* Data points */}
@@ -385,12 +387,12 @@ const Dashboard = () => {
                   { x: 300, y: 100 },
                   { x: 350, y: 120 }
                 ].map((point, i) => (
-                  <circle key={i} cx={point.x} cy={point.y} r="4" fill="#3b82f6" />
+                  <circle key={i} cx={point.x} cy={point.y} r="4" fill="#3b82f6" className="dark:fill-blue-400" />
                 ))}
               </svg>
               
               {/* X-axis labels */}
-              <div className="absolute bottom-0 left-12 right-8 flex justify-between text-xs text-gray-500">
+              <div className="absolute bottom-0 left-12 right-8 flex justify-between text-xs text-muted-foreground">
                 <span>Mon</span>
                 <span>Tue</span>
                 <span>Wed</span>
@@ -403,12 +405,12 @@ const Dashboard = () => {
               {/* Legend */}
               <div className="absolute top-2 right-4 flex gap-4 text-xs">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                  <span className="text-gray-700">Study</span>
+                  <div className="w-3 h-3 rounded-full bg-blue-500 dark:bg-blue-400"></div>
+                  <span className="text-text-secondary">Study</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                  <span className="text-gray-700">Exam</span>
+                  <div className="w-3 h-3 rounded-full bg-yellow-500 dark:bg-yellow-400"></div>
+                  <span className="text-text-secondary">Exam</span>
                 </div>
               </div>
             </div>
@@ -419,9 +421,9 @@ const Dashboard = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
-            className="lg:col-span-1 bg-white rounded-2xl p-6 border border-blue-200 shadow-lg"
+            className="lg:col-span-1 bg-card rounded-2xl p-6 border border-border-blue shadow-lg"
           >
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Leaderboard</h2>
+            <h2 className="text-xl font-bold text-card-foreground mb-6">Leaderboard</h2>
             <div className="space-y-3">
               {[
                 { name: 'Mary', score: 785 },
@@ -430,7 +432,7 @@ const Dashboard = () => {
                 { name: 'Taylor', score: 506 },
                 { name: 'Ralph', score: 471 },
               ].map((user, index) => (
-                <div key={index} className="flex items-center justify-between text-gray-900">
+                <div key={index} className="flex items-center justify-between text-card-foreground">
                   <span className="font-medium">{user.name}</span>
                   <span className="font-bold">{user.score} pts</span>
               </div>
@@ -444,14 +446,14 @@ const Dashboard = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.8 }}
-          className="flex items-center justify-between mt-8 pt-6 border-t border-gray-200"
+          className="flex items-center justify-between mt-8 pt-6 border-t border-border"
         >
           <div className="flex items-center gap-2">
-            <Plane className="w-6 h-6 text-blue-600" />
-            <span className="text-gray-900 font-bold text-lg">ATPS</span>
-            <span className="text-gray-600 text-sm ml-2">Live Monitoring</span>
+            <Plane className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            <span className="text-foreground font-bold text-lg">ATPS</span>
+            <span className="text-text-secondary text-sm ml-2">Live Monitoring</span>
           </div>
-          <div className="text-gray-900 font-medium text-lg">
+          <div className="text-foreground font-medium text-lg">
             <LiveClock />
           </div>
         </motion.div>
@@ -474,8 +476,8 @@ const LiveClock = () => {
 
   return (
     <div className="flex items-center gap-2">
-      <Clock className="w-5 h-5" />
-      <span>{time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
+      <Clock className="w-5 h-5 text-foreground" />
+      <span className="text-foreground">{time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
     </div>
   );
 };
@@ -539,31 +541,31 @@ const NotificationsCarousel = () => {
     switch (color) {
       case 'green':
         return {
-          bg: 'bg-green-50',
-          border: 'border-green-200',
-          iconBg: 'bg-green-100',
-          iconText: 'text-green-600'
+          bg: 'bg-green-50 dark:bg-green-950/30',
+          border: 'border-green-200 dark:border-green-800',
+          iconBg: 'bg-green-100 dark:bg-green-900/50',
+          iconText: 'text-green-600 dark:text-green-400'
         };
       case 'yellow':
         return {
-          bg: 'bg-yellow-50',
-          border: 'border-yellow-200',
-          iconBg: 'bg-yellow-100',
-          iconText: 'text-yellow-600'
+          bg: 'bg-yellow-50 dark:bg-yellow-950/30',
+          border: 'border-yellow-200 dark:border-yellow-800',
+          iconBg: 'bg-yellow-100 dark:bg-yellow-900/50',
+          iconText: 'text-yellow-600 dark:text-yellow-400'
         };
       case 'blue':
         return {
-          bg: 'bg-blue-50',
-          border: 'border-blue-200',
-          iconBg: 'bg-blue-100',
-          iconText: 'text-blue-600'
+          bg: 'bg-blue-50 dark:bg-blue-950/30',
+          border: 'border-blue-200 dark:border-blue-800',
+          iconBg: 'bg-blue-100 dark:bg-blue-900/50',
+          iconText: 'text-blue-600 dark:text-blue-400'
         };
       default:
         return {
-          bg: 'bg-gray-50',
-          border: 'border-gray-200',
-          iconBg: 'bg-gray-100',
-          iconText: 'text-gray-600'
+          bg: 'bg-muted',
+          border: 'border-border',
+          iconBg: 'bg-muted',
+          iconText: 'text-text-secondary'
         };
     }
   };
@@ -586,14 +588,14 @@ const NotificationsCarousel = () => {
           </div>
           <div className="flex-1 flex flex-col justify-between h-full">
             <div>
-              <p className="text-sm font-medium text-gray-900 mb-1">
+              <p className="text-sm font-medium text-card-foreground mb-1">
                 {currentNotification.title}
               </p>
-              <p className="text-xs text-gray-600 mb-2">
+              <p className="text-xs text-text-secondary mb-2">
                 {currentNotification.message}
               </p>
             </div>
-            <p className="text-xs text-gray-500 mt-auto">
+            <p className="text-xs text-muted-foreground mt-auto">
               {currentNotification.time}
             </p>
           </div>
@@ -607,7 +609,7 @@ const NotificationsCarousel = () => {
             key={index}
             onClick={() => setCurrentIndex(index)}
             className={`w-2 h-2 rounded-full transition-all ${
-              index === currentIndex ? 'bg-blue-600 w-6' : 'bg-gray-300'
+              index === currentIndex ? 'bg-blue-600 dark:bg-blue-400 w-6' : 'bg-muted-foreground/30'
             }`}
           />
         ))}
@@ -616,33 +618,33 @@ const NotificationsCarousel = () => {
       {/* Arrow Buttons */}
       <button
         onClick={goToPrevious}
-        className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white hover:bg-gray-50 border border-gray-200 rounded-full p-2 transition-all shadow-sm"
+        className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-card hover:bg-muted border border-border rounded-full p-2 transition-all shadow-sm"
       >
-        <ChevronLeft className="w-4 h-4 text-gray-700" />
+        <ChevronLeft className="w-4 h-4 text-card-foreground" />
       </button>
       <button
         onClick={goToNext}
-        className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white hover:bg-gray-50 border border-gray-200 rounded-full p-2 transition-all shadow-sm"
+        className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-card hover:bg-muted border border-border rounded-full p-2 transition-all shadow-sm"
       >
-        <ChevronRight className="w-4 h-4 text-gray-700" />
+        <ChevronRight className="w-4 h-4 text-card-foreground" />
       </button>
     </div>
   );
 };
 
 const DashboardSkeleton = () => (
-  <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 p-6">
+  <div className="min-h-screen bg-main-gradient p-6">
     <div className="max-w-7xl mx-auto space-y-6">
-      <Skeleton className="h-8 w-64 bg-gray-200" />
-      <Skeleton className="h-80 rounded-2xl bg-white" />
+      <Skeleton className="h-8 w-64 bg-muted" />
+      <Skeleton className="h-80 rounded-2xl bg-card" />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Skeleton className="h-64 rounded-2xl bg-white" />
-        <Skeleton className="h-64 rounded-2xl bg-white" />
-        <Skeleton className="h-64 rounded-2xl bg-white" />
+        <Skeleton className="h-64 rounded-2xl bg-card" />
+        <Skeleton className="h-64 rounded-2xl bg-card" />
+        <Skeleton className="h-64 rounded-2xl bg-card" />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <Skeleton className="h-64 rounded-2xl bg-white lg:col-span-3" />
-        <Skeleton className="h-64 rounded-2xl bg-white lg:col-span-1" />
+        <Skeleton className="h-64 rounded-2xl bg-card lg:col-span-3" />
+        <Skeleton className="h-64 rounded-2xl bg-card lg:col-span-1" />
       </div>
     </div>
   </div>

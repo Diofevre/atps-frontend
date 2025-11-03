@@ -62,7 +62,12 @@ const config: Config = {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
-  			}
+  			},
+  			// Custom theme-aware colors
+  			'text-primary': 'hsl(var(--text-primary))',
+  			'text-secondary': 'hsl(var(--text-secondary))',
+  			'text-muted': 'hsl(var(--text-muted))',
+  			'border-blue': 'hsl(var(--border-blue))',
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -90,6 +95,9 @@ const config: Config = {
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
+  		},
+  		backgroundImage: {
+  			'main-gradient': 'linear-gradient(to bottom right, hsl(var(--background-gradient-start)), hsl(var(--background-gradient-mid)), hsl(var(--background-gradient-end)))',
   		}
   	}
   },
