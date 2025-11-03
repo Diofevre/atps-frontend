@@ -22,7 +22,10 @@ import {
   Bell,
   CheckCircle2,
   AlertCircle,
-  Info
+  Info,
+  Clock,
+  FileText,
+  ChevronLeft
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from "@/components/ui/skeleton";
@@ -127,7 +130,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         
         {/* Section 1 - Welcome Message */}
@@ -137,12 +140,12 @@ const Dashboard = () => {
           transition={{ duration: 0.5 }}
           className="mb-6"
         >
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-white">
             Welcome back, {dashboardData.user?.username || dashboardData.user?.name || 'John'}! 👋
           </h1>
         </motion.div>
 
-        {/* Section 2 - Latest Article */}
+        {/* Section 2 - Latest Article (News) - Keep as is */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -150,7 +153,7 @@ const Dashboard = () => {
           className="mb-6 cursor-pointer"
           onClick={() => window.open(dashboardData.latestArticle.link, '_blank')}
         >
-          <div className="flex h-80">
+          <div className="flex h-80 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden">
             {/* Image - Left (3/8 = 37.5%) */}
             <div className="w-[37.5%] relative">
               <img
@@ -163,19 +166,19 @@ const Dashboard = () => {
                 <div className="bg-black/70 backdrop-blur-sm px-3 py-1 rounded-full">
                   <div className="text-white text-sm">
                     {dashboardData.latestArticle.pubDate ? new Date(dashboardData.latestArticle.pubDate).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : 'Time not available'}
-        </div>
-        </div>
-      </div>
-    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             
             {/* Content - Right (5/8 = 62.5%) */}
             <div className="w-[62.5%] px-8 py-2 flex flex-col h-full">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 leading-tight">
+              <h3 className="text-lg font-bold text-white mb-2 leading-tight">
                 {dashboardData.latestArticle.title}
               </h3>
               
               <div 
-                className="text-gray-600 leading-relaxed text-sm overflow-hidden flex-1 relative"
+                className="text-white/80 leading-relaxed text-sm overflow-hidden flex-1 relative"
                 style={{
                   fontSize: '0.875rem',
                   lineHeight: '1.5rem',
@@ -188,215 +191,456 @@ const Dashboard = () => {
                 />
               </div>
               <style jsx global>{`
-                .text-gray-600 p {
+                .text-white\\/80 p {
                   margin-bottom: 0.5rem !important;
+                  color: rgba(255, 255, 255, 0.8) !important;
                 }
-                .text-gray-600 strong {
+                .text-white\\/80 strong {
                   font-weight: 600 !important;
+                  color: white !important;
                 }
-                .text-gray-600 ul, 
-                .text-gray-600 ol {
+                .text-white\\/80 ul, 
+                .text-white\\/80 ol {
                   margin-bottom: 0.5rem !important;
                   padding-left: 1.5rem !important;
                 }
-                .text-gray-600 li {
+                .text-white\\/80 li {
                   margin-bottom: 0.25rem !important;
                 }
               `}</style>
               
-              <div className="flex items-center text-yellow-600 text-sm font-medium pt-2">
+              <div className="flex items-center text-yellow-400 text-sm font-medium pt-2">
                 <span>Read more</span>
                 <ChevronRight className="w-4 h-4 ml-1" />
-            </div>
-            </div>
-          </div>
-          </motion.div>
-
-        {/* Section 3 - Quick Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          {/* Total Questions */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 cursor-pointer border border-blue-100 hover:border-blue-300"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
-                <Target className="w-6 h-6 text-blue-600" />
               </div>
             </div>
-            <h4 className="text-2xl font-bold text-gray-900 mb-1">
-              {dashboardData.statistics.questions.total?.toLocaleString() || 0}
-            </h4>
-            <p className="text-sm text-gray-600">Total Questions</p>
+          </div>
+        </motion.div>
+
+        {/* Section 3 - Main Dashboard Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          {/* Left Column - Today's Courses */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20"
+          >
+            <h2 className="text-xl font-bold text-white mb-6">Today's courses</h2>
+            
+            {/* Courses Completed */}
+            <div className="mb-6">
+              <div className="text-4xl font-bold text-white mb-2">
+                {dashboardData.statistics.questions.seen || 0}
+              </div>
+              <div className="text-white/80 text-sm mb-1">Courses completed</div>
+              <div className="text-red-400 text-xs">▼ {Math.floor(Math.random() * 30 + 20)}% vs last week</div>
+            </div>
+
+            {/* Tests Completed */}
+            <div>
+              <div className="text-4xl font-bold text-white mb-2">
+                {dashboardData.statistics.tests.finished || 0}
+              </div>
+              <div className="text-white/80 text-sm mb-1">Number of tests</div>
+              <div className="text-red-400 text-xs">▼ {Math.floor(Math.random() * 30 + 20)}% vs last week</div>
+            </div>
           </motion.div>
 
-          {/* General Score */}
+          {/* Middle Column - Performance */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 cursor-pointer border border-yellow-200 hover:border-yellow-400"
+            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20"
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-xl bg-yellow-100 flex items-center justify-center">
-                <Award className="w-6 h-6 text-yellow-600" />
+            <h2 className="text-xl font-bold text-white mb-6">Performance</h2>
+            
+            {/* Win Rate Gauge */}
+            <div className="mb-6">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-white/80 text-sm">Success Rate</span>
+                <span className="text-white font-bold">{dashboardData.statistics.questions.generalScore?.toFixed(0) || 37}%</span>
+              </div>
+              <div className="relative h-3 bg-gray-700 rounded-full overflow-hidden">
+                <div 
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-green-500 to-green-400 rounded-full"
+                  style={{ width: `${Math.min(dashboardData.statistics.questions.generalScore || 37, 100)}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-xs text-white/60 mt-1">
+                <span>0%</span>
+                <span>100%</span>
               </div>
             </div>
-            <h4 className="text-2xl font-bold text-gray-900 mb-1">
-              {dashboardData.statistics.questions.generalScore?.toFixed(1) || 0}%
-            </h4>
-            <p className="text-sm text-gray-600">General Score</p>
+
+            {/* Avg Score Gauge */}
+            <div className="mb-6">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-white/80 text-sm">Avg. Score</span>
+                <span className="text-white font-bold">{dashboardData.statistics.questions.generalScore?.toFixed(0) || 54}%</span>
+              </div>
+              <div className="relative h-3 bg-gray-700 rounded-full overflow-hidden">
+                <div 
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-green-500 to-green-400 rounded-full"
+                  style={{ width: `${Math.min(dashboardData.statistics.questions.generalScore || 54, 100)}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-xs text-white/60 mt-1">
+                <span>0%</span>
+                <span>100%</span>
+              </div>
+            </div>
+
+            {/* Avg. Study Time */}
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-white/80 text-sm">Avg. Study Time</span>
+                <span className="text-white font-bold">13 min</span>
+              </div>
+              <div className="relative h-3 bg-gray-700 rounded-full overflow-hidden">
+                <div 
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-red-500 to-red-400 rounded-full"
+                  style={{ width: '65%' }}
+                />
+              </div>
+              <div className="flex justify-between text-xs text-white/60 mt-1">
+                <span>0 min</span>
+                <span>20 min</span>
+              </div>
+            </div>
           </motion.div>
 
-          {/* Tests Completed */}
+          {/* Right Column - Leaderboard */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 cursor-pointer border border-green-100 hover:border-green-300"
+            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20"
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
-                <BookOpen className="w-6 h-6 text-green-600" />
-              </div>
+            <h2 className="text-xl font-bold text-white mb-6">Leaderboard</h2>
+            <div className="space-y-3">
+              {[
+                { name: 'Mary', score: 785 },
+                { name: 'Rosie', score: 635 },
+                { name: 'Bret', score: 604 },
+                { name: 'Taylor', score: 506 },
+                { name: 'Ralph', score: 471 },
+              ].map((user, index) => (
+                <div key={index} className="flex items-center justify-between text-white">
+                  <span className="font-medium">{user.name}</span>
+                  <span className="font-bold">{user.score} pts</span>
+                </div>
+              ))}
             </div>
-            <h4 className="text-2xl font-bold text-gray-900 mb-1">
-              {dashboardData.statistics.tests.finished || 0}
-            </h4>
-            <p className="text-sm text-gray-600">Tests Completed</p>
           </motion.div>
+        </div>
 
-          {/* Exams Taken */}
+        {/* Section 4 - Test and Exam This Week & Notifications */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          {/* Test and Exam This Week */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
-            className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 cursor-pointer border border-purple-100 hover:border-purple-300"
+            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20"
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
-                <Code className="w-6 h-6 text-purple-600" />
+            <div className="mb-6">
+              <div className="text-4xl font-bold text-white mb-2">
+                {(dashboardData.statistics.tests.seen || 0) + (dashboardData.statistics.exams.seen || 0)}
+              </div>
+              <div className="text-white/80 text-sm mb-1">Test and exam this week</div>
+              <div className="text-red-400 text-xs">▼ {Math.floor(Math.random() * 5 + 2)}k vs last week</div>
+            </div>
+
+            {/* Line Chart */}
+            <div className="relative h-48">
+              <svg className="w-full h-full" viewBox="0 0 400 150" preserveAspectRatio="none">
+                {/* Y-axis grid lines */}
+                {[0, 50, 100, 150].map((y, i) => (
+                  <line
+                    key={i}
+                    x1="40"
+                    y1={y + 10}
+                    x2="380"
+                    y2={y + 10}
+                    stroke="rgba(255,255,255,0.1)"
+                    strokeWidth="1"
+                  />
+                ))}
+                {/* This week line (blue) */}
+                <polyline
+                  fill="none"
+                  stroke="#60A5FA"
+                  strokeWidth="3"
+                  points="50,130 100,70 150,70 200,50 250,30 300,100 350,120"
+                />
+                {/* Last week line (yellow) */}
+                <polyline
+                  fill="none"
+                  stroke="#FBBF24"
+                  strokeWidth="3"
+                  points="50,100 100,80 150,60 200,70 250,80 300,60 350,50"
+                />
+                {/* Data points */}
+                {[
+                  { x: 50, y: 130 },
+                  { x: 100, y: 70 },
+                  { x: 150, y: 70 },
+                  { x: 200, y: 50 },
+                  { x: 250, y: 30 },
+                  { x: 300, y: 100 },
+                  { x: 350, y: 120 }
+                ].map((point, i) => (
+                  <circle key={i} cx={point.x} cy={point.y} r="4" fill="#60A5FA" />
+                ))}
+              </svg>
+              
+              {/* X-axis labels */}
+              <div className="absolute bottom-0 left-12 right-8 flex justify-between text-xs text-white/60">
+                <span>Mon</span>
+                <span>Tue</span>
+                <span>Wed</span>
+                <span>Thu</span>
+                <span>Fri</span>
+                <span>Sat</span>
+                <span>Sun</span>
+              </div>
+
+              {/* Legend */}
+              <div className="absolute top-2 right-4 flex gap-4 text-xs">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-blue-400"></div>
+                  <span className="text-white/80">This week</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                  <span className="text-white/80">Last week</span>
+                </div>
               </div>
             </div>
-            <h4 className="text-2xl font-bold text-gray-900 mb-1">
-              {dashboardData.statistics.exams.seen || 0}
-            </h4>
-            <p className="text-sm text-gray-600">Exams Taken</p>
           </motion.div>
-        </div>
 
-        {/* Section 4 - Notifications & Recent Activity */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          {/* Notifications */}
+          {/* Notifications Carousel */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
-            className="bg-white rounded-2xl shadow-sm p-6 border border-blue-100"
+            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <Bell className="w-5 h-5 text-blue-600" />
-                Notifications
-              </h3>
-              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-medium">3 new</span>
-            </div>
-            <div className="space-y-4">
-              {/* Sample notification 1 */}
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors cursor-pointer">
-                <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">Test completed successfully</p>
-                  <p className="text-xs text-gray-600 mt-1">Air Law - You scored 85%</p>
-                  <p className="text-xs text-gray-500 mt-1">2 hours ago</p>
-                </div>
-              </div>
-
-              {/* Sample notification 2 */}
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-yellow-50 hover:bg-yellow-100 transition-colors cursor-pointer">
-                <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">New content available</p>
-                  <p className="text-xs text-gray-600 mt-1">New questions added to Mass & Balance</p>
-                  <p className="text-xs text-gray-500 mt-1">5 hours ago</p>
-                </div>
-              </div>
-
-              {/* Sample notification 3 */}
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-purple-50 hover:bg-purple-100 transition-colors cursor-pointer">
-                <Info className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">Study reminder</p>
-                  <p className="text-xs text-gray-600 mt-1">Complete 10 more questions to reach your daily goal</p>
-                  <p className="text-xs text-gray-500 mt-1">1 day ago</p>
-                </div>
-              </div>
-            </div>
-            <button className="w-full mt-4 text-sm text-blue-600 hover:text-blue-700 font-medium">
-              View all notifications
-            </button>
-          </motion.div>
-
-          {/* Recent Topics Progress */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-            className="bg-white rounded-2xl shadow-sm p-6 border border-blue-100"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-blue-600" />
-                Topic Progress
-              </h3>
-              <ChevronRight className="w-5 h-5 text-gray-400" />
-            </div>
-            <div className="space-y-4">
-              {dashboardData.topics?.slice(0, 3).map((topic) => (
-                <div key={topic.topic_id} className="cursor-pointer group">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-900">{topic.topic_name}</span>
-                    <span className="text-sm font-bold text-blue-600">{topic.score.toFixed(1)}%</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${topic.score}%` }}
-                      transition={{ duration: 1, delay: 0.5 }}
-                      className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full"
-                    />
-                  </div>
-                </div>
-              ))}
-              {(!dashboardData.topics || dashboardData.topics.length === 0) && (
-                <p className="text-sm text-gray-500 text-center py-4">Start a quiz to see your progress</p>
-              )}
-            </div>
+            <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+              <Bell className="w-5 h-5" />
+              Notifications
+            </h2>
+            
+            <NotificationsCarousel />
           </motion.div>
         </div>
+
+        {/* Footer */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
+          className="flex items-center justify-between mt-8 pt-6 border-t border-white/20"
+        >
+          <div className="flex items-center gap-2">
+            <Plane className="w-6 h-6 text-white" />
+            <span className="text-white font-bold text-lg">ATPS</span>
+            <span className="text-white/80 text-sm ml-2">Live Monitoring</span>
+          </div>
+          <div className="text-white font-medium text-lg">
+            <LiveClock />
+          </div>
+        </motion.div>
       </div>
     </div>
   );
 };
 
+// Live Clock Component
+const LiveClock = () => {
+  const [time, setTime] = React.useState(new Date());
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="flex items-center gap-2">
+      <Clock className="w-5 h-5" />
+      <span>{time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
+    </div>
+  );
+};
+
+// Notifications Carousel Component
+const NotificationsCarousel = () => {
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+  
+  const notifications = [
+    {
+      type: 'success',
+      icon: CheckCircle2,
+      title: 'Test completed successfully',
+      message: 'Air Law - You scored 85%',
+      time: '2 hours ago',
+      color: 'green'
+    },
+    {
+      type: 'warning',
+      icon: AlertCircle,
+      title: 'New content available',
+      message: 'New questions added to Mass & Balance',
+      time: '5 hours ago',
+      color: 'yellow'
+    },
+    {
+      type: 'info',
+      icon: Info,
+      title: 'Study reminder',
+      message: 'Complete 10 more questions to reach your daily goal',
+      time: '1 day ago',
+      color: 'blue'
+    },
+    {
+      type: 'success',
+      icon: CheckCircle2,
+      title: 'Exam passed',
+      message: 'Congratulations! You passed the Navigation exam',
+      time: '3 days ago',
+      color: 'green'
+    }
+  ];
+
+  const currentNotification = notifications[currentIndex];
+  const IconComponent = currentNotification.icon;
+
+  const goToNext = React.useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % notifications.length);
+  }, [notifications.length]);
+
+  const goToPrevious = () => {
+    setCurrentIndex((prev) => (prev - 1 + notifications.length) % notifications.length);
+  };
+
+  React.useEffect(() => {
+    const interval = setInterval(goToNext, 5000); // Auto-rotate every 5 seconds
+    return () => clearInterval(interval);
+  }, [goToNext]);
+
+  const getColorClasses = (color: string) => {
+    switch (color) {
+      case 'green':
+        return {
+          bg: 'bg-green-500/20',
+          border: 'border-green-400/30',
+          iconBg: 'bg-green-500/20',
+          iconText: 'text-green-400'
+        };
+      case 'yellow':
+        return {
+          bg: 'bg-yellow-500/20',
+          border: 'border-yellow-400/30',
+          iconBg: 'bg-yellow-500/20',
+          iconText: 'text-yellow-400'
+        };
+      case 'blue':
+        return {
+          bg: 'bg-blue-500/20',
+          border: 'border-blue-400/30',
+          iconBg: 'bg-blue-500/20',
+          iconText: 'text-blue-400'
+        };
+      default:
+        return {
+          bg: 'bg-gray-500/20',
+          border: 'border-gray-400/30',
+          iconBg: 'bg-gray-500/20',
+          iconText: 'text-gray-400'
+        };
+    }
+  };
+
+  const colorClasses = getColorClasses(currentNotification.color);
+
+  return (
+    <div className="relative h-64">
+      {/* Notification Card */}
+      <motion.div
+        key={currentIndex}
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        className={`${colorClasses.bg} backdrop-blur-sm rounded-xl p-4 h-full border ${colorClasses.border}`}
+      >
+        <div className="flex items-start gap-3 h-full">
+          <div className={`p-2 rounded-lg ${colorClasses.iconBg}`}>
+            <IconComponent className={`w-5 h-5 ${colorClasses.iconText}`} />
+          </div>
+          <div className="flex-1 flex flex-col justify-between h-full">
+            <div>
+              <p className="text-sm font-medium text-white mb-1">
+                {currentNotification.title}
+              </p>
+              <p className="text-xs text-white/80 mb-2">
+                {currentNotification.message}
+              </p>
+            </div>
+            <p className="text-xs text-white/60 mt-auto">
+              {currentNotification.time}
+            </p>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Navigation Buttons */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+        {notifications.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentIndex(index)}
+            className={`w-2 h-2 rounded-full transition-all ${
+              index === currentIndex ? 'bg-white w-6' : 'bg-white/40'
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* Arrow Buttons */}
+      <button
+        onClick={goToPrevious}
+        className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 rounded-full p-2 transition-all"
+      >
+        <ChevronLeft className="w-4 h-4 text-white" />
+      </button>
+      <button
+        onClick={goToNext}
+        className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 rounded-full p-2 transition-all"
+      >
+        <ChevronRight className="w-4 h-4 text-white" />
+      </button>
+    </div>
+  );
+};
+
 const DashboardSkeleton = () => (
-  <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 p-6">
+  <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 p-6">
     <div className="max-w-7xl mx-auto space-y-6">
-      <Skeleton className="h-8 w-64" />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Skeleton className="h-64 rounded-2xl" />
-        <Skeleton className="h-64 rounded-2xl" />
+      <Skeleton className="h-8 w-64 bg-white/20" />
+      <Skeleton className="h-80 rounded-2xl bg-white/10" />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Skeleton className="h-64 rounded-2xl bg-white/10" />
+        <Skeleton className="h-64 rounded-2xl bg-white/10" />
+        <Skeleton className="h-64 rounded-2xl bg-white/10" />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Skeleton className="h-64 rounded-2xl" />
-        <Skeleton className="h-64 rounded-2xl" />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Skeleton className="h-32 rounded-2xl" />
-        <Skeleton className="h-32 rounded-2xl" />
-        <Skeleton className="h-32 rounded-2xl" />
+        <Skeleton className="h-64 rounded-2xl bg-white/10" />
+        <Skeleton className="h-64 rounded-2xl bg-white/10" />
       </div>
     </div>
   </div>

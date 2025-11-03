@@ -168,7 +168,7 @@ export default function TestTopicSelection() {
                       <div className="space-y-1 ml-4">
                         {chapter.subChapters.map((subChapter) => (
                           <div key={subChapter.id} className="text-sm">
-                            • {subChapter.sub_chapter_text} ({subChapter.questionCount} questions)
+                            • {subChapter.sub_chapter_text || subChapter.name || 'Untitled'} ({subChapter.questionCount} questions)
                           </div>
                         ))}
                       </div>

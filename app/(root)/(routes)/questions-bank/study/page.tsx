@@ -392,6 +392,7 @@ const Study = () => {
                     <div className="flex items-center gap-1 ml-2">
                       <span className="text-xs sm:text-sm text-gray-500">{chapter.chapterQuestionCount}</span>
                       {chapter.subChapters.some(subChapter =>
+                        subChapter.sub_chapter_text && 
                         subChapter.sub_chapter_text.trim() !== "" &&
                         subChapter.sub_chapter_text.toLowerCase() !== "pas de nom"
                       ) && (
@@ -412,7 +413,7 @@ const Study = () => {
                   >
                     <div className="pl-2 sm:pl-4 mt-2 space-y-2">
                       {chapter.subChapters.map((subChapter) => (
-                        subChapter.sub_chapter_text.trim() !== "" && subChapter.sub_chapter_text.toLowerCase() !== "pas de nom" ? (
+                        subChapter.sub_chapter_text && subChapter.sub_chapter_text.trim() !== "" && subChapter.sub_chapter_text.toLowerCase() !== "pas de nom" ? (
                             <div key={subChapter.id} className="flex justify-between items-center p-2 sm:p-3 border rounded-lg">
                                 <div className="flex items-center gap-1.5 flex-1 min-w-0">
                                     <Input
