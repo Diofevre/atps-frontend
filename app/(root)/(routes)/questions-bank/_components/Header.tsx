@@ -49,6 +49,11 @@ const HeaderState: React.FC<HeaderStateProps> = ({
     return `${hours} : ${minutes} : ${seconds}`;
   };
 
+  // Update CSS variable when fontSize changes
+  React.useEffect(() => {
+    document.documentElement.style.setProperty('--quiz-font-size', `${fontSize}%`);
+  }, [fontSize]);
+
   // Close font size slider when clicking outside
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
