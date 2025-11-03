@@ -9,6 +9,7 @@ let refreshPromise: Promise<void> | null = null;
 /**
  * Automatically refresh token if it's about to expire
  * This prevents sudden logouts due to short token lifetimes
+ * UPDATED: Token expiration check disabled for study platform
  */
 export async function ensureValidToken(): Promise<boolean> {
   const tokens = getTokens();
@@ -17,23 +18,22 @@ export async function ensureValidToken(): Promise<boolean> {
     return false;
   }
 
-  // Check if token expires within the next 5 minutes
-  const fiveMinutesFromNow = Date.now() + (5 * 60 * 1000);
-  
-  if (tokens.expires_at < fiveMinutesFromNow) {
-    // Token is about to expire, refresh it
-    if (!refreshPromise) {
-      refreshPromise = refreshToken().then(() => {
-        refreshPromise = null;
-      }).catch((error) => {
-        console.error('Error refreshing token:', error);
-        clearAuth();
-        refreshPromise = null;
-      });
-    }
-    
-    await refreshPromise;
-  }
+  // Vérification de l'expiration désactivée pour une meilleure expérience d'étude
+  // Les étudiants peuvent rester connectés pendant leurs longues sessions d'étude
+  // const fiveMinutesFromNow = Date.now() + (5 * 60 * 1000);
+  // if (tokens.expires_at < fiveMinutesFromNow) {
+  //   // Token is about to expire, refresh it
+  //   if (!refreshPromise) {
+  //     refreshPromise = refreshToken().then(() => {
+  //       refreshPromise = null;
+  //     }).catch((error) => {
+  //       console.error('Error refreshing token:', error);
+  //       clearAuth();
+  //       refreshPromise = null;
+  //     });
+  //   }
+  //   await refreshPromise;
+  // }
   
   return true;
 }

@@ -288,10 +288,12 @@ const QuizzComponents = () => {
             const tokensStr = typeof window !== 'undefined' ? localStorage.getItem('keycloak_tokens') : null;
             if (tokensStr) {
               const tokens = JSON.parse(tokensStr);
-              // Check if token is expired
-              if (tokens.expires_at && tokens.expires_at > Date.now()) {
-                accessToken = tokens.access_token;
-              }
+              // Vérification de l'expiration désactivée pour une meilleure expérience d'étude
+              // Les étudiants peuvent rester connectés pendant leurs longues sessions d'étude
+              // if (tokens.expires_at && tokens.expires_at > Date.now()) {
+              //   accessToken = tokens.access_token;
+              // }
+              accessToken = tokens.access_token;
             }
           } catch (e) {
             console.error('[Quiz] Error reading tokens:', e);

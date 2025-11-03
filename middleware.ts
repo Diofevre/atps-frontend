@@ -61,21 +61,22 @@ export function middleware(request: NextRequest) {
       const decodedCookie = decodeURIComponent(tokenCookie);
       const tokens = JSON.parse(decodedCookie);
       
-      // Check if token is expired
-      if (tokens.expires_at && Date.now() > tokens.expires_at) {
-        // Token expired, clear cookie and redirect to login
-        console.log(`🔒 Token expired for route: ${pathname}`);
-        const redirectUrl = isAdminRoute 
-          ? new URL('/admin-login', request.url)
-          : new URL('/login', request.url);
-        const response = NextResponse.redirect(redirectUrl);
-        
-        // Clear expired token cookie
-        response.cookies.delete('keycloak_tokens');
-        response.cookies.delete('keycloak_user');
-        
-        return response;
-      }
+      // Vérification de l'expiration désactivée pour une meilleure expérience d'étude
+      // Les étudiants peuvent rester connectés pendant leurs longues sessions d'étude
+      // if (tokens.expires_at && Date.now() > tokens.expires_at) {
+      //   // Token expired, clear cookie and redirect to login
+      //   console.log(`🔒 Token expired for route: ${pathname}`);
+      //   const redirectUrl = isAdminRoute 
+      //     ? new URL('/admin-login', request.url)
+      //     : new URL('/login', request.url);
+      //   const response = NextResponse.redirect(redirectUrl);
+      //   
+      //   // Clear expired token cookie
+      //   response.cookies.delete('keycloak_tokens');
+      //   response.cookies.delete('keycloak_user');
+      //   
+      //   return response;
+      // }
       
       // Token is valid, allow access
       return NextResponse.next();

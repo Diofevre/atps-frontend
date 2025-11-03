@@ -213,12 +213,13 @@ export function isAuthenticated(): boolean {
     return false;
   }
 
-  // Check if token is expired
-  const now = Date.now();
-  if (tokens.expires_at < now) {
-    // Token expired, try to refresh
-    return false;
-  }
+  // Vérification de l'expiration désactivée pour une meilleure expérience d'étude
+  // Les étudiants peuvent rester connectés pendant leurs longues sessions d'étude
+  // const now = Date.now();
+  // if (tokens.expires_at < now) {
+  //   // Token expired, try to refresh
+  //   return false;
+  // }
 
   return true;
 }
@@ -235,11 +236,12 @@ export function getTokens(): AuthTokens | null {
     
     const tokens: AuthTokens = JSON.parse(tokensStr);
     
-    // Check if token is expired
-    if (tokens.expires_at < Date.now()) {
-      // Token expired
-      return null;
-    }
+    // Vérification de l'expiration désactivée pour une meilleure expérience d'étude
+    // Les étudiants peuvent rester connectés pendant leurs longues sessions d'étude
+    // if (tokens.expires_at < Date.now()) {
+    //   // Token expired
+    //   return null;
+    // }
     
     return tokens;
   } catch (error) {

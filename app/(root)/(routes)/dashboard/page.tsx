@@ -84,10 +84,12 @@ const Dashboard = () => {
         const tokensStr = localStorage.getItem('keycloak_tokens');
         if (tokensStr) {
           const tokens = JSON.parse(tokensStr);
-          // Check if token is expired
-          if (tokens.expires_at && tokens.expires_at > Date.now()) {
-            token = tokens.access_token;
-          }
+          // Vérification de l'expiration désactivée pour une meilleure expérience d'étude
+          // Les étudiants peuvent rester connectés pendant leurs longues sessions d'étude
+          // if (tokens.expires_at && tokens.expires_at > Date.now()) {
+          //   token = tokens.access_token;
+          // }
+          token = tokens.access_token;
         }
       } catch (e) {
         console.error('[Dashboard] Error reading tokens:', e);
