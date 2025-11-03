@@ -43,7 +43,10 @@ export async function login(credentials: LoginCredentials): Promise<AuthResponse
 
     if (data.success && data.data) {
       // Calculate expiry timestamp
-      const expiresAt = Date.now() + data.data.expires_in * 1000;
+      // For study platform: extend token lifetime to 8 hours (28800 seconds)
+      // This prevents interruption during long study sessions
+      const extendedExpiryTime = 8 * 60 * 60 * 1000; // 8 hours in milliseconds
+      const expiresAt = Date.now() + extendedExpiryTime;
       
       // Store tokens in localStorage and cookies
       const tokens: AuthTokens = {
@@ -57,7 +60,7 @@ export async function login(credentials: LoginCredentials): Promise<AuthResponse
       // Store in cookie for middleware access (properly encoded for JSON)
       const encodedTokens = encodeURIComponent(JSON.stringify(tokens));
       const isSecure = window.location.protocol === 'https:';
-      document.cookie = `keycloak_tokens=${encodedTokens}; path=/; max-age=${data.data.expires_in}; SameSite=Lax${isSecure ? '; Secure' : ''};`;
+      document.cookie = `keycloak_tokens=${encodedTokens}; path=/; max-age=${8 * 60 * 60}; SameSite=Lax${isSecure ? '; Secure' : ''};`;
     }
 
     return data;
@@ -143,7 +146,9 @@ export async function refreshToken(): Promise<AuthResponse> {
 
     if (data.success && data.data) {
       // Update tokens in localStorage and cookies
-      const expiresAt = Date.now() + data.data.expires_in * 1000;
+      // For study platform: extend token lifetime to 8 hours
+      const extendedExpiryTime = 8 * 60 * 60 * 1000; // 8 hours in milliseconds
+      const expiresAt = Date.now() + extendedExpiryTime;
       const newTokens: AuthTokens = {
         ...data.data,
         expires_at: expiresAt,
@@ -154,7 +159,7 @@ export async function refreshToken(): Promise<AuthResponse> {
       // Update cookie
       const encodedTokens = encodeURIComponent(JSON.stringify(newTokens));
       const isSecure = window.location.protocol === 'https:';
-      document.cookie = `keycloak_tokens=${encodedTokens}; path=/; max-age=${data.data.expires_in}; SameSite=Lax${isSecure ? '; Secure' : ''};`;
+      document.cookie = `keycloak_tokens=${encodedTokens}; path=/; max-age=${8 * 60 * 60}; SameSite=Lax${isSecure ? '; Secure' : ''};`;
     }
 
     return data;
