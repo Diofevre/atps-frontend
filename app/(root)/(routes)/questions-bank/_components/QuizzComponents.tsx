@@ -282,8 +282,20 @@ const QuizzComponents = () => {
           
           console.log('📤 Sending request to /api/tests/start:', bodyData);
   
-          // Get token from localStorage
-          const accessToken = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+          // Get token from localStorage (same as dashboard)
+          let accessToken: string | null = null;
+          try {
+            const tokensStr = typeof window !== 'undefined' ? localStorage.getItem('keycloak_tokens') : null;
+            if (tokensStr) {
+              const tokens = JSON.parse(tokensStr);
+              // Check if token is expired
+              if (tokens.expires_at && tokens.expires_at > Date.now()) {
+                accessToken = tokens.access_token;
+              }
+            }
+          } catch (e) {
+            console.error('[Quiz] Error reading tokens:', e);
+          }
           
           const response = await fetch(
             `/api/tests/start`,
