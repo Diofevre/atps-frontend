@@ -95,49 +95,65 @@ const Dictionary = () => {
   };
 
   return (
-    <div className="min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <button
-            onClick={() => router.push(`/courses`)}
-            className="flex items-center px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Back to All Terms
-          </button>
-          <div className="flex items-center">
-            <Book className="w-8 h-8 text-blue-600 mr-3" />
-            <h1 className="text-3xl font-bold text-gray-800">Technical Dictionary</h1>
-          </div>
-          <div className="w-[120px]" /> {/* Spacer for centering */}
-        </div>
-
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header Section */}
         <div className="mb-8">
-          <div className="relative max-w-2xl mx-auto">
-            <input
-              type="text"
-              placeholder="Search for a term..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-              className="w-full px-4 py-3 pl-12 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all shadow-sm"
-            />
-            <Search 
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"
-            />
+          <div className="flex items-center justify-between mb-6">
             <button
-              onClick={handleSearch}
-              disabled={isLoading}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 px-4 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:bg-blue-400 shadow-sm"
+              onClick={() => router.push(`/courses`)}
+              className="flex items-center px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-blue-50 rounded-lg transition-colors border border-blue-200"
             >
-              {isLoading ? 'Searching...' : 'Search'}
+              <ArrowLeft className="w-5 h-5 mr-2" />
+              Back to Courses
             </button>
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-blue-100 rounded-xl">
+                <Book className="w-6 h-6 text-blue-600" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">Technical Dictionary</h1>
+                <p className="text-sm text-gray-600 mt-1">{entries.length} terms available</p>
+              </div>
+            </div>
+            <div className="w-[140px]" /> {/* Spacer for centering */}
+          </div>
+
+          {/* Search Bar - Enhanced */}
+          <div className="bg-white rounded-xl border border-blue-200 shadow-lg p-6">
+            <div className="relative max-w-3xl mx-auto">
+              <input
+                type="text"
+                placeholder="Search for a term..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                className="w-full px-4 py-3 pl-12 pr-32 rounded-lg border border-blue-200 bg-blue-50/50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white outline-none transition-all"
+              />
+              <Search 
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-600 w-5 h-5"
+              />
+              <button
+                onClick={handleSearch}
+                disabled={isLoading}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed font-medium shadow-sm"
+              >
+                {isLoading ? 'Searching...' : 'Search'}
+              </button>
+            </div>
           </div>
         </div>
 
+        {/* Dictionary Entries */}
         {entries.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-lg shadow-sm">
-            <p className="text-gray-500">No entries found</p>
+          <div className="bg-white rounded-xl border border-blue-200 shadow-lg p-12 text-center">
+            <div className="max-w-md mx-auto">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Book className="w-8 h-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">No entries found</h3>
+              <p className="text-gray-600">Try adjusting your search or browse all terms</p>
+            </div>
           </div>
         ) : (
           <>
@@ -147,14 +163,23 @@ const Dictionary = () => {
                 {leftColumnEntries.map((entry) => (
                   <div
                     key={entry.id}
-                    className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-all"
+                    className="bg-white p-6 rounded-xl border border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                   >
-                    <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                      {entry.word || '[No term]'}
-                    </h2>
-                    <p className="text-gray-600 leading-relaxed">
-                      {entry.definition}
-                    </p>
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <span className="text-blue-600 font-bold text-sm">
+                          {entry.word?.charAt(0)?.toUpperCase() || 'A'}
+                        </span>
+                      </div>
+                      <div className="flex-1">
+                        <h2 className="text-xl font-bold text-gray-900 mb-2">
+                          {entry.word || '[No term]'}
+                        </h2>
+                        <p className="text-gray-600 leading-relaxed">
+                          {entry.definition}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -164,62 +189,73 @@ const Dictionary = () => {
                 {rightColumnEntries.map((entry) => (
                   <div
                     key={entry.id}
-                    className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-all"
+                    className="bg-white p-6 rounded-xl border border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                   >
-                    <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                      {entry.word || '[No term]'}
-                    </h2>
-                    <p className="text-gray-600 leading-relaxed">
-                      {entry.definition}
-                    </p>
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <span className="text-blue-600 font-bold text-sm">
+                          {entry.word?.charAt(0)?.toUpperCase() || 'A'}
+                        </span>
+                      </div>
+                      <div className="flex-1">
+                        <h2 className="text-xl font-bold text-gray-900 mb-2">
+                          {entry.word || '[No term]'}
+                        </h2>
+                        <p className="text-gray-600 leading-relaxed">
+                          {entry.definition}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Pagination */}
-            <div className="bg-white p-4 rounded-lg shadow-sm">
-              <div className="flex justify-center items-center space-x-2">
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="p-2 rounded-md border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-                
-                {getPageNumbers().map((pageNum) => (
+            {/* Pagination - Enhanced */}
+            {totalPages > 1 && (
+              <div className="bg-white rounded-xl border border-blue-200 shadow-lg p-6">
+                <div className="flex justify-center items-center gap-2 flex-wrap">
                   <button
-                    key={pageNum}
-                    onClick={() => handlePageChange(pageNum)}
-                    className={`px-4 py-2 rounded-md transition-colors ${
-                      currentPage === pageNum
-                        ? 'bg-blue-600 text-white shadow-sm'
-                        : 'border border-gray-300 hover:bg-gray-50'
-                    }`}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="p-2 rounded-lg border border-blue-200 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-gray-700 hover:text-gray-900"
                   >
-                    {pageNum}
+                    <ChevronLeft className="w-5 h-5" />
                   </button>
-                ))}
-
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="p-2 rounded-md border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
+                  
+                  {getPageNumbers().map((pageNum) => (
+                    <button
+                      key={pageNum}
+                      onClick={() => handlePageChange(pageNum)}
+                      className={`px-4 py-2 rounded-lg transition-colors font-medium ${
+                        currentPage === pageNum
+                          ? 'bg-blue-600 text-white shadow-md'
+                          : 'border border-blue-200 hover:bg-blue-50 text-gray-700 hover:text-gray-900'
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  ))}
+                  
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="p-2 rounded-lg border border-blue-200 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-gray-700 hover:text-gray-900"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </div>
+                
+                <div className="mt-4 text-center text-sm text-gray-600">
+                  Page {currentPage} of {totalPages} ({entries.length} total entries)
+                </div>
               </div>
-
-              <div className="text-center mt-4 text-sm text-gray-600">
-                Showing {startIndex + 1}-{Math.min(endIndex, entries.length)} of {entries.length} entries
-              </div>
-            </div>
+            )}
           </>
         )}
       </div>
     </div>
   );
-}
+};
 
 export default Dictionary;
