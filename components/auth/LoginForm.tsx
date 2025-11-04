@@ -106,10 +106,10 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
     return (
       <form onSubmit={handleForgotPassword} className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold mb-2" style={{ color: '#2D3748' }}>
+          <h2 className="text-2xl font-bold mb-2" >
             Mot de passe oublié ?
           </h2>
-          <p className="text-sm" style={{ color: '#718096' }}>
+          <p className="text-sm" >
             Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.
           </p>
         </div>
@@ -118,7 +118,7 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
           <label 
             htmlFor="forgot-email" 
             className="block text-sm font-semibold"
-            style={{ color: '#4A5568' }}
+            
           >
             Adresse email
           </label>
@@ -130,23 +130,16 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
             onChange={(e) => setForgotEmail(e.target.value)}
             required
             disabled={loading}
-            className="w-full px-4 py-3.5 rounded-xl border-2 transition-all duration-200 focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
-            style={{
-              borderColor: '#C1E0F1',
-              backgroundColor: '#F7FAFC',
-              color: '#2D3748'
-            }}
-            onFocus={(e) => e.target.style.borderColor = '#EECE84'}
-            onBlur={(e) => e.target.style.borderColor = '#C1E0F1'}
+            className="w-full px-4 py-3.5 rounded-xl border-2 border-border-blue bg-card text-foreground placeholder:text-muted-foreground transition-all duration-200 focus:outline-none focus:border-yellow-400 dark:focus:border-yellow-500 disabled:bg-muted disabled:cursor-not-allowed"
+            
+            
+            
           />
         </div>
 
         {error && (
-          <div className="px-4 py-3 rounded-xl text-sm font-medium flex items-center space-x-2"
-            style={{
-              backgroundColor: '#FED7D7',
-              color: '#C53030'
-            }}
+          <div className="px-4 py-3 rounded-xl text-sm font-medium flex items-center space-x-2 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300"
+            
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
@@ -156,11 +149,8 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
         )}
 
         {success && (
-          <div className="px-4 py-3 rounded-xl text-sm font-medium flex items-center space-x-2"
-            style={{
-              backgroundColor: '#C6F6D5',
-              color: '#22543D'
-            }}
+          <div className="px-4 py-3 rounded-xl text-sm font-medium flex items-center space-x-2 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300"
+            
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -172,12 +162,8 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-4 px-6 rounded-xl font-semibold transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none relative overflow-hidden group"
-          style={{
-            background: '#EECE84',
-            color: '#2D3748',
-            boxShadow: '0 10px 30px rgba(238, 206, 132, 0.5)'
-          }}
+          className="w-full py-4 px-6 rounded-xl font-semibold bg-yellow-400 dark:bg-yellow-500 text-foreground shadow-lg shadow-yellow-400/50 dark:shadow-yellow-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-400/50 dark:hover:shadow-yellow-500/50 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none relative overflow-hidden group"
+          
         >
           <span className="relative z-10">
             {loading ? (
@@ -193,10 +179,8 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
             )}
           </span>
           <div 
-            className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300"
-            style={{
-              background: 'rgba(0,0,0,0.1)'
-            }}
+            className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 bg-foreground/10"
+            
           />
         </button>
 
@@ -208,8 +192,8 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
             setError('');
             setForgotEmail('');
           }}
-          className="w-full py-3 px-6 rounded-xl font-medium transition-all duration-300 hover:bg-gray-100"
-          style={{ color: '#718096' }}
+          className="w-full py-3 px-6 rounded-xl font-medium transition-all duration-300 hover:bg-muted text-text-secondary"
+          
           disabled={loading}
         >
           ← Retour à la connexion
@@ -225,7 +209,7 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
         <label 
           htmlFor="username" 
           className="block text-sm font-semibold"
-          style={{ color: '#4A5568' }}
+          
         >
           Email ou nom d'utilisateur
         </label>
@@ -237,14 +221,10 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
           onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
           required
           disabled={loading}
-          className="w-full px-4 py-3.5 rounded-xl border-2 transition-all duration-200 focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
-          style={{
-            borderColor: '#C1E0F1',
-            backgroundColor: '#F7FAFC',
-            color: '#2D3748'
-          }}
-          onFocus={(e) => e.target.style.borderColor = '#EECE84'}
-          onBlur={(e) => e.target.style.borderColor = '#C1E0F1'}
+          className="w-full px-4 py-3.5 rounded-xl border-2 border-border-blue bg-card text-foreground placeholder:text-muted-foreground transition-all duration-200 focus:outline-none focus:border-yellow-400 dark:focus:border-yellow-500 disabled:bg-muted disabled:cursor-not-allowed"
+          
+          
+          
         />
       </div>
 
@@ -252,7 +232,7 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
         <label 
           htmlFor="password" 
           className="block text-sm font-semibold"
-          style={{ color: '#4A5568' }}
+          
         >
           Mot de passe
         </label>
@@ -265,20 +245,16 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
             onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
             required
             disabled={loading}
-            className="w-full px-4 py-3.5 pr-12 rounded-xl border-2 transition-all duration-200 focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
-            style={{
-              borderColor: '#C1E0F1',
-              backgroundColor: '#F7FAFC',
-              color: '#2D3748'
-            }}
-            onFocus={(e) => e.target.style.borderColor = '#EECE84'}
-            onBlur={(e) => e.target.style.borderColor = '#C1E0F1'}
+            className="w-full px-4 py-3.5 pr-12 rounded-xl border-2 border-border-blue bg-card text-foreground placeholder:text-muted-foreground transition-all duration-200 focus:outline-none focus:border-yellow-400 dark:focus:border-yellow-500 disabled:bg-muted disabled:cursor-not-allowed"
+            
+            
+            
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-            style={{ color: '#718096' }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-foreground focus:outline-none transition-colors"
+            
           >
             {showPassword ? (
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -298,34 +274,28 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
       <div className="flex items-center justify-between">
         <label className="flex items-center space-x-2 cursor-pointer">
           <input
-            type="checkbox"
+            type="checkbox" className="w-4 h-4 rounded border-2 border-border-blue text-yellow-400 dark:text-yellow-500 focus:ring-yellow-400 dark:focus:ring-yellow-500 transition-colors"
             checked={rememberMe}
             onChange={(e) => setRememberMe(e.target.checked)}
             className="w-4 h-4 rounded border-2 transition-colors"
-            style={{
-              borderColor: '#C1E0F1',
-              accentColor: '#EECE84'
-            }}
+            
           />
-          <span className="text-sm" style={{ color: '#4A5568' }}>Remember me</span>
+          <span className="text-sm" >Remember me</span>
         </label>
         
         <button
           type="button"
           onClick={() => setView('forgot-password')}
-          className="text-sm font-medium hover:underline transition-colors"
-          style={{ color: '#2D3748' }}
+          className="text-sm font-medium hover:underline transition-colors text-foreground"
+          
         >
           Mot de passe oublié ?
         </button>
       </div>
 
       {error && (
-        <div className="px-4 py-3 rounded-xl text-sm font-medium flex items-center space-x-2"
-          style={{
-            backgroundColor: '#FED7D7',
-            color: '#C53030'
-          }}
+        <div className="px-4 py-3 rounded-xl text-sm font-medium flex items-center space-x-2 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300"
+          
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
@@ -335,11 +305,8 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
       )}
 
       {success && (
-        <div className="px-4 py-3 rounded-xl text-sm font-medium flex items-center space-x-2"
-          style={{
-            backgroundColor: '#C6F6D5',
-            color: '#22543D'
-          }}
+        <div className="px-4 py-3 rounded-xl text-sm font-medium flex items-center space-x-2 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300"
+          
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -351,12 +318,8 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-4 px-6 rounded-xl font-semibold transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none relative overflow-hidden group"
-        style={{
-          background: '#EECE84',
-          color: '#2D3748',
-          boxShadow: '0 10px 30px rgba(238, 206, 132, 0.5)'
-        }}
+        className="w-full py-4 px-6 rounded-xl font-semibold bg-yellow-400 dark:bg-yellow-500 text-foreground shadow-lg shadow-yellow-400/50 dark:shadow-yellow-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-400/50 dark:hover:shadow-yellow-500/50 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none relative overflow-hidden group"
+        
       >
         <span className="relative z-10">
           {loading ? (
@@ -372,21 +335,19 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
           )}
         </span>
         <div 
-          className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300"
-          style={{
-            background: 'rgba(0,0,0,0.1)'
-          }}
+          className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 bg-foreground/10"
+          
         />
       </button>
 
       {/* Sign up link */}
-      <div className="text-center text-sm pt-4 border-t" style={{ borderColor: '#C1E0F1', color: '#718096' }}>
+      <div className="text-center text-sm pt-4 border-t border-border-blue text-text-secondary" >
         <p>Don't have an account?{' '}
-          <a href="/signup" className="font-semibold hover:underline transition-colors" style={{ color: '#2D3748' }}>
+          <a href="/signup" className="font-semibold hover:underline transition-colors text-foreground" >
             Sign up
           </a>
         </p>
-        <p className="mt-2">Test account: <span className="font-semibold" style={{ color: '#2D3748' }}>client@atps.com</span> / <span className="font-semibold" style={{ color: '#2D3748' }}>client123</span></p>
+        <p className="mt-2">Test account: <span className="font-semibold" >client@atps.com</span> / <span className="font-semibold" >client123</span></p>
       </div>
     </form>
   );
