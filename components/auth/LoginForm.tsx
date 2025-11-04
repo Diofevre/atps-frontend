@@ -55,7 +55,7 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
             // Store credentials in localStorage (secure cookie would be better in production)
             localStorage.setItem('remember_me', 'true');
           }
-          router.push(redirectTo);
+          router.push(redirectTo || '/dashboard');
           router.refresh();
         }, 1000);
       } else {
