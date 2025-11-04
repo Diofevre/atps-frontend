@@ -5,7 +5,7 @@ import { useAuth, useUser } from '@/lib/mock-clerk';
 import { ensureValidToken } from '@/lib/authInterceptor';
 import { getAccessToken } from '@/lib/keycloakAuth';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { Loader } from '@/components/ui/loader';
 import { toast } from 'sonner';
@@ -17,10 +17,10 @@ import ReviewForm from './ReviewForm';
 import SidebarCard from './Sidebar';
 import FooterState from './Footer';
 import QuestionOptions from './QuestionOptionsQuizz';
-import AIChat from './AIChats';
-import FlyComputer from './FlyComputer';
-import AIOverlay from './AIOverlay';
-import ScientificCalculator from './ScientificCalculator';
+const AIChat = React.lazy(() => import('./AIChats'));
+const FlyComputer = React.lazy(() => import('./FlyComputer'));
+const AIOverlay = React.lazy(() => import('./AIOverlay'));
+const ScientificCalculator = React.lazy(() => import('./ScientificCalculator'));
 
 interface QuizData {
   topic_name?: string;
