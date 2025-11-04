@@ -1,14 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { User, Edit3, LogOut, Loader2, AlertTriangle, Save, X } from 'lucide-react';
+import { User, Edit3, LogOut, Loader2, AlertTriangle, Save, X, Lock, Bell, Shield, Key, Smartphone, Mail, Globe, Check } from 'lucide-react';
 import { GiUpgrade } from "react-icons/gi";
 import { useRouter } from 'next/navigation';
 import { getAccessToken } from '@/lib/keycloakAuth';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 
 interface UserData {
@@ -96,15 +96,15 @@ export default function UserProfilePage() {
   const handleSave = async () => {
     // TODO: Implement save
     console.log('Save changes:', editForm);
-      setIsEditing(false);
+    setIsEditing(false);
   };
 
   if (shouldShowLoading || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-[#EECE84]" />
-          <p className="text-gray-600">Loading profile...</p>
+          <p className="text-text-secondary">Loading profile...</p>
         </div>
       </div>
     );
@@ -112,12 +112,12 @@ export default function UserProfilePage() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
-        <div className="text-center bg-white p-8 rounded-xl shadow-xl max-w-md">
-          <AlertTriangle className="h-12 w-12 text-red-600 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-red-600 mb-2">Error</h2>
-          <p className="text-gray-600 mb-6">{error}</p>
-          <Button onClick={() => window.location.reload()} className="bg-[#EECE84] text-black">
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center bg-card border border-border p-8 rounded-xl shadow-lg max-w-md">
+          <AlertTriangle className="h-12 w-12 text-red-500 dark:text-red-400 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-card-foreground mb-2">Error</h2>
+          <p className="text-text-secondary mb-6">{error}</p>
+          <Button onClick={() => window.location.reload()} className="bg-[#EECE84] hover:bg-[#e5c16e] text-black">
             Retry
           </Button>
         </div>
@@ -125,289 +125,369 @@ export default function UserProfilePage() {
     );
   }
 
+  const fullName = `${userData?.firstName || ''} ${userData?.lastName || ''}`.trim() || 'User';
+  const initials = `${userData?.firstName?.[0] || ''}${userData?.lastName?.[0] || ''}`.toUpperCase() || 'U';
+
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground">Account Settings</h1>
-          <p className="text-text-secondary mt-2">Manage your account settings and preferences</p>
-        </div>
+      {/* Header with Profile Banner */}
+      <div className="relative">
+        <div className="h-48 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 dark:from-slate-800 dark:via-slate-700 dark:to-slate-800"></div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Profile Card */}
-          <div className="lg:col-span-1 space-y-6">
-            <Card className="overflow-hidden bg-card border border-border">
-              <div className="relative">
-                <div className="h-32 bg-main-gradient"></div>
-                <div className="absolute -bottom-16 inset-x-0 flex justify-center">
-                  <div className="w-32 h-32 rounded-full border-4 border-card shadow-lg bg-muted flex items-center justify-center">
-                    <User className="h-16 w-16 text-muted-foreground" />
-                  </div>
-                </div>
+        {/* Subscription Banner Overlay */}
+        <div className="absolute top-4 right-4">
+          <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border border-yellow-200 dark:border-yellow-700/30 rounded-lg p-3 shadow-lg backdrop-blur-sm">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-yellow-400 dark:bg-yellow-500 flex items-center justify-center">
+                <span className="text-xl">☀️</span>
               </div>
-              
-              <CardContent className="pt-20 pb-6 text-center">
-                <h2 className="text-2xl font-bold text-card-foreground">
-                  {userData?.firstName || 'User'} {userData?.lastName || ''}
-                </h2>
-                <p className="text-muted-foreground mt-1">@{userData?.username || 'username'}</p>
-                
-                <div className="mt-6 space-y-3">
-                      <Button 
-                        onClick={() => setIsEditing(true)}
-                    className="w-full bg-[#EECE84] hover:bg-[#e5c16e] text-black"
-                      >
-                    <Edit3 className="h-4 w-4 mr-2" />
-                        Edit Profile
-                      </Button>
-                  
-                  <Button 
-                    onClick={() => router.push('/settings')}
-                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
-                  >
-                    <GiUpgrade className="h-4 w-4 mr-2" />
-                    Upgrade Plan
-                  </Button>
-                  
-                  <Button 
-                    variant="outline"
-                    onClick={async () => {
-                      const { logout } = await import('@/lib/keycloakAuth');
-                      await logout();
-                      window.location.href = '/login';
-                    }}
-                    className="w-full"
-                  >
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Logout
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+              <div>
+                <p className="text-xs font-medium text-yellow-800 dark:text-yellow-300">Subscription</p>
+                <p className="text-sm font-bold text-yellow-900 dark:text-yellow-200">Free limited</p>
+              </div>
+              <Button 
+                onClick={() => router.push('/settings')}
+                className="bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-600 dark:hover:bg-yellow-700 text-white text-xs px-3 py-1.5 h-auto"
+              >
+                <GiUpgrade className="h-3 w-3 mr-1" />
+                Upgrade
+              </Button>
+            </div>
+          </div>
+        </div>
 
-            {/* Subscription Banner */}
-            <Card className="bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border border-yellow-200 dark:border-yellow-700/30 overflow-hidden relative">
-              <div className="absolute top-0 left-0 w-full h-full opacity-20">
-                {/* Cloud shapes */}
-                <div className="absolute top-2 left-2 w-16 h-12 bg-white dark:bg-gray-300 rounded-full"></div>
-                <div className="absolute top-4 left-8 w-12 h-8 bg-white dark:bg-gray-300 rounded-full"></div>
-                <div className="absolute top-1 left-20 w-10 h-6 bg-white dark:bg-gray-300 rounded-full"></div>
+        {/* Profile Info Overlay */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative -mb-16">
+          <div className="flex flex-col sm:flex-row items-start sm:items-end gap-6 pb-6">
+            {/* Avatar */}
+            <div className="relative">
+              <div className="w-32 h-32 rounded-full border-4 border-card shadow-xl bg-card flex items-center justify-center">
+                <span className="text-4xl font-bold text-card-foreground">{initials}</span>
               </div>
-              
-              <CardContent className="relative p-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <p className="text-xs font-medium text-yellow-800 dark:text-yellow-300 mb-1">Subscription</p>
-                    <p className="text-xl font-bold text-yellow-900 dark:text-yellow-200">Free limited</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {/* Sun icon */}
-                    <div className="w-12 h-12 rounded-full bg-yellow-400 dark:bg-yellow-500 flex items-center justify-center">
-                      <span className="text-2xl">☀️</span>
+              <button
+                onClick={() => setIsEditing(true)}
+                className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-[#EECE84] hover:bg-[#e5c16e] text-black shadow-lg flex items-center justify-center transition-transform hover:scale-110"
+                title="Edit profile"
+              >
+                <Edit3 className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* User Info */}
+            <div className="flex-1 pb-2">
+              <h1 className="text-3xl font-bold text-card-foreground mb-1">{fullName}</h1>
+              <p className="text-text-secondary mb-2">@{userData?.username || 'username'}</p>
+              <p className="text-text-secondary text-sm">{userData?.email || 'No email'}</p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3 mb-2">
+              <Button
+                variant="outline"
+                onClick={async () => {
+                  const { logout } = await import('@/lib/keycloakAuth');
+                  await logout();
+                  window.location.href = '/login';
+                }}
+                className="border-border"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8">
+        {/* Tabs */}
+        <div className="border-b border-border mb-8">
+          <nav className="flex space-x-8">
+            <button
+              onClick={() => setActiveTab('general')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors flex items-center gap-2 ${
+                activeTab === 'general'
+                  ? 'border-[#EECE84] text-[#EECE84]'
+                  : 'border-transparent text-text-secondary hover:text-foreground hover:border-border'
+              }`}
+            >
+              <User className="h-4 w-4" />
+              General Information
+            </button>
+            <button
+              onClick={() => setActiveTab('security')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors flex items-center gap-2 ${
+                activeTab === 'security'
+                  ? 'border-[#EECE84] text-[#EECE84]'
+                  : 'border-transparent text-text-secondary hover:text-foreground hover:border-border'
+              }`}
+            >
+              <Shield className="h-4 w-4" />
+              Security
+            </button>
+            <button
+              onClick={() => setActiveTab('notifications')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors flex items-center gap-2 ${
+                activeTab === 'notifications'
+                  ? 'border-[#EECE84] text-[#EECE84]'
+                  : 'border-transparent text-text-secondary hover:text-foreground hover:border-border'
+              }`}
+            >
+              <Bell className="h-4 w-4" />
+              Notifications
+            </button>
+          </nav>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'general' && (
+          <Card className="bg-card border border-border shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-card-foreground">Personal Information</CardTitle>
+              <CardDescription>
+                {isEditing ? 'Update your personal details below' : 'View and manage your personal information'}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {isEditing ? (
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="firstName" className="text-sm font-medium">First Name</Label>
+                      <Input
+                        id="firstName"
+                        value={editForm.firstName}
+                        onChange={(e) => setEditForm({ ...editForm, firstName: e.target.value })}
+                        placeholder="First name"
+                        className="bg-background border-border"
+                      />
                     </div>
-                    <Button 
-                      onClick={() => router.push('/settings')}
-                      className="bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-4 py-2"
-                    >
-                      Upgrade now
+                    <div className="space-y-2">
+                      <Label htmlFor="lastName" className="text-sm font-medium">Last Name</Label>
+                      <Input
+                        id="lastName"
+                        value={editForm.lastName}
+                        onChange={(e) => setEditForm({ ...editForm, lastName: e.target.value })}
+                        placeholder="Last name"
+                        className="bg-background border-border"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="username" className="text-sm font-medium">Username</Label>
+                      <Input
+                        id="username"
+                        value={editForm.username}
+                        onChange={(e) => setEditForm({ ...editForm, username: e.target.value })}
+                        placeholder="Username"
+                        className="bg-background border-border"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-sm font-medium">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={editForm.email}
+                        onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                        placeholder="Email"
+                        className="bg-background border-border"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="country" className="text-sm font-medium">Country</Label>
+                      <Input
+                        id="country"
+                        value={editForm.country}
+                        onChange={(e) => setEditForm({ ...editForm, country: e.target.value })}
+                        placeholder="Country"
+                        className="bg-background border-border"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="language" className="text-sm font-medium">Language</Label>
+                      <Input
+                        id="language"
+                        value={editForm.language}
+                        onChange={(e) => setEditForm({ ...editForm, language: e.target.value })}
+                        placeholder="Language"
+                        className="bg-background border-border"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-end space-x-3 pt-4 border-t border-border">
+                    <Button variant="outline" onClick={() => setIsEditing(false)} className="border-border">
+                      <X className="h-4 w-4 mr-2" />
+                      Cancel
+                    </Button>
+                    <Button onClick={handleSave} className="bg-[#EECE84] hover:bg-[#e5c16e] text-black">
+                      <Save className="h-4 w-4 mr-2" />
+                      Save Changes
                     </Button>
                   </div>
                 </div>
+              ) : (
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium text-muted-foreground">First Name</Label>
+                      <p className="text-base text-card-foreground">{userData?.firstName || 'Not provided'}</p>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium text-muted-foreground">Last Name</Label>
+                      <p className="text-base text-card-foreground">{userData?.lastName || 'Not provided'}</p>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium text-muted-foreground">Username</Label>
+                      <p className="text-base text-card-foreground">@{userData?.username || 'Not provided'}</p>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                        <Mail className="h-4 w-4" />
+                        Email
+                      </Label>
+                      <p className="text-base text-card-foreground">{userData?.email || 'Not provided'}</p>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                        <Globe className="h-4 w-4" />
+                        Country
+                      </Label>
+                      <p className="text-base text-card-foreground">{userData?.country || 'Not provided'}</p>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium text-muted-foreground">Language</Label>
+                      <p className="text-base text-card-foreground">{userData?.language || 'Not provided'}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
+        {activeTab === 'security' && (
+          <div className="space-y-6">
+            <Card className="bg-card border border-border shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-card-foreground flex items-center gap-2">
+                  <Key className="h-5 w-5" />
+                  Password
+                </CardTitle>
+                <CardDescription>
+                  Update your password to keep your account secure
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button variant="outline" className="border-border">
+                  Change Password
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-card border border-border shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-card-foreground flex items-center gap-2">
+                  <Shield className="h-5 w-5" />
+                  Two-Factor Authentication
+                </CardTitle>
+                <CardDescription>
+                  Add an extra layer of security to your account
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-card-foreground">2FA Status</p>
+                    <p className="text-xs text-muted-foreground mt-1">Not enabled</p>
+                  </div>
+                  <Button variant="outline" className="border-border">
+                    Enable 2FA
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-card border border-border shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-card-foreground flex items-center gap-2">
+                  <Smartphone className="h-5 w-5" />
+                  Active Sessions
+                </CardTitle>
+                <CardDescription>
+                  Manage devices where you're logged in
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 border border-border rounded-lg">
+                    <div>
+                      <p className="text-sm font-medium text-card-foreground">Current Session</p>
+                      <p className="text-xs text-muted-foreground mt-1">This device • Now</p>
+                    </div>
+                    <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
+                      <Check className="h-4 w-4" />
+                      <span className="text-xs font-medium">Active</span>
+                    </div>
+                  </div>
+                  <Button variant="outline" className="w-full border-border">
+                    View All Sessions
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </div>
+        )}
 
-          {/* Right Column - Tabs Content */}
-          <div className="lg:col-span-2">
-            {/* Tabs */}
-            <div className="border-b border-border mb-6">
-              <nav className="flex space-x-8">
-                <button
-                  onClick={() => setActiveTab('general')}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                    activeTab === 'general'
-                      ? 'border-[#EECE84] text-[#EECE84]'
-                      : 'border-transparent text-text-secondary hover:text-foreground hover:border-border'
-                  }`}
-                >
-                  General Information
-                </button>
-                <button
-                  onClick={() => setActiveTab('security')}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                    activeTab === 'security'
-                      ? 'border-[#EECE84] text-[#EECE84]'
-                      : 'border-transparent text-text-secondary hover:text-foreground hover:border-border'
-                  }`}
-                >
-                  Security
-                </button>
-                <button
-                  onClick={() => setActiveTab('notifications')}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                    activeTab === 'notifications'
-                      ? 'border-[#EECE84] text-[#EECE84]'
-                      : 'border-transparent text-text-secondary hover:text-foreground hover:border-border'
-                  }`}
-                >
-                  Notifications
-                </button>
-              </nav>
-            </div>
-
-            {/* Tab Content */}
-            {activeTab === 'general' && (
-              <Card className="bg-card border border-border">
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2 text-card-foreground">Personal Information</h3>
-                  <p className="text-text-secondary mb-6">
-                    {isEditing ? 'Update your personal details' : 'View your personal details'}
-                  </p>
-
-              {isEditing ? (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      <div>
-                        <Label>First Name</Label>
-                            <Input
-                              value={editForm.firstName}
-                              onChange={(e) => setEditForm({ ...editForm, firstName: e.target.value })}
-                          placeholder="First name"
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label>Last Name</Label>
-                            <Input
-                              value={editForm.lastName}
-                              onChange={(e) => setEditForm({ ...editForm, lastName: e.target.value })}
-                          placeholder="Last name"
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label>Username</Label>
-                            <Input
-                              value={editForm.username}
-                              onChange={(e) => setEditForm({ ...editForm, username: e.target.value })}
-                          placeholder="Username"
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label>Email</Label>
-                            <Input
-                              type="email"
-                              value={editForm.email}
-                              onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                          placeholder="Email"
-                          className="mt-1"
-                        />
-                      </div>
-                    </div>
-                    <div className="flex justify-end space-x-3 pt-4">
-                      <Button variant="outline" onClick={() => setIsEditing(false)}>
-                        <X className="h-4 w-4 mr-2" />
-                        Cancel
-                      </Button>
-                      <Button onClick={handleSave} className="bg-[#EECE84] hover:bg-[#e5c16e] text-black">
-                          <Save className="h-4 w-4 mr-2" />
-                        Save Changes
-                      </Button>
-                    </div>
+        {activeTab === 'notifications' && (
+          <Card className="bg-card border border-border shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-card-foreground flex items-center gap-2">
+                <Bell className="h-5 w-5" />
+                Notification Preferences
+              </CardTitle>
+              <CardDescription>
+                Choose how you want to be notified about activities and updates
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <div className="flex items-start justify-between p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors">
+                  <div className="flex-1">
+                    <Label className="text-base font-semibold text-card-foreground">Email Notifications</Label>
+                    <p className="text-sm text-muted-foreground mt-1">Receive email updates about your account and activities</p>
                   </div>
-                    ) : (
-                                      <div className="space-y-4">
-                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <div>
-                          <Label className="text-sm text-muted-foreground">First Name</Label>
-                          <p className="text-card-foreground mt-1">{userData?.firstName || 'Not provided'}</p>
-                        </div>
-                        <div>
-                          <Label className="text-sm text-muted-foreground">Last Name</Label>
-                          <p className="text-card-foreground mt-1">{userData?.lastName || 'Not provided'}</p>
-                        </div>
-                        <div>
-                          <Label className="text-sm text-muted-foreground">Username</Label>
-                          <p className="text-card-foreground mt-1">@{userData?.username || 'Not provided'}</p>
-                        </div>
-                        <div>
-                          <Label className="text-sm text-muted-foreground">Email</Label>
-                          <p className="text-card-foreground mt-1">{userData?.email || 'Not provided'}</p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                  <label className="relative inline-flex items-center cursor-pointer ml-4">
+                    <input type="checkbox" className="sr-only peer" defaultChecked />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#EECE84] dark:peer-focus:ring-[#EECE84] rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#EECE84]"></div>
+                  </label>
                 </div>
-              </Card>
-            )}
-
-            {activeTab === 'security' && (
-              <Card className="bg-card border border-border">
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2 text-card-foreground">Security Settings</h3>
-                  <p className="text-text-secondary mb-6">Manage your password and security preferences</p>
-                  
-                  <div className="space-y-6">
-                    <div>
-                      <Label className="text-base font-semibold">Change Password</Label>
-                      <p className="text-sm text-muted-foreground mt-1 mb-4">Update your password to keep your account secure</p>
-                      <Button variant="outline">Change Password</Button>
-                    </div>
-                    
-                    <div className="border-t border-border pt-6">
-                      <Label className="text-base font-semibold">Two-Factor Authentication</Label>
-                      <p className="text-sm text-muted-foreground mt-1 mb-4">Add an extra layer of security to your account</p>
-                      <Button variant="outline">Enable 2FA</Button>
-                    </div>
-                    
-                    <div className="border-t border-border pt-6">
-                      <Label className="text-base font-semibold">Active Sessions</Label>
-                      <p className="text-sm text-muted-foreground mt-1 mb-4">Manage devices where you're logged in</p>
-                      <Button variant="outline">View Sessions</Button>
-                    </div>
+                
+                <div className="flex items-start justify-between p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors">
+                  <div className="flex-1">
+                    <Label className="text-base font-semibold text-card-foreground">Push Notifications</Label>
+                    <p className="text-sm text-muted-foreground mt-1">Get notified about important updates and announcements</p>
                   </div>
+                  <label className="relative inline-flex items-center cursor-pointer ml-4">
+                    <input type="checkbox" className="sr-only peer" />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#EECE84] dark:peer-focus:ring-[#EECE84] rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#EECE84]"></div>
+                  </label>
                 </div>
-              </Card>
-            )}
-
-            {activeTab === 'notifications' && (
-              <Card className="bg-card border border-border">
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2 text-card-foreground">Notification Preferences</h3>
-                  <p className="text-text-secondary mb-6">Choose how you want to be notified</p>
-                  
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <Label className="text-base font-semibold">Email Notifications</Label>
-                        <p className="text-sm text-muted-foreground mt-1">Receive email updates about your account</p>
-                      </div>
-                      <input type="checkbox" className="w-5 h-5" defaultChecked />
-                    </div>
-                    
-                    <div className="border-t border-border pt-6 flex items-center justify-between">
-                      <div>
-                        <Label className="text-base font-semibold">Push Notifications</Label>
-                        <p className="text-sm text-muted-foreground mt-1">Get notified about important updates</p>
-                      </div>
-                      <input type="checkbox" className="w-5 h-5" />
-                    </div>
-                    
-                    <div className="border-t border-border pt-6 flex items-center justify-between">
-                      <div>
-                        <Label className="text-base font-semibold">Study Reminders</Label>
-                        <p className="text-sm text-muted-foreground mt-1">Reminders to continue your studies</p>
-                      </div>
-                      <input type="checkbox" className="w-5 h-5" defaultChecked />
-                    </div>
+                
+                <div className="flex items-start justify-between p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors">
+                  <div className="flex-1">
+                    <Label className="text-base font-semibold text-card-foreground">Study Reminders</Label>
+                    <p className="text-sm text-muted-foreground mt-1">Reminders to continue your studies and complete your courses</p>
                   </div>
+                  <label className="relative inline-flex items-center cursor-pointer ml-4">
+                    <input type="checkbox" className="sr-only peer" defaultChecked />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#EECE84] dark:peer-focus:ring-[#EECE84] rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#EECE84]"></div>
+                  </label>
                 </div>
-              </Card>
-            )}
-          </div>
-        </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );

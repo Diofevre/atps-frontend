@@ -45,9 +45,9 @@
   :root {
     /* Light Theme - Backgrounds (blancs et bleus clairs) */
     --background: 0 0% 100%;
-    --background-gradient-start: 220 100% 97%; /* blue-50 */
+    --background-gradient-start: 210 90% 92%; /* blue-100 - bleu ciel */
     --background-gradient-mid: 0 0% 100%; /* white */
-    --background-gradient-end: 220 100% 97%; /* blue-50 */
+    --background-gradient-end: 210 90% 92%; /* blue-100 - bleu ciel */
     --card: 0 0% 100%; /* white */
     --popover: 0 0% 100%; /* white */
     --sidebar-background: 220 14% 96%; /* gray-50, légèrement plus clair que le main */
