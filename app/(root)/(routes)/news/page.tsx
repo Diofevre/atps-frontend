@@ -90,7 +90,7 @@ export default function NewsPage() {
   // Show loading while checking auth
   if (isLoading || loading) {
     return (
-      <div className="container mx-auto px-4 py-8 bg-background">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center text-foreground">Loading...</div>
       </div>
     );
@@ -102,7 +102,8 @@ export default function NewsPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-background">
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold mb-8 text-foreground">Aviation News</h1>
         
         {/* Featured Article */}
@@ -129,7 +130,7 @@ export default function NewsPage() {
                       <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 group-hover:text-atps-yellow transition-colors">
                         {featured.title}
                       </h2>
-                      <p className="text-gray-200 mb-6 text-lg leading-relaxed line-clamp-2">
+                      <p className="text-white/90 mb-6 text-lg leading-relaxed line-clamp-2">
                         {featured.excerpt}
                       </p>
                       <div className="flex items-center text-white text-sm">
@@ -151,6 +152,7 @@ export default function NewsPage() {
             <NewsCard key={article.id} article={article} />
           ))}
         </div>
+      </div>
     </div>
   );
 }

@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { MenuSidebar } from "@/lib/menu-sidebar";
 import Image from "next/image";
-import { GiUpgrade } from "react-icons/gi";
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { AdvancedThemeSwitch } from '@/components/advanced-theme-switch';
@@ -19,9 +18,19 @@ const Sidebar = () => {
     <div
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
-      className={`h-screen p-5 pt-3 transition-all duration-300 flex flex-col bg-sidebar border-r border-sidebar-border ${
+      onTouchStart={(e) => {
+        // Sur tablette, ouvrir au touch
+        if (!isOpen) {
+          setIsOpen(true);
+        }
+      }}
+      className={`fixed left-0 top-0 z-50 h-screen p-5 pt-3 transition-all duration-300 flex flex-col bg-sidebar border-r border-sidebar-border overflow-y-auto ${
         isOpen ? "w-60" : "w-20"
       }`}
+      style={{ 
+        WebkitOverflowScrolling: 'touch',
+        touchAction: 'pan-y'
+      }}
     >
       <Link href='/dashboard' className="flex items-center h-[40px] mb-8 relative mt-2">
         <div className="relative flex-shrink-0">
@@ -49,7 +58,7 @@ const Sidebar = () => {
       <ul className="flex-1 flex flex-col justify-center">
         {MenuSidebar.map((menu, index) => (
           <Link href={menu.path} key={index}>
-            <li className={`text-sm flex items-center gap-3 p-2 mt-2 cursor-pointer hover:bg-sidebar-accent rounded-md transition-colors duration-200 hover:text-[#EECE84] text-sidebar-foreground ${
+            <li className={`text-sm flex items-center gap-3 p-2 mt-2 cursor-pointer hover:bg-sidebar-accent active:bg-sidebar-accent rounded-md transition-colors duration-200 hover:text-[#EECE84] text-sidebar-foreground touch-manipulation ${
               pathname.startsWith(menu.path) && 'text-[#EECE84] bg-sidebar-accent'
             }`}>
               <span className="text-2xl min-w-[24px]">
@@ -75,7 +84,7 @@ const Sidebar = () => {
           ) : (
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-2 rounded-lg hover:bg-sidebar-accent transition-colors duration-200"
+              className="p-2 rounded-lg hover:bg-sidebar-accent active:bg-sidebar-accent transition-colors duration-200 touch-manipulation"
               title="Toggle theme"
             >
               <svg className="w-5 h-5 text-sidebar-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,28 +92,6 @@ const Sidebar = () => {
               </svg>
             </button>
           )}
-        </div>
-      </div>
-
-      {/* Bottom Mode Section */}
-      <div 
-        onClick={() => router.push('/settings')}
-        className={`cursor-pointer hover:bg-sidebar-accent rounded-md transition-colors duration-200 hover:text-[#EECE84] text-sidebar-foreground ${
-          pathname === '/settings' && 'text-[#EECE84] bg-sidebar-accent'
-        }`}
-      >
-        <div className={`flex items-center gap-2 ${isOpen && 'p-2'}`}>
-          <GiUpgrade className="text-2xl min-w-[24px] ml-2" />
-          <div className={`flex flex-col whitespace-nowrap overflow-hidden transition-all duration-300 ${
-            isOpen ? "opacity-100 w-32" : "opacity-0 w-0"
-          }`}>
-            <span className="text-[14px] text-sidebar-foreground">
-              Upgrade plan
-            </span>
-            <span className="text-[10px] text-sidebar-accent-foreground">
-              More access to the features
-            </span>
-          </div>
         </div>
       </div>
     </div>

@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { User, Edit3, LogOut, Loader2, AlertTriangle, Save, X } from 'lucide-react';
+import { GiUpgrade } from "react-icons/gi";
+import { useRouter } from 'next/navigation';
 import { getAccessToken } from '@/lib/keycloakAuth';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { Input } from "@/components/ui/input";
@@ -20,6 +22,7 @@ interface UserData {
 }
 
 export default function UserProfilePage() {
+  const router = useRouter();
   const { shouldShowLoading } = useRequireAuth();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -157,6 +160,14 @@ export default function UserProfilePage() {
                     <Edit3 className="h-4 w-4 mr-2" />
                         Edit Profile
                       </Button>
+                  
+                  <Button 
+                    onClick={() => router.push('/settings')}
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
+                  >
+                    <GiUpgrade className="h-4 w-4 mr-2" />
+                    Upgrade Plan
+                  </Button>
                   
                   <Button 
                     variant="outline"
