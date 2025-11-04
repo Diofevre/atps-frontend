@@ -3,75 +3,58 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MenuSidebar } from "@/lib/menu-sidebar";
 import Image from "next/image";
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { AdvancedThemeSwitch } from '@/components/advanced-theme-switch';
 import { useTheme } from 'next-themes';
-import { isMobileOrTablet } from '@/lib/utils/deviceDetection';
 
 const Sidebar = () => {
-  const router = useRouter();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  // Réduire la sidebar automatiquement sur tablette/téléphone quand on clique à l'extérieur
+  // Fermer la sidebar quand on clique à l'extérieur (pour mobile/tablette)
   useEffect(() => {
-    if (!isMobileOrTablet()) return; // Seulement sur tablette/téléphone
-
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (isOpen && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
 
-    // Ajouter les event listeners
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('touchstart', handleClickOutside);
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
 
-    // Nettoyer les event listeners
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('touchstart', handleClickOutside);
     };
   }, [isOpen]);
 
-  // Réduire la sidebar automatiquement sur tablette/téléphone quand on change de route
+  // Fermer la sidebar automatiquement quand on change de route (pour mobile/tablette)
   useEffect(() => {
-    if (isMobileOrTablet() && isOpen) {
-      setIsOpen(false);
+    if (isOpen) {
+      // Délai pour éviter les fermetures trop rapides
+      const timer = setTimeout(() => {
+        setIsOpen(false);
+      }, 100);
+      return () => clearTimeout(timer);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [pathname, isOpen]);
 
   return (
     <div
       ref={sidebarRef}
-      onMouseEnter={() => {
-        // Sur desktop, ouvrir au survol
-        if (!isMobileOrTablet()) {
-          setIsOpen(true);
-        }
-      }}
-      onMouseLeave={() => {
-        // Sur desktop, fermer quand on quitte
-        if (!isMobileOrTablet()) {
-          setIsOpen(false);
-        }
-      }}
-      onTouchStart={(e) => {
-        // Sur tablette, ouvrir au touch
-        if (isMobileOrTablet() && !isOpen) {
-          setIsOpen(true);
-          e.stopPropagation();
-        }
-      }}
-      className={`fixed left-0 top-0 z-50 max-h-screen overflow-hidden flex flex-col bg-sidebar border-r border-sidebar-border ${
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+      className={`fixed left-0 top-0 z-50 flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300 ${
         isOpen ? "w-60" : "w-20"
       }`}
       style={{ 
-        height: '100dvh', // Dynamic viewport height for mobile
+        height: '100vh',
+        maxHeight: '100vh',
       }}
     >
       {/* Header - Fixed at top */}
@@ -99,24 +82,34 @@ const Sidebar = () => {
         </Link>
       </div>
 
-      {/* Menu - Takes available space, no scroll */}
-      <ul className="flex-1 flex flex-col justify-center px-5 min-h-0">
-        {MenuSidebar.map((menu, index) => (
-          <Link href={menu.path} key={index}>
-            <li className={`text-sm flex items-center gap-3 p-2 mt-2 cursor-pointer hover:bg-sidebar-accent active:bg-sidebar-accent rounded-md transition-colors duration-200 hover:text-[#EECE84] text-sidebar-foreground touch-manipulation ${
-              pathname.startsWith(menu.path) && 'text-[#EECE84] bg-sidebar-accent'
-            }`}>
-              <span className="text-2xl min-w-[24px] flex-shrink-0">
-                <menu.icon />
-              </span>
-              <span className={`text-base font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${
-                isOpen ? "opacity-100 w-32" : "opacity-0 w-0"
-              }`}>
-                {menu.title}
-              </span>
-            </li>
-          </Link>
-        ))}
+      {/* Menu - Scrollable if needed */}
+      <ul className="flex-1 overflow-y-auto overflow-x-hidden px-5 py-4" style={{ minHeight: 0 }}>
+        {MenuSidebar.map((menu, index) => {
+          const isActive = pathname.startsWith(menu.path);
+          
+          return (
+            <Link href={menu.path} key={index}>
+              <li 
+                className={`flex items-center gap-3 p-3 mb-1 cursor-pointer rounded-md transition-all duration-200 touch-manipulation ${
+                  isActive
+                    ? 'bg-[#EECE84] dark:bg-[#EECE84] text-gray-900 dark:text-gray-900 shadow-md'
+                    : 'hover:bg-sidebar-accent text-sidebar-foreground hover:text-[#EECE84]'
+                }`}
+              >
+                <span className={`text-2xl min-w-[24px] flex-shrink-0 flex items-center justify-center ${
+                  isActive ? 'text-gray-900' : 'text-sidebar-foreground'
+                }`}>
+                  <menu.icon />
+                </span>
+                <span className={`text-base font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${
+                  isOpen ? "opacity-100 w-auto" : "opacity-0 w-0"
+                } ${isActive ? 'text-gray-900 font-semibold' : ''}`}>
+                  {menu.title}
+                </span>
+              </li>
+            </Link>
+          );
+        })}
       </ul>
 
       {/* Theme Toggle Section - Fixed at bottom, always visible */}
@@ -130,7 +123,9 @@ const Sidebar = () => {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                setTheme(theme === "dark" ? "light" : "dark");
+                const newTheme = theme === "dark" ? "light" : "dark";
+                localStorage.setItem('theme', newTheme);
+                window.dispatchEvent(new Event('theme-change'));
               }}
               className="p-2 rounded-lg hover:bg-sidebar-accent active:bg-sidebar-accent transition-colors duration-200 touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center w-full"
               title="Toggle theme"
