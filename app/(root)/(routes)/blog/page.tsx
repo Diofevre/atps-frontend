@@ -101,7 +101,7 @@ export default function BlogPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-screen flex items-center justify-center bg-main-gradient">
         <p className="text-text-secondary">Loading...</p>
       </div>
     );
@@ -112,7 +112,7 @@ export default function BlogPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-main-gradient">
       {/* Header Section */}
       <div className="relative overflow-hidden bg-card border-b border-border">
         <div className="absolute inset-0 bg-gradient-to-br from-muted/50 to-transparent" />

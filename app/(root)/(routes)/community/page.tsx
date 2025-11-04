@@ -56,7 +56,7 @@ export default function CommunityPage() {
   // Show loading while checking auth
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-main-gradient flex items-center justify-center">
         <div className="text-center">
           <p className="text-foreground">Loading...</p>
         </div>
@@ -129,7 +129,7 @@ export default function CommunityPage() {
   const displayPosts = posts.length > 0 ? posts : mockPosts;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-main-gradient">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Header */}
         <div className="mb-8">
