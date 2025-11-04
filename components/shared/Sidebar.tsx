@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MenuSidebar } from "@/lib/menu-sidebar";
 import Image from "next/image";
 import { usePathname, useRouter } from 'next/navigation';
@@ -13,14 +13,69 @@ const Sidebar = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const { theme, setTheme } = useTheme();
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  // Fonction pour détecter si on est sur un petit écran (tablette/téléphone)
+  const isMobileOrTablet = () => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth < 1024; // lg breakpoint de Tailwind
+  };
+
+  // Réduire la sidebar automatiquement sur tablette/téléphone quand on clique à l'extérieur ou qu'on scroll
+  useEffect(() => {
+    if (!isMobileOrTablet()) return; // Seulement sur tablette/téléphone
+
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (isOpen && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    const handleScroll = () => {
+      if (isOpen) {
+        setIsOpen(false);
+      }
+    };
+
+    // Ajouter les event listeners
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    window.addEventListener('scroll', handleScroll, true); // true pour capturer le scroll dans tous les éléments
+
+    // Nettoyer les event listeners
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+      window.removeEventListener('scroll', handleScroll, true);
+    };
+  }, [isOpen]);
+
+  // Réduire la sidebar automatiquement sur tablette/téléphone quand on change de route
+  useEffect(() => {
+    if (isMobileOrTablet() && isOpen) {
+      setIsOpen(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   return (
     <div
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
+      ref={sidebarRef}
+      onMouseEnter={() => {
+        // Sur desktop, ouvrir au survol
+        if (!isMobileOrTablet()) {
+          setIsOpen(true);
+        }
+      }}
+      onMouseLeave={() => {
+        // Sur desktop, fermer quand on quitte
+        if (!isMobileOrTablet()) {
+          setIsOpen(false);
+        }
+      }}
       onTouchStart={(e) => {
         // Sur tablette, ouvrir au touch
-        if (!isOpen) {
+        if (isMobileOrTablet() && !isOpen) {
           setIsOpen(true);
         }
       }}

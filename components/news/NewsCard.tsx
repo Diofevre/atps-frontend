@@ -20,12 +20,12 @@ export default function NewsCard({ article }: NewsCardProps) {
       <article className="bg-card rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow h-full border border-border">
         <div className="relative h-48">
           <img
-            src={article.featuredImageUrl || '/placeholder-news.jpg'}
+            src={article.featuredImageUrl || '/breaking-news-default.jpg'}
             alt={article.title}
             className="w-full h-full object-cover"
             onError={(e) => {
               console.error('Image failed to load:', article.featuredImageUrl);
-              e.currentTarget.src = '/placeholder-news.jpg';
+              e.currentTarget.src = '/breaking-news-default.jpg';
             }}
           />
         </div>

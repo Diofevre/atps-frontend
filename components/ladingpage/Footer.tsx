@@ -101,10 +101,10 @@ const Footer = () => {
             <span className="block mt-1 text-transparent bg-clip-text bg-gradient-to-r from-[#EECE84] to-amber-400">
               {t.footer.ctaSubtitle}
             </span>
-          </h2>
+              </h2>
           <div className="flex gap-4 justify-start">
             <Link href="/signup">
-              <Button 
+                  <Button 
                 size="lg"
                 className="bg-gradient-to-r from-[#EECE84] to-amber-400 hover:from-[#EECE84]/90 hover:to-amber-400/90 text-slate-900 rounded-[24px] px-8 h-14 transition-all duration-300 group"
               >
@@ -113,8 +113,8 @@ const Footer = () => {
                   <span className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform">
                     ⟶
                   </span>
-                </span>
-              </Button>
+                    </span>
+                  </Button>
             </Link>
           </div>
         </motion.div>
@@ -181,7 +181,7 @@ const Footer = () => {
                     <Icon className="w-5 h-5" />
                   </motion.a>
                 ))}
-              </div>
+            </div>
             </motion.div>
 
             {/* Quick Links */}
@@ -232,7 +232,7 @@ const Footer = () => {
                 ))}
               </ul>
             </motion.div>
-          </div>
+        </div>
 
           {/* Bottom Bar */}
           <motion.div 
@@ -242,11 +242,11 @@ const Footer = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="pt-12 border-t border-white/5"
           >
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <p className="text-sm text-gray-500">
                 {t.footer.allRightsReserved}
-              </p>
-              <div className="flex items-center gap-6">
+            </p>
+            <div className="flex items-center gap-6">
                 <Link href="/privacy-policy" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">{t.footer.privacyPolicy}</Link>
                 <Link href="/terms-of-service" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">{t.footer.termsOfService}</Link>
                 <Link href="/cookie-policy" className="text-sm text-gray-400 hover:text-[#EECE84] transition-colors">{t.footer.cookiePolicy}</Link>
