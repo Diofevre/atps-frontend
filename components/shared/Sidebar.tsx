@@ -14,6 +14,7 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLUListElement>(null);
 
   // Fonction pour détecter si on est sur un petit écran (tablette/téléphone)
   const isMobileOrTablet = () => {
@@ -31,7 +32,11 @@ const Sidebar = () => {
       }
     };
 
-    const handleScroll = () => {
+    const handleScroll = (event: Event) => {
+      // Ne pas fermer si on scroll dans la sidebar elle-même
+      if (sidebarRef.current && sidebarRef.current.contains(event.target as Node)) {
+        return;
+      }
       if (isOpen) {
         setIsOpen(false);
       }
@@ -77,49 +82,58 @@ const Sidebar = () => {
         // Sur tablette, ouvrir au touch
         if (isMobileOrTablet() && !isOpen) {
           setIsOpen(true);
+          e.stopPropagation();
         }
       }}
-      className={`fixed left-0 top-0 z-50 h-screen p-5 pt-3 pb-5 transition-all duration-300 flex flex-col bg-sidebar border-r border-sidebar-border ${
+      className={`fixed left-0 top-0 z-50 transition-all duration-300 flex flex-col bg-sidebar border-r border-sidebar-border ${
         isOpen ? "w-60" : "w-20"
       }`}
       style={{ 
-        WebkitOverflowScrolling: 'touch',
-        touchAction: 'pan-y',
+        height: '100vh',
         maxHeight: '100vh',
-        overflowY: 'auto',
-        overflowX: 'hidden'
+        WebkitOverflowScrolling: 'touch',
       }}
     >
-      <Link href='/dashboard' className="flex items-center h-[40px] mb-8 relative mt-2">
-        <div className="relative flex-shrink-0">
-          <Image
-            src={isOpen ? "/atps.png" : "/atps-default.png"}
-            alt="ATPS LOGO"
-            height={isOpen ? 100 :40}
-            width={isOpen ? 100 :40}
-            className="transition-transform duration-300"
-          />
-        </div>
-        <div 
-          className={`flex items-center overflow-hidden transition-all duration-300 ${
-            isOpen ? "w-auto opacity-100 ml-2" : "w-0 opacity-0"
-          }`}
-        >
-          <span className="text-[30px] text-sidebar-foreground flex-shrink-0">|</span>
-          <span className="text-[10px] font-semibold text-sidebar-foreground whitespace-nowrap ml-2">
-            Airline Transport <br /> Pilot School
-          </span>
-        </div>
-      </Link>
+      {/* Header - Fixed at top */}
+      <div className="flex-shrink-0 p-5 pt-3">
+        <Link href='/dashboard' className="flex items-center h-[40px] relative">
+          <div className="relative flex-shrink-0">
+            <Image
+              src={isOpen ? "/atps.png" : "/atps-default.png"}
+              alt="ATPS LOGO"
+              height={isOpen ? 100 :40}
+              width={isOpen ? 100 :40}
+              className="transition-transform duration-300"
+            />
+          </div>
+          <div 
+            className={`flex items-center overflow-hidden transition-all duration-300 ${
+              isOpen ? "w-auto opacity-100 ml-2" : "w-0 opacity-0"
+            }`}
+          >
+            <span className="text-[30px] text-sidebar-foreground flex-shrink-0">|</span>
+            <span className="text-[10px] font-semibold text-sidebar-foreground whitespace-nowrap ml-2">
+              Airline Transport <br /> Pilot School
+            </span>
+          </div>
+        </Link>
+      </div>
 
-      {/* Centered Menu */}
-      <ul className="flex-1 flex flex-col justify-center min-h-0 overflow-y-auto">
+      {/* Scrollable Menu - Takes available space */}
+      <ul 
+        ref={menuRef}
+        className="flex-1 overflow-y-auto overflow-x-hidden px-5 flex flex-col justify-center"
+        style={{
+          WebkitOverflowScrolling: 'touch',
+          minHeight: 0, // Important for flexbox scroll
+        }}
+      >
         {MenuSidebar.map((menu, index) => (
           <Link href={menu.path} key={index}>
             <li className={`text-sm flex items-center gap-3 p-2 mt-2 cursor-pointer hover:bg-sidebar-accent active:bg-sidebar-accent rounded-md transition-colors duration-200 hover:text-[#EECE84] text-sidebar-foreground touch-manipulation ${
               pathname.startsWith(menu.path) && 'text-[#EECE84] bg-sidebar-accent'
             }`}>
-              <span className="text-2xl min-w-[24px]">
+              <span className="text-2xl min-w-[24px] flex-shrink-0">
                 <menu.icon />
               </span>
               <span className={`text-base font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${
@@ -132,8 +146,8 @@ const Sidebar = () => {
         ))}
       </ul>
 
-      {/* Theme Toggle Section - Always visible, even on mobile/tablet */}
-      <div className={`mt-auto flex-shrink-0 ${isOpen ? 'px-2' : 'px-2'}`}>
+      {/* Theme Toggle Section - Fixed at bottom, always visible */}
+      <div className="flex-shrink-0 p-5 pb-5 border-t border-sidebar-border">
         <div className={`flex items-center transition-all duration-300 ${
           isOpen ? 'opacity-100 w-auto' : 'opacity-100 w-auto justify-center'
         }`}>
@@ -141,8 +155,11 @@ const Sidebar = () => {
             <AdvancedThemeSwitch />
           ) : (
             <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-2 rounded-lg hover:bg-sidebar-accent active:bg-sidebar-accent transition-colors duration-200 touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
+              onClick={(e) => {
+                e.stopPropagation();
+                setTheme(theme === "dark" ? "light" : "dark");
+              }}
+              className="p-2 rounded-lg hover:bg-sidebar-accent active:bg-sidebar-accent transition-colors duration-200 touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center w-full"
               title="Toggle theme"
               aria-label="Toggle theme"
             >

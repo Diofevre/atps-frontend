@@ -44,8 +44,8 @@ export default function Layout({ children }: Props) {
       <div className="flex w-full relative">
         {/* Sidebar with glass effect */}
         {!hideSidebar && (
-          <aside className="top-0 left-0 h-full relative hidden md:flex">
-            <div className="absolute inset-0 bg-white/50 border-r backdrop-blur-md" />
+          <aside className="top-0 left-0 h-full relative">
+            <div className="absolute inset-0 bg-white/50 border-r backdrop-blur-md hidden md:block" />
             <div className="relative">
               <Sidebar />
             </div>
