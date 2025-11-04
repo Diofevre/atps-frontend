@@ -7,6 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { AdvancedThemeSwitch } from '@/components/advanced-theme-switch';
 import { useTheme } from 'next-themes';
+import { isMobileOrTablet } from '@/lib/utils/deviceDetection';
 
 const Sidebar = () => {
   const router = useRouter();
@@ -14,12 +15,6 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const sidebarRef = useRef<HTMLDivElement>(null);
-
-  // Fonction pour détecter si on est sur un petit écran (tablette/téléphone)
-  const isMobileOrTablet = () => {
-    if (typeof window === 'undefined') return false;
-    return window.innerWidth < 1024; // lg breakpoint de Tailwind
-  };
 
   // Réduire la sidebar automatiquement sur tablette/téléphone quand on clique à l'extérieur
   useEffect(() => {
