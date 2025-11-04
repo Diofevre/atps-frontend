@@ -124,21 +124,21 @@ export default function BlogPostPage() {
 
   if (!post) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
-          <p className="text-gray-600">Loading article...</p>
+          <p className="text-text-secondary">Loading article...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-50">
+    <div className="min-h-screen bg-background">
       {/* Back Button */}
       <div className="container mx-auto px-4 py-6">
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 text-gray-700 hover:text-atps-yellow font-medium transition-colors"
+          className="inline-flex items-center gap-2 text-card-foreground hover:text-atps-yellow font-medium transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           Back to Blog
@@ -150,13 +150,13 @@ export default function BlogPostPage() {
         <div className="max-w-4xl mx-auto">
           {/* Category and Tags */}
           <div className="flex flex-wrap items-center gap-3 mb-4">
-            <span className="px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium capitalize">
+            <span className="px-4 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-full text-sm font-medium capitalize">
               {post.category.replace('-', ' ')}
             </span>
             {post.tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
+                className="inline-flex items-center gap-1 px-3 py-1 bg-muted text-card-foreground rounded-full text-sm"
               >
                 <Tag className="w-3 h-3" />
                 {tag}
@@ -165,19 +165,19 @@ export default function BlogPostPage() {
           </div>
 
           {/* Title */}
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
             {post.title}
           </h1>
 
           {/* Meta Info */}
-          <div className="flex flex-wrap items-center gap-6 text-gray-600 mb-8 pb-8 border-b border-gray-200">
+          <div className="flex flex-wrap items-center gap-6 text-text-secondary mb-8 pb-8 border-b border-border">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-atps-yellow to-yellow-600 flex items-center justify-center text-gray-900 font-bold">
                 {post.author.name.charAt(0)}
               </div>
               <div>
-                <p className="font-medium text-gray-900">{post.author.name}</p>
-                <p className="text-sm">{post.author.bio}</p>
+                <p className="font-medium text-foreground">{post.author.name}</p>
+                <p className="text-sm text-text-secondary">{post.author.bio}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -210,8 +210,8 @@ export default function BlogPostPage() {
             {/* Table of Contents */}
             <aside className="lg:col-span-1 order-2 lg:order-1">
               <div className="sticky top-8">
-                <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
-                  <h3 className="font-bold text-gray-900 mb-4 text-lg">Table of Contents</h3>
+                <div className="bg-card rounded-xl shadow-md p-6 border border-border">
+                  <h3 className="font-bold text-foreground mb-4 text-lg">Table of Contents</h3>
                   <nav className="space-y-2">
                     {post.content.sections.map((section) => (
                       <a
@@ -226,8 +226,8 @@ export default function BlogPostPage() {
                         }}
                         className={`block px-3 py-2 rounded-lg text-sm transition-all ${
                           activeSection === section.id
-                            ? 'bg-yellow-100 text-gray-900 font-medium'
-                            : 'text-gray-600 hover:bg-gray-100'
+                            ? 'bg-yellow-100 dark:bg-yellow-900/30 text-foreground font-medium'
+                            : 'text-text-secondary hover:bg-muted'
                         }`}
                       >
                         {section.heading}
@@ -247,16 +247,16 @@ export default function BlogPostPage() {
 
             {/* Article Content */}
             <article className="lg:col-span-3 order-1 lg:order-2">
-              <div className="bg-white rounded-2xl shadow-md p-8 md:p-12 border border-gray-100">
+              <div className="bg-card rounded-2xl shadow-md p-8 md:p-12 border border-border">
                 {/* Excerpt */}
-                <p className="text-xl text-gray-700 mb-12 leading-relaxed border-l-4 border-atps-yellow pl-6">
+                <p className="text-xl text-text-secondary mb-12 leading-relaxed border-l-4 border-atps-yellow pl-6">
                   {post.excerpt}
                 </p>
 
                 {/* Sections */}
                 {post.content.sections.map((section, index) => (
                   <section key={section.id} id={section.id} className="mb-16 scroll-mt-8">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                    <h2 className="text-3xl font-bold text-foreground mb-6">
                       {index + 1}. {section.heading}
                     </h2>
                     {section.image && (
@@ -268,8 +268,8 @@ export default function BlogPostPage() {
                         />
                       </div>
                     )}
-                    <div className="prose prose-lg max-w-none">
-                      <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                    <div className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-text-secondary">
+                      <p className="text-text-secondary leading-relaxed whitespace-pre-line">
                         {section.content}
                       </p>
                     </div>
@@ -277,9 +277,9 @@ export default function BlogPostPage() {
                 ))}
 
                 {/* Conclusion */}
-                <div className="mt-16 p-8 bg-yellow-50 rounded-xl border border-yellow-200">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Key Takeaways</h3>
-                  <ul className="space-y-3 text-gray-700">
+                <div className="mt-16 p-8 bg-yellow-50 dark:bg-yellow-900/20 rounded-xl border border-yellow-200 dark:border-yellow-800">
+                  <h3 className="text-2xl font-bold text-foreground mb-4">Key Takeaways</h3>
+                  <ul className="space-y-3 text-text-secondary">
                     <li className="flex items-start gap-3">
                       <span className="text-atps-yellow font-bold text-xl">✓</span>
                       <span>Always perform a thorough walk-around inspection</span>
@@ -300,15 +300,15 @@ export default function BlogPostPage() {
                 </div>
 
                 {/* Author Bio */}
-                <div className="mt-16 p-8 bg-gray-50 rounded-xl">
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">About the Author</h3>
+                <div className="mt-16 p-8 bg-muted rounded-xl">
+                  <h3 className="text-xl font-bold text-foreground mb-4">About the Author</h3>
                   <div className="flex items-start gap-4">
                     <div className="w-16 h-16 rounded-full bg-gradient-to-br from-atps-yellow to-yellow-600 flex items-center justify-center text-gray-900 text-xl font-bold flex-shrink-0">
                       {post.author.name.charAt(0)}
                     </div>
                     <div>
-                      <h4 className="font-bold text-gray-900 mb-1">{post.author.name}</h4>
-                      <p className="text-gray-600">{post.author.bio}</p>
+                      <h4 className="font-bold text-foreground mb-1">{post.author.name}</h4>
+                      <p className="text-text-secondary">{post.author.bio}</p>
                     </div>
                   </div>
                 </div>

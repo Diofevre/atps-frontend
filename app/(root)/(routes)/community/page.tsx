@@ -56,9 +56,9 @@ export default function CommunityPage() {
   // Show loading while checking auth
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-text-secondary">Loading...</p>
         </div>
       </div>
     );
@@ -132,8 +132,8 @@ export default function CommunityPage() {
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">Community</h1>
-        <p className="text-gray-600">Connect, share, and learn with fellow aviation enthusiasts</p>
+        <h1 className="text-4xl font-bold text-foreground mb-2">Community</h1>
+        <p className="text-text-secondary">Connect, share, and learn with fellow aviation enthusiasts</p>
       </div>
 
       {/* Search and Create Post */}
@@ -145,10 +145,10 @@ export default function CommunityPage() {
             placeholder="Search posts, tags, or users..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-atps-yellow focus:border-transparent"
+            className="w-full px-4 py-3 pl-12 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-atps-yellow focus:border-transparent bg-card text-foreground placeholder-muted-foreground"
           />
           <svg 
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" 
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" 
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24"
@@ -172,8 +172,8 @@ export default function CommunityPage() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Sidebar - Categories */}
         <aside className="lg:col-span-1">
-          <div className="bg-white rounded-xl shadow-md p-6 sticky top-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Categories</h2>
+          <div className="bg-card rounded-xl shadow-md p-6 sticky top-6 border border-border">
+            <h2 className="text-xl font-bold text-foreground mb-4">Categories</h2>
             <nav className="space-y-2">
               {categories.map((category) => (
                                   <button
@@ -181,8 +181,8 @@ export default function CommunityPage() {
                     onClick={() => setActiveCategory(category.id)}
                     className={`w-full text-left px-4 py-3 rounded-lg transition-all ${
                       activeCategory === category.id
-                        ? 'bg-yellow-50 text-gray-900 font-semibold border-l-4 border-atps-yellow'
-                        : 'text-gray-700 hover:bg-gray-50'
+                        ? 'bg-yellow-50 dark:bg-yellow-900/30 text-foreground font-semibold border-l-4 border-atps-yellow'
+                        : 'text-text-secondary hover:bg-muted'
                     }`}
                   >
                     {category.label}
@@ -213,7 +213,7 @@ export default function CommunityPage() {
           {displayPosts.map((post) => (
             <article
               key={post.id}
-              className={`bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow ${
+              className={`bg-card rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow border border-border ${
                 post.is_pinned ? 'border-2 border-atps-yellow' : ''
               }`}
             >

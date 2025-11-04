@@ -67,8 +67,8 @@ export default function NewsArticlePage() {
   if (isLoading || loading) {
     return (
       
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">Loading...</div>
+        <div className="container mx-auto px-4 py-8 bg-background">
+          <div className="text-center text-foreground">Loading...</div>
         </div>
       
     );
@@ -82,10 +82,10 @@ export default function NewsArticlePage() {
   if (!article) {
     return (
       
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 bg-background">
           <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">Article not found</h1>
-            <Link href="/news" className="text-blue-600 hover:underline">
+            <h1 className="text-2xl font-bold mb-4 text-foreground">Article not found</h1>
+            <Link href="/news" className="text-blue-600 dark:text-blue-400 hover:underline">
               Back to News
             </Link>
           </div>
@@ -96,11 +96,11 @@ export default function NewsArticlePage() {
 
   return (
     
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 py-8 max-w-4xl bg-background">
         {/* Back button */}
         <Link 
           href="/news"
-          className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6"
+          className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 mb-6"
         >
           ← Back to News
         </Link>
@@ -126,7 +126,7 @@ export default function NewsArticlePage() {
             {article.categories.map((category) => (
               <span
                 key={category.id}
-                className="px-3 py-1 text-sm font-semibold bg-blue-100 text-blue-800 rounded"
+                className="px-3 py-1 text-sm font-semibold bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded"
               >
                 {category.name}
               </span>
@@ -135,10 +135,10 @@ export default function NewsArticlePage() {
         )}
 
         {/* Title */}
-        <h1 className="text-4xl font-bold mb-4">{article.title}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-foreground">{article.title}</h1>
 
         {/* Meta info */}
-        <div className="flex items-center text-gray-600 mb-8 pb-6 border-b">
+        <div className="flex items-center text-text-secondary mb-8 pb-6 border-b border-border">
           <span>{new Date(article.publishedAt).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
@@ -149,19 +149,19 @@ export default function NewsArticlePage() {
         </div>
 
         {/* Excerpt */}
-        <p className="text-xl text-gray-700 mb-8 italic">{article.excerpt}</p>
+        <p className="text-xl text-text-secondary mb-8 italic">{article.excerpt}</p>
 
         {/* Content */}
         <div
-          className="prose prose-lg max-w-none"
+          className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-text-secondary prose-a:text-blue-600 dark:prose-a:text-blue-400"
           dangerouslySetInnerHTML={{ __html: article.contentHtml }}
         />
 
         {/* Back to news */}
-        <div className="mt-12 pt-8 border-t">
+        <div className="mt-12 pt-8 border-t border-border">
           <Link 
             href="/news"
-            className="inline-flex items-center text-blue-600 hover:text-blue-800"
+            className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
           >
             ← Back to News
           </Link>

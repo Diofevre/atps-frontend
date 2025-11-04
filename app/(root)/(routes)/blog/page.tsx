@@ -101,8 +101,8 @@ export default function BlogPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
-        <p className="text-gray-600">Loading...</p>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <p className="text-text-secondary">Loading...</p>
       </div>
     );
   }
@@ -112,18 +112,18 @@ export default function BlogPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
+    <div className="min-h-screen bg-background">
       {/* Header Section */}
-      <div className="relative overflow-hidden bg-white border-b border-blue-200">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent" />
+      <div className="relative overflow-hidden bg-card border-b border-border">
+        <div className="absolute inset-0 bg-gradient-to-br from-muted/50 to-transparent" />
         
         <div className="relative container mx-auto px-4 py-12">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-3 text-gray-900">
+              <h1 className="text-4xl md:text-5xl font-bold mb-3 text-foreground">
                 Aviation Blog
               </h1>
-              <p className="text-lg text-gray-600">
+              <p className="text-lg text-text-secondary">
                 Expert insights, training tips, and industry knowledge
               </p>
             </div>
@@ -139,7 +139,7 @@ export default function BlogPage() {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter your email"
                       required
-                      className="w-full pl-12 pr-4 py-3 bg-white border border-gray-300 rounded-full text-gray-900 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                      className="w-full pl-12 pr-4 py-3 bg-card border border-border rounded-full text-foreground placeholder-muted-foreground focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-400/20 transition-all"
                     />
                   </div>
                   <button
@@ -155,7 +155,7 @@ export default function BlogPage() {
                   <span className="font-medium">Thanks for subscribing!</span>
                 </div>
               )}
-              <p className="text-sm text-gray-500 mt-3">
+              <p className="text-sm text-muted-foreground mt-3">
                 Get the latest aviation insights delivered to your inbox
               </p>
             </div>
@@ -169,7 +169,7 @@ export default function BlogPage() {
         {activeCategory === 'all' && (
           <div className="mb-16">
             <Link href={`/blog/${mockPosts[0].slug}`}>
-              <div className="group relative overflow-hidden rounded-3xl bg-white border border-gray-200 hover:border-blue-300 hover:shadow-xl transition-all duration-300">
+                <div className="group relative overflow-hidden rounded-3xl bg-card border border-border hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-xl transition-all duration-300">
                 <div className="md:flex items-center">
                   <div className="md:w-1/2 h-96 md:h-[500px] relative overflow-hidden">
                     <img
@@ -190,15 +190,15 @@ export default function BlogPage() {
                       </span>
                     </div>
                     
-                    <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 group-hover:text-blue-600 transition-colors">
+                    <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {mockPosts[0].title}
                     </h2>
                     
-                    <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+                    <p className="text-xl text-text-secondary mb-8 leading-relaxed">
                       {mockPosts[0].excerpt}
                     </p>
                     
-                    <div className="flex items-center gap-8 text-gray-600 mb-6">
+                    <div className="flex items-center gap-8 text-text-secondary mb-6">
                       <div className="flex items-center gap-2">
                         <Clock className="w-5 h-5" />
                         <span className="font-medium">{mockPosts[0].readingTime} min read</span>
@@ -214,8 +214,8 @@ export default function BlogPage() {
                         {mockPosts[0].author.name.charAt(0)}
                       </div>
                       <div>
-                        <p className="text-gray-900 font-medium">{mockPosts[0].author.name}</p>
-                        <p className="text-gray-600 text-sm">Aviation Expert</p>
+                        <p className="text-foreground font-medium">{mockPosts[0].author.name}</p>
+                        <p className="text-text-secondary text-sm">Aviation Expert</p>
                       </div>
                     </div>
                   </div>
@@ -233,8 +233,8 @@ export default function BlogPage() {
               onClick={() => setActiveCategory(category.id)}
               className={`px-6 py-3 rounded-full font-medium transition-all duration-200 ${
                 activeCategory === category.id
-                  ? 'bg-blue-600 text-white scale-105 shadow-lg shadow-blue-500/30'
-                  : 'bg-white text-gray-700 hover:bg-blue-50 hover:text-blue-600 border border-gray-200'
+                  ? 'bg-blue-600 dark:bg-blue-500 text-white scale-105 shadow-lg shadow-blue-500/30'
+                  : 'bg-card text-card-foreground hover:bg-muted hover:text-blue-600 dark:hover:text-blue-400 border border-border'
               }`}
             >
               {category.label}
@@ -248,7 +248,7 @@ export default function BlogPage() {
             .filter((_, index) => activeCategory === 'all' ? index > 0 : true)
             .map((post) => (
             <Link key={post.id} href={`/blog/${post.slug}`}>
-              <article className="group relative h-full bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-blue-300 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <article className="group relative h-full bg-card rounded-2xl overflow-hidden border border-border hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
                 <div className="relative h-56 overflow-hidden bg-gradient-to-br from-blue-100 to-blue-200">
                   <img
                     src={post.featuredImage}
@@ -273,7 +273,7 @@ export default function BlogPage() {
                     {post.tags.slice(0, 2).map((tag) => (
                       <span
                         key={tag}
-                        className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 text-gray-600 rounded-md text-xs"
+                        className="inline-flex items-center gap-1 px-2 py-1 bg-muted text-text-secondary rounded-md text-xs"
                       >
                         <Tag className="w-3 h-3" />
                         {tag}
@@ -281,22 +281,22 @@ export default function BlogPage() {
                     ))}
                   </div>
                   
-                  <h3 className="text-xl font-bold mb-3 text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+                  <h3 className="text-xl font-bold mb-3 text-card-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
                     {post.title}
                   </h3>
                   
-                  <p className="text-gray-600 mb-6 line-clamp-3 leading-relaxed">
+                  <p className="text-text-secondary mb-6 line-clamp-3 leading-relaxed">
                     {post.excerpt}
                   </p>
                   
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                  <div className="flex items-center justify-between pt-4 border-t border-border">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-xs font-bold">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-700 flex items-center justify-center text-white text-xs font-bold">
                         {post.author.name.charAt(0)}
                       </div>
-                      <p className="text-sm text-gray-700">{post.author.name.split(' ')[0]}</p>
+                      <p className="text-sm text-card-foreground">{post.author.name.split(' ')[0]}</p>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <div className="flex items-center gap-2 text-sm text-text-secondary">
                       <Clock className="w-4 h-4" />
                       {post.readingTime} min
                     </div>
@@ -309,9 +309,9 @@ export default function BlogPage() {
 
         {filteredPosts.length === 0 && (
           <div className="text-center py-20">
-            <Filter className="w-20 h-20 text-gray-400 mx-auto mb-6" />
-            <h3 className="text-3xl font-bold text-gray-900 mb-3">No posts found</h3>
-            <p className="text-gray-600 text-lg">Try selecting a different category</p>
+            <Filter className="w-20 h-20 text-muted-foreground mx-auto mb-6" />
+            <h3 className="text-3xl font-bold text-foreground mb-3">No posts found</h3>
+            <p className="text-text-secondary text-lg">Try selecting a different category</p>
           </div>
         )}
       </div>

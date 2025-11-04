@@ -90,8 +90,8 @@ export default function NewsPage() {
   // Show loading while checking auth
   if (isLoading || loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">Loading...</div>
+      <div className="container mx-auto px-4 py-8 bg-background">
+        <div className="text-center text-foreground">Loading...</div>
       </div>
     );
   }
@@ -102,8 +102,8 @@ export default function NewsPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold mb-8">Aviation News</h1>
+    <div className="container mx-auto px-4 py-8 bg-background">
+        <h1 className="text-4xl font-bold mb-8 text-foreground">Aviation News</h1>
         
         {/* Featured Article */}
         {featured && (
