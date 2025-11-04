@@ -61,22 +61,27 @@ export function middleware(request: NextRequest) {
       const decodedCookie = decodeURIComponent(tokenCookie);
       const tokens = JSON.parse(decodedCookie);
       
-      // Vérification de l'expiration désactivée pour une meilleure expérience d'étude
-      // Les étudiants peuvent rester connectés pendant leurs longues sessions d'étude
-      // if (tokens.expires_at && Date.now() > tokens.expires_at) {
-      //   // Token expired, clear cookie and redirect to login
-      //   console.log(`🔒 Token expired for route: ${pathname}`);
-      //   const redirectUrl = isAdminRoute 
-      //     ? new URL('/admin-login', request.url)
-      //     : new URL('/login', request.url);
-      //   const response = NextResponse.redirect(redirectUrl);
-      //   
-      //   // Clear expired token cookie
-      //   response.cookies.delete('keycloak_tokens');
-      //   response.cookies.delete('keycloak_user');
-      //   
-      //   return response;
-      // }
+      // Check if token is expired (with 10 minute tolerance for automatic refresh)
+      // The client-side refresh will handle tokens that expire within 5 minutes
+      // This tolerance prevents race conditions where middleware checks before refresh completes
+      const now = Date.now();
+      const tenMinutesAgo = now - (10 * 60 * 1000);
+      
+      if (tokens.expires_at && tokens.expires_at < tenMinutesAgo) {
+        // Token expired more than 10 minutes ago, redirect to login
+        // (Allows time for automatic refresh to work on client side)
+        console.log(`🔒 Token expired for route: ${pathname}`);
+        const redirectUrl = isAdminRoute 
+          ? new URL('/admin-login', request.url)
+          : new URL('/login', request.url);
+        const response = NextResponse.redirect(redirectUrl);
+        
+        // Clear expired token cookie
+        response.cookies.delete('keycloak_tokens');
+        response.cookies.delete('keycloak_user');
+        
+        return response;
+      }
       
       // Token is valid, allow access
       return NextResponse.next();

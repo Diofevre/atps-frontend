@@ -31,8 +31,8 @@ export function useKeycloakAuth() {
   });
 
   useEffect(() => {
-    const checkAuth = () => {
-      const authenticated = isAuthenticated();
+    const checkAuth = async () => {
+      const authenticated = await isAuthenticated();
       const token = getAccessToken();
       const user = getUser();
 

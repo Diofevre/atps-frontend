@@ -42,11 +42,11 @@ export async function login(credentials: LoginCredentials): Promise<AuthResponse
     const data = await response.json();
 
     if (data.success && data.data) {
-      // Calculate expiry timestamp
-      // For study platform: extend token lifetime to 8 hours (28800 seconds)
-      // This prevents interruption during long study sessions
-      const extendedExpiryTime = 8 * 60 * 60 * 1000; // 8 hours in milliseconds
-      const expiresAt = Date.now() + extendedExpiryTime;
+      // Calculate expiry timestamp using actual expires_in from backend
+      // Use actual token lifetime from Keycloak (typically 5 minutes for access tokens)
+      // The refresh mechanism will automatically renew tokens before expiration
+      const expiresIn = data.data.expires_in || 300; // Default 5 minutes if not provided (in seconds)
+      const expiresAt = Date.now() + (expiresIn * 1000);
       
       // Store tokens in localStorage and cookies
       const tokens: AuthTokens = {
@@ -58,9 +58,11 @@ export async function login(credentials: LoginCredentials): Promise<AuthResponse
       localStorage.setItem('keycloak_user', JSON.stringify(data.data.user));
       
       // Store in cookie for middleware access (properly encoded for JSON)
+      // Use actual expires_in for cookie max-age (in seconds)
+      const cookieMaxAge = expiresIn; // expiresIn is already in seconds
       const encodedTokens = encodeURIComponent(JSON.stringify(tokens));
       const isSecure = window.location.protocol === 'https:';
-      document.cookie = `keycloak_tokens=${encodedTokens}; path=/; max-age=${8 * 60 * 60}; SameSite=Lax${isSecure ? '; Secure' : ''};`;
+      document.cookie = `keycloak_tokens=${encodedTokens}; path=/; max-age=${cookieMaxAge}; SameSite=Lax${isSecure ? '; Secure' : ''};`;
     }
 
     return data;
@@ -146,9 +148,9 @@ export async function refreshToken(): Promise<AuthResponse> {
 
     if (data.success && data.data) {
       // Update tokens in localStorage and cookies
-      // For study platform: extend token lifetime to 8 hours
-      const extendedExpiryTime = 8 * 60 * 60 * 1000; // 8 hours in milliseconds
-      const expiresAt = Date.now() + extendedExpiryTime;
+      // Use actual expires_in from backend response (in seconds, convert to milliseconds)
+      const expiresIn = data.data.expires_in || 3600; // Default 1 hour if not provided
+      const expiresAt = Date.now() + (expiresIn * 1000);
       const newTokens: AuthTokens = {
         ...data.data,
         expires_at: expiresAt,
@@ -156,10 +158,11 @@ export async function refreshToken(): Promise<AuthResponse> {
       
       localStorage.setItem('keycloak_tokens', JSON.stringify(newTokens));
       
-      // Update cookie
+      // Update cookie with actual expiration time
+      const cookieMaxAge = expiresIn; // expiresIn is already in seconds
       const encodedTokens = encodeURIComponent(JSON.stringify(newTokens));
       const isSecure = window.location.protocol === 'https:';
-      document.cookie = `keycloak_tokens=${encodedTokens}; path=/; max-age=${8 * 60 * 60}; SameSite=Lax${isSecure ? '; Secure' : ''};`;
+      document.cookie = `keycloak_tokens=${encodedTokens}; path=/; max-age=${cookieMaxAge}; SameSite=Lax${isSecure ? '; Secure' : ''};`;
     }
 
     return data;
@@ -205,27 +208,42 @@ export async function getCurrentUser(): Promise<any> {
 
 /**
  * Check if user is authenticated
+ * Will attempt to refresh token if it's about to expire
  */
-export function isAuthenticated(): boolean {
+export async function isAuthenticated(): Promise<boolean> {
   const tokens = getTokens();
   
   if (!tokens) {
     return false;
   }
 
-  // Vérification de l'expiration désactivée pour une meilleure expérience d'étude
-  // Les étudiants peuvent rester connectés pendant leurs longues sessions d'étude
-  // const now = Date.now();
-  // if (tokens.expires_at < now) {
-  //   // Token expired, try to refresh
-  //   return false;
-  // }
+  // Check if token is expired or about to expire (within 5 minutes)
+  const now = Date.now();
+  const fiveMinutesFromNow = now + (5 * 60 * 1000);
+  
+  if (tokens.expires_at < fiveMinutesFromNow) {
+    // Token is expired or about to expire, try to refresh
+    try {
+      const refreshResult = await refreshToken();
+      if (!refreshResult.success) {
+        // Refresh failed, user needs to login again
+        clearAuth();
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error('Error refreshing token:', error);
+      clearAuth();
+      return false;
+    }
+  }
 
   return true;
 }
 
 /**
  * Get stored tokens
+ * Returns null if tokens are expired (doesn't refresh automatically)
  */
 export function getTokens(): AuthTokens | null {
   try {
@@ -236,12 +254,13 @@ export function getTokens(): AuthTokens | null {
     
     const tokens: AuthTokens = JSON.parse(tokensStr);
     
-    // Vérification de l'expiration désactivée pour une meilleure expérience d'étude
-    // Les étudiants peuvent rester connectés pendant leurs longues sessions d'étude
-    // if (tokens.expires_at < Date.now()) {
-    //   // Token expired
-    //   return null;
-    // }
+    // Check if token is expired
+    const now = Date.now();
+    if (tokens.expires_at < now) {
+      // Token is expired, but don't clear it here - let refreshToken() handle it
+      // This allows the refresh mechanism to work
+      return tokens;
+    }
     
     return tokens;
   } catch (error) {

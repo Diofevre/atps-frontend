@@ -9,7 +9,7 @@ let refreshPromise: Promise<void> | null = null;
 /**
  * Automatically refresh token if it's about to expire
  * This prevents sudden logouts due to short token lifetimes
- * UPDATED: Token expiration check disabled for study platform
+ * Refreshes token if it expires within 5 minutes
  */
 export async function ensureValidToken(): Promise<boolean> {
   const tokens = getTokens();
@@ -18,22 +18,31 @@ export async function ensureValidToken(): Promise<boolean> {
     return false;
   }
 
-  // Vérification de l'expiration désactivée pour une meilleure expérience d'étude
-  // Les étudiants peuvent rester connectés pendant leurs longues sessions d'étude
-  // const fiveMinutesFromNow = Date.now() + (5 * 60 * 1000);
-  // if (tokens.expires_at < fiveMinutesFromNow) {
-  //   // Token is about to expire, refresh it
-  //   if (!refreshPromise) {
-  //     refreshPromise = refreshToken().then(() => {
-  //       refreshPromise = null;
-  //     }).catch((error) => {
-  //       console.error('Error refreshing token:', error);
-  //       clearAuth();
-  //       refreshPromise = null;
-  //     });
-  //   }
-  //   await refreshPromise;
-  // }
+  // Check if token is expired or about to expire (within 5 minutes)
+  const now = Date.now();
+  const fiveMinutesFromNow = now + (5 * 60 * 1000);
+  
+  if (tokens.expires_at < fiveMinutesFromNow) {
+    // Token is about to expire or already expired, refresh it
+    if (!refreshPromise) {
+      refreshPromise = refreshToken().then(() => {
+        refreshPromise = null;
+      }).catch((error) => {
+        console.error('Error refreshing token:', error);
+        clearAuth();
+        refreshPromise = null;
+        throw error; // Re-throw to let caller handle it
+      });
+    }
+    
+    try {
+      await refreshPromise;
+      return true;
+    } catch (error) {
+      // Refresh failed, user needs to login again
+      return false;
+    }
+  }
   
   return true;
 }
@@ -46,7 +55,15 @@ export async function authenticatedFetch(
   options: RequestInit = {}
 ): Promise<Response> {
   // Ensure token is valid before making request
-  await ensureValidToken();
+  const isValid = await ensureValidToken();
+  
+  if (!isValid) {
+    // Redirect to login if token refresh failed
+    if (typeof window !== 'undefined') {
+      window.location.href = '/login';
+    }
+    throw new Error('Not authenticated - token refresh failed');
+  }
   
   const tokens = getTokens();
   

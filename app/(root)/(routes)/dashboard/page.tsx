@@ -31,6 +31,8 @@ import { useRouter } from 'next/navigation';
 import { Skeleton } from "@/components/ui/skeleton";
 import useSWR from 'swr';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { ensureValidToken } from '@/lib/authInterceptor';
+import { getAccessToken } from '@/lib/keycloakAuth';
 
 interface DashboardData {
   user: {
@@ -78,22 +80,14 @@ const Dashboard = () => {
     async (url: string) => {
       console.log('[Dashboard] Fetching from:', url);
       
-      // Get token from localStorage (set during login)
-      let token: string | null = null;
-      try {
-        const tokensStr = localStorage.getItem('keycloak_tokens');
-        if (tokensStr) {
-          const tokens = JSON.parse(tokensStr);
-          // Vérification de l'expiration désactivée pour une meilleure expérience d'étude
-          // Les étudiants peuvent rester connectés pendant leurs longues sessions d'étude
-          // if (tokens.expires_at && tokens.expires_at > Date.now()) {
-          //   token = tokens.access_token;
-          // }
-          token = tokens.access_token;
-        }
-      } catch (e) {
-        console.error('[Dashboard] Error reading tokens:', e);
+      // Ensure token is valid (will auto-refresh if needed)
+      const isValid = await ensureValidToken();
+      if (!isValid) {
+        throw new Error('Not authenticated - token refresh failed');
       }
+      
+      // Get token using utility function that handles expiration
+      const token = getAccessToken();
       
       if (!token) {
         throw new Error('Not authenticated - please login again');

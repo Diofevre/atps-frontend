@@ -2,6 +2,8 @@
 'use client';
 
 import { useAuth, useUser } from '@/lib/mock-clerk';
+import { ensureValidToken } from '@/lib/authInterceptor';
+import { getAccessToken } from '@/lib/keycloakAuth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -282,22 +284,14 @@ const QuizzComponents = () => {
           
           console.log('📤 Sending request to /api/tests/start:', bodyData);
   
-          // Get token from localStorage (same as dashboard)
-          let accessToken: string | null = null;
-          try {
-            const tokensStr = typeof window !== 'undefined' ? localStorage.getItem('keycloak_tokens') : null;
-            if (tokensStr) {
-              const tokens = JSON.parse(tokensStr);
-              // Vérification de l'expiration désactivée pour une meilleure expérience d'étude
-              // Les étudiants peuvent rester connectés pendant leurs longues sessions d'étude
-              // if (tokens.expires_at && tokens.expires_at > Date.now()) {
-              //   accessToken = tokens.access_token;
-              // }
-              accessToken = tokens.access_token;
-            }
-          } catch (e) {
-            console.error('[Quiz] Error reading tokens:', e);
+          // Ensure token is valid (will auto-refresh if needed)
+          const isValid = await ensureValidToken();
+          if (!isValid) {
+            throw new Error('Not authenticated - token refresh failed');
           }
+          
+          // Get token using utility function that handles expiration
+          const accessToken = getAccessToken();
           
           const response = await fetch(
             `/api/tests/start`,

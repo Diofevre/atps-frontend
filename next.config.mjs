@@ -4,7 +4,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   typescript: {
-    ignoreBuildErrors: true, // Permettre le build malgré les erreurs TypeScript
+    ignoreBuildErrors: false, // ✅ Validation TypeScript activée pour la qualité du code
   },
   output: 'standalone', // Pour le déploiement Docker optimisé
   // Timeout increased for static page generation
