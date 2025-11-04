@@ -277,7 +277,6 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
             type="checkbox" className="w-4 h-4 rounded border-2 border-border-blue text-yellow-400 dark:text-yellow-500 focus:ring-yellow-400 dark:focus:ring-yellow-500 transition-colors"
             checked={rememberMe}
             onChange={(e) => setRememberMe(e.target.checked)}
-            className="w-4 h-4 rounded border-2 transition-colors"
             
           />
           <span className="text-sm" >Remember me</span>
