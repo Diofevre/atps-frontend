@@ -29,7 +29,7 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
   // Check for account creation message
   useEffect(() => {
     const message = searchParams.get('message');
-    if (message === 'account-created') {
+    if (message && message === 'account-created') {
       setSuccess('Your account has been created successfully! Please login with your credentials.');
       // Clear the query parameter
       router.replace('/login');
@@ -133,7 +133,8 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
             className="w-full px-4 py-3.5 rounded-xl border-2 transition-all duration-200 focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
             style={{
               borderColor: '#C1E0F1',
-              backgroundColor: '#F7FAFC'
+              backgroundColor: '#F7FAFC',
+              color: '#2D3748'
             }}
             onFocus={(e) => e.target.style.borderColor = '#EECE84'}
             onBlur={(e) => e.target.style.borderColor = '#C1E0F1'}
@@ -239,7 +240,8 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
           className="w-full px-4 py-3.5 rounded-xl border-2 transition-all duration-200 focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
           style={{
             borderColor: '#C1E0F1',
-            backgroundColor: '#F7FAFC'
+            backgroundColor: '#F7FAFC',
+            color: '#2D3748'
           }}
           onFocus={(e) => e.target.style.borderColor = '#EECE84'}
           onBlur={(e) => e.target.style.borderColor = '#C1E0F1'}
@@ -266,7 +268,8 @@ function LoginFormContent({ redirectTo }: LoginFormProps) {
             className="w-full px-4 py-3.5 pr-12 rounded-xl border-2 transition-all duration-200 focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
             style={{
               borderColor: '#C1E0F1',
-              backgroundColor: '#F7FAFC'
+              backgroundColor: '#F7FAFC',
+              color: '#2D3748'
             }}
             onFocus={(e) => e.target.style.borderColor = '#EECE84'}
             onBlur={(e) => e.target.style.borderColor = '#C1E0F1'}

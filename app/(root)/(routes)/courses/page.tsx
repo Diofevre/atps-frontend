@@ -48,10 +48,10 @@ const Courses = () => {
                   items-center 
                   justify-center 
                   gap-4
-                  bg-white
+                  bg-white dark:bg-slate-800
                   shadow-md 
+                  border border-gray-200 dark:border-slate-700
                   rounded-[30px]
-                  border
                   hover:shadow-xl hover:scale-105
                   transition-all 
                   duration-300
@@ -71,9 +71,9 @@ const Courses = () => {
                   />
                 </div>
                 <span className="
-                  text-sm font-medium 
+                  text-sm font-medium text-gray-900 dark:text-white
                   transition-colors duration-300 
-                  group-hover:text-sky-600
+                  group-hover:text-sky-600 dark:group-hover:text-sky-400
                 ">
                   {card.label}
                 </span>

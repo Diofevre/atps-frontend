@@ -72,9 +72,12 @@ const Sidebar = () => {
           e.stopPropagation();
         }
       }}
-      className={`fixed left-0 top-0 z-50 h-screen flex flex-col bg-sidebar border-r border-sidebar-border ${
+      className={`fixed left-0 top-0 z-50 max-h-screen overflow-hidden flex flex-col bg-sidebar border-r border-sidebar-border ${
         isOpen ? "w-60" : "w-20"
       }`}
+      style={{ 
+        height: '100dvh', // Dynamic viewport height for mobile
+      }}
     >
       {/* Header - Fixed at top */}
       <div className="flex-shrink-0 p-5 pt-3">
@@ -101,8 +104,8 @@ const Sidebar = () => {
         </Link>
       </div>
 
-      {/* Menu - No scroll, just centered */}
-      <ul className="flex-1 flex flex-col justify-center px-5">
+      {/* Menu - Takes available space, no scroll */}
+      <ul className="flex-1 flex flex-col justify-center px-5 min-h-0">
         {MenuSidebar.map((menu, index) => (
           <Link href={menu.path} key={index}>
             <li className={`text-sm flex items-center gap-3 p-2 mt-2 cursor-pointer hover:bg-sidebar-accent active:bg-sidebar-accent rounded-md transition-colors duration-200 hover:text-[#EECE84] text-sidebar-foreground touch-manipulation ${

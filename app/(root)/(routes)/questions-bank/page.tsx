@@ -139,9 +139,9 @@ const QuestionBank = () => {
                   items-center 
                   justify-center 
                   gap-4
-                  bg-white
+                  bg-white dark:bg-slate-800
                   shadow-md 
-                  border
+                  border border-gray-200 dark:border-slate-700
                   rounded-[30px] 
                   ${!card.disabled ? 'hover:shadow-xl hover:scale-105' : 'opacity-50 cursor-not-allowed'}
                   transition-all 
@@ -169,9 +169,9 @@ const QuestionBank = () => {
                   )}
                 </div>
                 <span className={`
-                  text-sm font-medium 
+                  text-sm font-medium text-gray-900 dark:text-white
                   transition-colors duration-300 
-                  ${!card.disabled ? 'group-hover:text-sky-600' : ''}
+                  ${!card.disabled ? 'group-hover:text-sky-600 dark:group-hover:text-sky-400' : ''}
                 `}>
                   {card.label}
                 </span>
