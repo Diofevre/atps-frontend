@@ -90,7 +90,7 @@ export default function NewsPage() {
   // Show loading while checking auth
   if (isLoading || loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-main-gradient flex items-center justify-center">
         <div className="text-center text-foreground">Loading...</div>
       </div>
     );
@@ -102,7 +102,7 @@ export default function NewsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-main-gradient">
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold mb-8 text-foreground">Aviation News</h1>
         

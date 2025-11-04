@@ -43,7 +43,7 @@ const QuestionBank = () => {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col min-h-screen bg-main-gradient">
       {/* Header */}
       <header className="w-full px-4 mt-1">
         <div className="flex flex-row gap-1 items-center font-semibold text-xl">

@@ -79,12 +79,15 @@ const Sidebar = () => {
           setIsOpen(true);
         }
       }}
-      className={`fixed left-0 top-0 z-50 h-screen p-5 pt-3 transition-all duration-300 flex flex-col bg-sidebar border-r border-sidebar-border overflow-y-auto ${
+      className={`fixed left-0 top-0 z-50 h-screen p-5 pt-3 pb-5 transition-all duration-300 flex flex-col bg-sidebar border-r border-sidebar-border ${
         isOpen ? "w-60" : "w-20"
       }`}
       style={{ 
         WebkitOverflowScrolling: 'touch',
-        touchAction: 'pan-y'
+        touchAction: 'pan-y',
+        maxHeight: '100vh',
+        overflowY: 'auto',
+        overflowX: 'hidden'
       }}
     >
       <Link href='/dashboard' className="flex items-center h-[40px] mb-8 relative mt-2">
@@ -110,7 +113,7 @@ const Sidebar = () => {
       </Link>
 
       {/* Centered Menu */}
-      <ul className="flex-1 flex flex-col justify-center">
+      <ul className="flex-1 flex flex-col justify-center min-h-0 overflow-y-auto">
         {MenuSidebar.map((menu, index) => (
           <Link href={menu.path} key={index}>
             <li className={`text-sm flex items-center gap-3 p-2 mt-2 cursor-pointer hover:bg-sidebar-accent active:bg-sidebar-accent rounded-md transition-colors duration-200 hover:text-[#EECE84] text-sidebar-foreground touch-manipulation ${
@@ -130,7 +133,7 @@ const Sidebar = () => {
       </ul>
 
       {/* Theme Toggle Section - Always visible, even on mobile/tablet */}
-      <div className={`mt-auto mb-4 ${isOpen ? 'px-2' : 'px-2'}`}>
+      <div className={`mt-auto flex-shrink-0 ${isOpen ? 'px-2' : 'px-2'}`}>
         <div className={`flex items-center transition-all duration-300 ${
           isOpen ? 'opacity-100 w-auto' : 'opacity-100 w-auto justify-center'
         }`}>
