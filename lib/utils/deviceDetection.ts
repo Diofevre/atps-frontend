@@ -54,7 +54,7 @@ export const isDesktop = (): boolean => {
  */
 export const getViewportWidth = (): number => {
   if (typeof window === 'undefined') return 1024; // SSR: default to desktop
-  return window.innerHeight;
+  return window.innerWidth;
 };
 
 /**
