@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 import TopLoader from "@/components/shared/TopLoader";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { FontSizeProvider } from "@/hooks/useFontSize";
+import ErrorBoundaryWrapper from '@/components/error-boundary/ErrorBoundaryWrapper';
 
 const font = Urbanist({ 
   subsets: ['latin'], 
