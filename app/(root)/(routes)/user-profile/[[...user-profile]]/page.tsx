@@ -132,32 +132,37 @@ export default function UserProfilePage() {
     <div className="min-h-screen bg-background">
       {/* Header with Profile Banner */}
       <div className="relative">
-        <div className="h-48 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 dark:from-slate-800 dark:via-slate-700 dark:to-slate-800"></div>
+        <div className="h-64 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 dark:from-slate-800 dark:via-slate-700 dark:to-slate-800"></div>
         
-        {/* Subscription Banner Overlay */}
-        <div className="absolute top-4 right-4">
-          <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border border-yellow-200 dark:border-yellow-700/30 rounded-lg p-3 shadow-lg backdrop-blur-sm">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-yellow-400 dark:bg-yellow-500 flex items-center justify-center">
-                <span className="text-xl">☀️</span>
+        {/* Subscription Banner - Full width at top of header */}
+        <div className="absolute top-0 left-0 right-0">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/30 dark:to-yellow-800/30 border-b border-yellow-200 dark:border-yellow-700/30 rounded-t-lg shadow-lg backdrop-blur-sm">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-yellow-400 dark:bg-yellow-500 flex items-center justify-center shadow-md">
+                    <span className="text-2xl">☀️</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-yellow-900 dark:text-yellow-200">Subscription Plan</p>
+                    <p className="text-lg font-bold text-yellow-900 dark:text-yellow-100">Free Limited</p>
+                    <p className="text-xs text-yellow-700 dark:text-yellow-300 mt-1">Upgrade to unlock all features</p>
+                  </div>
+                </div>
+                <Button 
+                  onClick={() => router.push('/settings')}
+                  className="bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-600 dark:hover:bg-yellow-700 text-white font-semibold px-6 py-2 shadow-md hover:shadow-lg transition-all"
+                >
+                  <GiUpgrade className="h-4 w-4 mr-2" />
+                  Upgrade Now
+                </Button>
               </div>
-              <div>
-                <p className="text-xs font-medium text-yellow-800 dark:text-yellow-300">Subscription</p>
-                <p className="text-sm font-bold text-yellow-900 dark:text-yellow-200">Free limited</p>
-              </div>
-              <Button 
-                onClick={() => router.push('/settings')}
-                className="bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-600 dark:hover:bg-yellow-700 text-white text-xs px-3 py-1.5 h-auto"
-              >
-                <GiUpgrade className="h-3 w-3 mr-1" />
-                Upgrade
-              </Button>
             </div>
           </div>
         </div>
 
         {/* Profile Info Overlay */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative -mb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative -mb-16 pt-24">
           <div className="flex flex-col sm:flex-row items-start sm:items-end gap-6 pb-6">
             {/* Avatar */}
             <div className="relative">
@@ -200,7 +205,7 @@ export default function UserProfilePage() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-8">
         {/* Tabs */}
         <div className="border-b border-border mb-8">
           <nav className="flex space-x-8">
