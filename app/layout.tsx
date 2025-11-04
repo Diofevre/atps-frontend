@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     // <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <ErrorBoundary>
+        <ErrorBoundaryWrapper>
         <body
           className={`${font.className} antialiased`}
         >
@@ -45,7 +45,7 @@ export default function RootLayout({
             </FontSizeProvider>
           </ThemeProvider>
         </body>
-      </ErrorBoundary>
+      </ErrorBoundaryWrapper>
       </html>
     // </ClerkProvider>
   );
