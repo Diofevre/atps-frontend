@@ -92,18 +92,12 @@ const FooterState: React.FC<FooterStateProps> = ({
                     className={`
                       group flex items-center gap-2 px-4 py-2 rounded-[12px] transition-all duration-300
                       ${isActive
-                        ? 'bg-gradient-to-r from-[#EECE84] to-[#EECE84]/50 text-black shadow-lg shadow-blue-500/25'
-                        : 'hover:bg-[#EECE84] text-slate-600 hover:text-slate-900'
+                        ? 'bg-gradient-to-r from-[#EECE84] to-[#EECE84]/50 text-black dark:text-gray-900 shadow-lg shadow-blue-500/25'
+                        : 'hover:bg-[#EECE84] text-slate-600 dark:text-text-secondary hover:text-slate-900 dark:hover:text-white'
                       }
                     `}
                   >
-                    <span className={`
-                      transition-transform duration-300
-                      ${isActive ? 'scale-110' : 'group-hover:scale-110'}
-                    `}>
-                      {item.icon}
-                    </span>
-                    <span className="hidden sm:block text-sm font-medium">
+                    <span className="text-sm font-medium">
                       {item.label}
                     </span>
                   </button>
@@ -111,13 +105,7 @@ const FooterState: React.FC<FooterStateProps> = ({
               })}
             </div>
 
-            <div className="flex items-center">
-              <div className="px-4 py-2">
-                <span className="text-sm font-medium bg-gradient-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent">
-                  {topicName || 'Loading...'}
-                </span>
-              </div>
-            </div>
+
           </div>
         </div>
       </div>

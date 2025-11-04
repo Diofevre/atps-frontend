@@ -269,7 +269,7 @@ const ScientificCalculator: React.FC<ScientificCalculatorProps> = ({ isVisible, 
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.8, opacity: 0 }}
           transition={{ type: "spring", duration: 0.3 }}
-          className="bg-gradient-to-b from-slate-100 to-slate-200 rounded-3xl shadow-2xl p-7 w-full max-w-md mx-4 pointer-events-auto border-2 border-slate-300"
+          className="bg-gradient-to-b from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-3xl shadow-2xl p-4 sm:p-7 w-full max-w-md mx-2 sm:mx-4 pointer-events-auto border-2 border-slate-300 dark:border-border max-h-[90vh] overflow-y-auto"
           style={{ 
             position: 'fixed',
             top: '20px',

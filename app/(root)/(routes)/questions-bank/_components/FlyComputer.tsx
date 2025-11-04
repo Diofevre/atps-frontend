@@ -515,7 +515,7 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
     <div className="fixed inset-0 z-50">
       {/* E6B Flight Computer déplaçable - Positionné à droite */}
         <div 
-          className="absolute w-2/3 h-full"
+          className="absolute w-full sm:w-2/3 h-full"
           style={{ 
             right: '-20%',
             transform: `translate(-53px, ${flyComputerPosition.y}px)`,

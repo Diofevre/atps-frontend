@@ -206,105 +206,8 @@ const QuestionOptions: React.FC<QuestionOptionsProps> = ({
     return urls;
   };
 
-  const renderQualityStars = (score: string | null | undefined) => {
-    if (!score) {
-      return (
-        <div className="flex items-center gap-1 bg-white backdrop-blur-sm px-3 py-1.5 rounded-[12px] border border-white">
-          <span className="text-sm font-medium text-gray-700 mr-1">Quality:</span>
-          <span>Not available</span>
-        </div>
-      );
-    }
-
-    const parts = score.split(' of ');
-
-    if (parts.length !== 2) {
-      console.warn(`Unexpected quality score format: ${score}`);
-      return (
-        <div className="flex items-center gap-1 bg-white backdrop-blur-sm px-3 py-1.5 rounded-[12px] border border-white">
-          <span className="text-sm font-medium text-gray-700 mr-1">Quality:</span>
-          <span>Invalid format</span>
-        </div>
-      );
-    }
-
-    const value = Number(parts[0]);
-    const total = Number(parts[1]);
-
-    if (isNaN(value) || isNaN(total)) {
-      console.warn(`Quality score contains non-numeric values: ${score}`);
-      return (
-        <div className="flex items-center gap-1 bg-white backdrop-blur-sm px-3 py-1.5 rounded-[12px] border border-white">
-          <span className="text-sm font-medium text-gray-700 mr-1">Quality:</span>
-          <span>Invalid value</span>
-        </div>
-      );
-    }
-
-    return (
-      <div className="flex items-center gap-1 bg-white backdrop-blur-sm px-3 py-1.5 rounded-[12px] border border-white">
-        <span className="text-sm font-medium text-gray-700 mr-1">Quality:</span>
-        <div className="flex">
-          {[...Array(total)].map((_, i) => (
-            <Star
-              key={i}
-              className={`w-4 h-4 ${i < value ? 'text-[#EECE84] fill-[#EECE84]' : 'text-gray-300'}`}
-              strokeWidth={1.5}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="w-full max-w-5xl mx-auto space-y-4">
-      {/* Quality Score and Question ID */}
-      <div className="flex items-center justify-end gap-4">
-        <div className="flex items-center gap-1 bg-white backdrop-blur-sm px-3 py-1.5 rounded-[12px] border border-white">
-          <span className="text-sm font-medium text-gray-700">Question ID:</span>
-          {editingQuestionId === questionId ? (
-            <div className="flex items-center gap-2">
-              <input
-                type="text"
-                value={tempQuestionId}
-                onChange={(e) => onTempQuestionIdChange(e.target.value)}
-                className="text-sm font-semibold text-[#EECE84] bg-transparent border-b border-[#EECE84] px-1 py-0.5 w-20 focus:outline-none"
-                autoFocus
-              />
-              <button
-                onClick={onSaveQuestionId}
-                className="p-1 hover:bg-green-100 rounded transition-colors"
-                title="Save"
-              >
-                <Save className="w-3 h-3 text-green-600" />
-              </button>
-              <button
-                onClick={onCancelEdit}
-                className="p-1 hover:bg-red-100 rounded transition-colors"
-                title="Cancel"
-              >
-                <XIcon className="w-3 h-3 text-red-600" />
-              </button>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold text-[#EECE84]">{questionId}</span>
-              {isDevMode && (
-                <button
-                  onClick={() => onEditQuestionId(questionId)}
-                  className="p-1 hover:bg-blue-100 rounded transition-colors"
-                  title="Edit Question ID"
-                >
-                  <Edit3 className="w-3 h-3 text-blue-600" />
-                </button>
-              )}
-            </div>
-          )}
-        </div>
-        {renderQualityStars(currentQuestion.quality_score)}
-      </div>
-      
       {/* Question Images - Display ALL images */}
       <div className="mb-6 flex flex-wrap gap-2 justify-start">
         {/* Hidden file input for image uploads */}
@@ -449,9 +352,9 @@ const QuestionOptions: React.FC<QuestionOptionsProps> = ({
                 group/button relative w-full p-5 rounded-[20px] transition-all duration-300
                 ${!questionAnswered && 'hover:scale-[1.02] hover:shadow-lg cursor-pointer'}
                 ${questionAnswered && 'cursor-not-allowed'}
-                ${answerResult?.status === 'correct' ? 'bg-green-50 border border-green-500' : 
-                  answerResult?.status === 'incorrect' ? 'bg-red-50 border border-red-500' :
-                  'bg-white backdrop-blur-sm border border-[#C1E0F1] hover:border-[#C1E0F1]/80'}
+                ${answerResult?.status === 'correct' ? 'bg-green-50 dark:bg-green-900/30 border border-green-500 dark:border-green-600' : 
+                  answerResult?.status === 'incorrect' ? 'bg-red-50 dark:bg-red-900/30 border border-red-500 dark:border-red-600' :
+                  'bg-white dark:bg-card backdrop-blur-sm border border-[#C1E0F1] dark:border-border hover:border-[#C1E0F1]/80 dark:hover:border-border-blue'}
               `}
             >
               <div className="flex items-center gap-6">
@@ -459,9 +362,9 @@ const QuestionOptions: React.FC<QuestionOptionsProps> = ({
                 <div className={`
                   flex items-center justify-center w-10 h-10 rounded-xl text-lg font-semibold
                   transition-colors duration-300
-                  ${answerResult?.status === 'correct' ? 'bg-green-100 text-green-700' :
-                    answerResult?.status === 'incorrect' ? 'bg-red-100 text-red-700' :
-                    'bg-[#C1E0F1]/50 text-black/50 group-hover/button:bg-[#C1E0F1]/30'}
+                  ${answerResult?.status === 'correct' ? 'bg-green-100 dark:bg-green-800/50 text-green-700 dark:text-green-300' :
+                    answerResult?.status === 'incorrect' ? 'bg-red-100 dark:bg-red-800/50 text-red-700 dark:text-red-300' :
+                    'bg-[#C1E0F1]/50 dark:bg-muted/50 text-black/50 dark:text-white/50 group-hover/button:bg-[#C1E0F1]/30 dark:group-hover/button:bg-muted/70'}
                 `}>
                   {key}
                 </div>
@@ -469,9 +372,9 @@ const QuestionOptions: React.FC<QuestionOptionsProps> = ({
                 {/* Option Text */}
                 <span className={`
                   flex-1 text-left quiz-option-text
-                  ${answerResult?.status === 'correct' ? 'text-green-700' :
-                    answerResult?.status === 'incorrect' ? 'text-red-700' :
-                    'text-gray-700'}
+                  ${answerResult?.status === 'correct' ? 'text-green-700 dark:text-green-300' :
+                    answerResult?.status === 'incorrect' ? 'text-red-700 dark:text-red-300' :
+                    'text-gray-700 dark:text-white'}
                 `}>
                   {value}
                 </span>

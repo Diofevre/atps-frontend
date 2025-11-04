@@ -1251,7 +1251,7 @@ const QuizzComponents = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header - Fixed at top */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-card border-b dark:border-border">
         <HeaderState
           currentQuestionIndex={currentQuestionIndex}
           totalQuestions={questions.length}
@@ -1400,8 +1400,8 @@ const QuizzComponents = () => {
                   <div className="p-8 mb-6">
                     <div className="max-w-2xl mx-auto">
                       <div className="mb-8 max-w-[620px] mx-auto">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-3">Review Question</h2>
-                        <p className="text-gray-600 text-lg">
+                        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">Review Question</h2>
+                        <p className="text-gray-600 dark:text-text-secondary text-lg">
                           Help us improve by providing your feedback on this question.
                         </p>
                       </div>
@@ -1419,11 +1419,11 @@ const QuizzComponents = () => {
                                   </span>
                                 </div>
                                 <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block z-50">
-                                  <div className="bg-white rounded-lg shadow-xl p-4 text-sm min-w-[250px] border border-gray-200/50">
-                                    <div className="font-medium text-gray-900 mb-2 pb-2 border-b">
+                                  <div className="bg-white dark:bg-card rounded-lg shadow-xl p-4 text-sm min-w-[250px] border border-gray-200/50 dark:border-border">
+                                    <div className="font-medium text-gray-900 dark:text-white mb-2 pb-2 border-b dark:border-border">
                                       {country} Exam Sessions
                                     </div>
-                                    <div className="text-gray-500 text-sm">Available in this country</div>
+                                    <div className="text-gray-500 dark:text-text-secondary text-sm">Available in this country</div>
                                   </div>
                                 </div>
                               </div>
@@ -1438,8 +1438,8 @@ const QuizzComponents = () => {
                                   </span>
                                 </div>
                                 <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block z-50">
-                                  <div className="bg-white rounded-lg shadow-xl p-4 text-sm min-w-[250px] border border-gray-200/50">
-                                    <div className="font-medium text-gray-900 mb-2 pb-2 border-b">
+                                  <div className="bg-white dark:bg-card rounded-lg shadow-xl p-4 text-sm min-w-[250px] border border-gray-200/50 dark:border-border">
+                                    <div className="font-medium text-gray-900 dark:text-white mb-2 pb-2 border-b dark:border-border">
                                       {country} Exam Sessions
                                     </div>
                                     {!years ? (
@@ -1561,15 +1561,15 @@ const QuizzComponents = () => {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white rounded-2xl p-6 max-w-6xl mx-4 shadow-2xl border border-gray-200 w-full h-[80vh] flex flex-col"
+            className="bg-white dark:bg-card rounded-2xl p-6 max-w-6xl mx-4 shadow-2xl border border-gray-200 dark:border-border w-full h-[80vh] flex flex-col"
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-semibold text-gray-900">Annexes PDF</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Annexes PDF</h2>
               <button
                 onClick={() => setIsAnnexesOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 dark:hover:bg-muted rounded-lg transition-colors"
               >
-                <XIcon className="w-5 h-5 text-gray-500" />
+                <XIcon className="w-5 h-5 text-gray-500 dark:text-text-secondary" />
               </button>
             </div>
             
@@ -1577,13 +1577,13 @@ const QuizzComponents = () => {
               <div className="flex-1 flex items-center justify-center">
                 <div className="text-center">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#EECE84] mx-auto mb-4"></div>
-                  <p className="text-gray-600">Chargement des annexes...</p>
+                  <p className="text-gray-600 dark:text-text-secondary">Chargement des annexes...</p>
                 </div>
               </div>
             ) : selectedAnnex ? (
               <div className="flex-1 flex flex-col">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-gray-900">{selectedAnnex.title}</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{selectedAnnex.title}</h3>
                   <button
                     onClick={handleCloseAnnexViewer}
                     className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -1687,7 +1687,7 @@ const QuizzComponents = () => {
                       <div className="flex items-start gap-4">
                         {/* Thumbnail */}
                         <div className="flex-shrink-0">
-                          <div className="w-24 h-32 bg-white rounded-lg shadow-md border border-gray-200 flex items-center justify-center overflow-hidden">
+                          <div className="w-24 h-32 bg-white dark:bg-card rounded-lg shadow-md border border-gray-200 dark:border-border flex items-center justify-center overflow-hidden">
                             {annex.thumbnail_path ? (
                               <img
                                 src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${annex.thumbnail_path}`}
@@ -1715,13 +1715,13 @@ const QuizzComponents = () => {
                         
                         {/* Content */}
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
                             {annex.title}
                           </h3>
-                          <p className="text-gray-600 text-sm mb-3 line-clamp-3">
+                          <p className="text-gray-600 dark:text-text-secondary text-sm mb-3 line-clamp-3">
                             {annex.description}
                           </p>
-                          <div className="flex items-center gap-4 text-xs text-gray-500">
+                          <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-text-secondary">
                             <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
                               {annex.category}
                             </span>
@@ -1757,16 +1757,16 @@ const QuizzComponents = () => {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white rounded-2xl p-6 max-w-md mx-4 shadow-2xl border border-gray-200"
+            className="bg-white dark:bg-card rounded-2xl p-6 max-w-md mx-4 shadow-2xl border border-gray-200 dark:border-border"
           >
             <div className="text-center">
-              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <XIcon className="w-8 h-8 text-red-600" />
+              <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <XIcon className="w-8 h-8 text-red-600 dark:text-red-400" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                 {confirmationModal.title}
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-600 dark:text-text-secondary mb-6">
                 {confirmationModal.message}
               </p>
               <div className="flex gap-3 justify-center">

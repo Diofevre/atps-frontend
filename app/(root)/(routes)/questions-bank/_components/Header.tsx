@@ -105,32 +105,32 @@ const HeaderState: React.FC<HeaderStateProps> = ({
               onClick={() => setIsFontSizeSliderOpen(!isFontSizeSliderOpen)}
               className={cn(
                 "flex items-center justify-center w-12 h-12 rounded-full border transition-all duration-200 hover:scale-105",
-                fontSize !== 100 
+                                  fontSize !== 100 
                   ? "bg-[#EECE84] border-[#EECE84] shadow-md" 
                   : isFontSizeSliderOpen 
                     ? "bg-[#EECE84]/20 border-[#EECE84] shadow-md" 
-                    : "bg-white/90 border-[#C1E0F1] shadow-sm hover:bg-white hover:border-[#EECE84]/50"
+                    : "bg-white/90 dark:bg-card/90 border-[#C1E0F1] dark:border-border shadow-sm hover:bg-white dark:hover:bg-card hover:border-[#EECE84]/50"
               )}
               title="Ajuster la taille de police"
             >
               <div className="flex flex-col items-center justify-center gap-0">
                 <span className={cn(
                   "text-lg font-bold leading-none",
-                  fontSize !== 100 ? "text-white" : "text-gray-800"
+                  fontSize !== 100 ? "text-white" : "text-gray-800 dark:text-white"
                 )}>A</span>
                 <span className={cn(
                   "text-xs font-bold leading-none",
-                  fontSize !== 100 ? "text-white" : "text-gray-600"
+                  fontSize !== 100 ? "text-white" : "text-gray-600 dark:text-text-secondary"
                 )}>A</span>
               </div>
             </button>
 
             {/* Font Size Slider - Appears on click */}
             {isFontSizeSliderOpen && (
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white/95 backdrop-blur-sm rounded-2xl border border-[#EECE84]/30 shadow-xl p-5 z-50 min-w-[240px] animate-in fade-in-0 zoom-in-95 duration-200">
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white/95 dark:bg-card/95 backdrop-blur-sm rounded-2xl border border-[#EECE84]/30 dark:border-border shadow-xl p-5 z-50 min-w-[240px] animate-in fade-in-0 zoom-in-95 duration-200">
                 <div className="flex flex-col items-center gap-4">
                   {/* Font Size Display */}
-                  <div className="text-sm font-semibold text-gray-700 bg-[#EECE84]/10 px-3 py-1.5 rounded-lg">
+                  <div className="text-sm font-semibold text-gray-700 dark:text-white bg-[#EECE84]/10 dark:bg-[#EECE84]/20 px-3 py-1.5 rounded-lg">
                     Taille: {fontSize}%
                   </div>
                   
@@ -148,7 +148,7 @@ const HeaderState: React.FC<HeaderStateProps> = ({
                       }}
                       className="w-full h-3 bg-gradient-to-r from-[#C1E0F1] to-[#EECE84] rounded-full appearance-none cursor-pointer slider-custom"
                     />
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                    <div className="flex justify-between text-xs text-gray-500 dark:text-text-secondary mt-1">
                       <span>50%</span>
                       <span>200%</span>
                     </div>
@@ -165,7 +165,7 @@ const HeaderState: React.FC<HeaderStateProps> = ({
                     </button>
                     <button
                       onClick={resetFontSize}
-                      className="px-4 py-2 text-sm bg-[#EECE84]/30 hover:bg-[#EECE84]/50 text-gray-800 rounded-lg transition-all duration-200 font-medium"
+                      className="px-4 py-2 text-sm bg-[#EECE84]/30 hover:bg-[#EECE84]/50 text-gray-800 dark:text-gray-900 rounded-lg transition-all duration-200 font-medium"
                     >
                       Reset
                     </button>
@@ -188,18 +188,18 @@ const HeaderState: React.FC<HeaderStateProps> = ({
               size="icon"
               onClick={onPreviousQuestion}
               disabled={currentQuestionIndex === 0}
-              className="p-2 rounded-[12px] bg-white hover:bg-white/80 disabled:opacity-50 text-black shadow-sm"
+              className="p-2 rounded-[12px] bg-white dark:bg-card hover:bg-white/80 dark:hover:bg-card/80 disabled:opacity-50 text-black dark:text-white shadow-sm"
             >
               <ChevronLeft className="w-5 h-5" />
             </Button>
-            <span className="font-medium">
+            <span className="font-medium text-foreground">
               {currentQuestionIndex + 1} / {totalQuestions}
             </span>
             <Button
               size="icon"
               onClick={onNextQuestion}
               disabled={currentQuestionIndex === totalQuestions - 1}
-              className="p-2 rounded-[12px] bg-white hover:bg-white/80 disabled:opacity-50 text-black shadow-sm"
+              className="p-2 rounded-[12px] bg-white dark:bg-card hover:bg-white/80 dark:hover:bg-card/80 disabled:opacity-50 text-black dark:text-white shadow-sm"
             >
               <ChevronRight className="w-5 h-5" />
             </Button>
@@ -238,7 +238,7 @@ const HeaderState: React.FC<HeaderStateProps> = ({
             <Button
               size="icon"
               onClick={onToggleSidebar}
-              className="lg:hidden p-2 rounded-full bg-white hover:bg-white/80 text-black shadow-sm"
+              className="lg:hidden p-2 rounded-full bg-white dark:bg-card hover:bg-white/80 dark:hover:bg-card/80 text-black dark:text-white shadow-sm"
             >
               <AlignJustify className="w-5 h-5" />
             </Button>
