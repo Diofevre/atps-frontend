@@ -14,7 +14,6 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const menuRef = useRef<HTMLUListElement>(null);
 
   // Fonction pour détecter si on est sur un petit écran (tablette/téléphone)
   const isMobileOrTablet = () => {
@@ -22,7 +21,7 @@ const Sidebar = () => {
     return window.innerWidth < 1024; // lg breakpoint de Tailwind
   };
 
-  // Réduire la sidebar automatiquement sur tablette/téléphone quand on clique à l'extérieur ou qu'on scroll
+  // Réduire la sidebar automatiquement sur tablette/téléphone quand on clique à l'extérieur
   useEffect(() => {
     if (!isMobileOrTablet()) return; // Seulement sur tablette/téléphone
 
@@ -32,26 +31,14 @@ const Sidebar = () => {
       }
     };
 
-    const handleScroll = (event: Event) => {
-      // Ne pas fermer si on scroll dans la sidebar elle-même
-      if (sidebarRef.current && sidebarRef.current.contains(event.target as Node)) {
-        return;
-      }
-      if (isOpen) {
-        setIsOpen(false);
-      }
-    };
-
     // Ajouter les event listeners
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('touchstart', handleClickOutside);
-    window.addEventListener('scroll', handleScroll, true); // true pour capturer le scroll dans tous les éléments
 
     // Nettoyer les event listeners
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('touchstart', handleClickOutside);
-      window.removeEventListener('scroll', handleScroll, true);
     };
   }, [isOpen]);
 
@@ -85,14 +72,9 @@ const Sidebar = () => {
           e.stopPropagation();
         }
       }}
-      className={`fixed left-0 top-0 z-50 transition-all duration-300 flex flex-col bg-sidebar border-r border-sidebar-border ${
+      className={`fixed left-0 top-0 z-50 h-screen flex flex-col bg-sidebar border-r border-sidebar-border ${
         isOpen ? "w-60" : "w-20"
       }`}
-      style={{ 
-        height: '100vh',
-        maxHeight: '100vh',
-        WebkitOverflowScrolling: 'touch',
-      }}
     >
       {/* Header - Fixed at top */}
       <div className="flex-shrink-0 p-5 pt-3">
@@ -119,15 +101,8 @@ const Sidebar = () => {
         </Link>
       </div>
 
-      {/* Scrollable Menu - Takes available space */}
-      <ul 
-        ref={menuRef}
-        className="flex-1 overflow-y-auto overflow-x-hidden px-5 flex flex-col justify-center"
-        style={{
-          WebkitOverflowScrolling: 'touch',
-          minHeight: 0, // Important for flexbox scroll
-        }}
-      >
+      {/* Menu - No scroll, just centered */}
+      <ul className="flex-1 flex flex-col justify-center px-5">
         {MenuSidebar.map((menu, index) => (
           <Link href={menu.path} key={index}>
             <li className={`text-sm flex items-center gap-3 p-2 mt-2 cursor-pointer hover:bg-sidebar-accent active:bg-sidebar-accent rounded-md transition-colors duration-200 hover:text-[#EECE84] text-sidebar-foreground touch-manipulation ${
@@ -148,7 +123,7 @@ const Sidebar = () => {
 
       {/* Theme Toggle Section - Fixed at bottom, always visible */}
       <div className="flex-shrink-0 p-5 pb-5 border-t border-sidebar-border">
-        <div className={`flex items-center transition-all duration-300 ${
+        <div className={`flex items-center justify-center transition-all duration-300 ${
           isOpen ? 'opacity-100 w-auto' : 'opacity-100 w-auto justify-center'
         }`}>
           {isOpen ? (
