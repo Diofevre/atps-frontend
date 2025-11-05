@@ -11,11 +11,26 @@ import { useTheme } from 'next-themes';
 const Sidebar = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const { theme } = useTheme();
+  const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const { theme, setTheme } = useTheme();
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  // Fermer la sidebar quand on clique à l'extérieur (pour mobile/tablette)
+  // Détecter si on est sur mobile/tablette
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Fermer la sidebar quand on clique à l'extérieur (uniquement pour mobile/tablette)
+  useEffect(() => {
+    if (!isMobile) return; // Ne pas fermer sur desktop
+
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (isOpen && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
         setIsOpen(false);
@@ -31,30 +46,53 @@ const Sidebar = () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('touchstart', handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isOpen, isMobile]);
 
-  // Fermer la sidebar automatiquement quand on change de route (pour mobile/tablette)
+  // Fermer la sidebar automatiquement quand on change de route (uniquement pour mobile/tablette)
   useEffect(() => {
-    if (isOpen) {
-      // Délai pour éviter les fermetures trop rapides
-      const timer = setTimeout(() => {
-        setIsOpen(false);
-      }, 100);
-      return () => clearTimeout(timer);
+    if (!isMobile || !isOpen) return; // Ne pas fermer sur desktop ou si déjà fermé
+
+    const timer = setTimeout(() => {
+      setIsOpen(false);
+    }, 300); // Délai plus long pour éviter les conflits
+    return () => clearTimeout(timer);
+  }, [pathname, isOpen, isMobile]);
+
+  // Gérer l'ouverture/fermeture selon le type d'appareil
+  const handleMouseEnter = () => {
+    if (!isMobile) {
+      setIsHovered(true);
+      setIsOpen(true);
     }
-  }, [pathname, isOpen]);
+  };
+
+  const handleMouseLeave = () => {
+    if (!isMobile) {
+      setIsHovered(false);
+      setIsOpen(false);
+    }
+  };
+
+  // Sur mobile/tablette, permettre l'ouverture manuelle
+  const handleToggle = () => {
+    if (isMobile) {
+      setIsOpen(!isOpen);
+    }
+  };
 
   return (
     <div
       ref={sidebarRef}
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={isMobile ? handleToggle : undefined}
       className={`fixed left-0 top-0 z-50 flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300 ${
         isOpen ? "w-60" : "w-20"
       }`}
       style={{ 
         height: '100vh',
         maxHeight: '100vh',
+        overflow: 'hidden', // Empêcher le scroll sur la sidebar elle-même
       }}
     >
       {/* Header - Fixed at top */}
@@ -114,8 +152,8 @@ const Sidebar = () => {
 
       {/* Theme Toggle Section - Fixed at bottom, always visible */}
       <div className="flex-shrink-0 p-5 pb-5 border-t border-sidebar-border">
-        <div className={`flex items-center justify-center transition-all duration-300 ${
-          isOpen ? 'opacity-100 w-auto' : 'opacity-100 w-auto justify-center'
+        <div className={`flex items-center transition-all duration-300 ${
+          isOpen ? 'opacity-100 w-full justify-start' : 'opacity-100 w-full justify-center'
         }`}>
           {isOpen ? (
             <AdvancedThemeSwitch />
@@ -123,9 +161,9 @@ const Sidebar = () => {
             <button
               onClick={(e) => {
                 e.stopPropagation();
+                e.preventDefault();
                 const newTheme = theme === "dark" ? "light" : "dark";
-                localStorage.setItem('theme', newTheme);
-                window.dispatchEvent(new Event('theme-change'));
+                setTheme(newTheme);
               }}
               className="p-2 rounded-lg hover:bg-sidebar-accent active:bg-sidebar-accent transition-colors duration-200 touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center w-full"
               title="Toggle theme"

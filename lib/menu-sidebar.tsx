@@ -1,10 +1,22 @@
 import { MdDashboard, MdBook, MdQuiz, MdNewspaper, MdGroups, MdAccountCircle, MdFlight, MdArticle, MdSearch } from 'react-icons/md';
+import dynamic from 'next/dynamic';
 import RolledNewspaperIcon from '@/components/icons/RolledNewspaperIcon';
+
+// Lazy load les icônes les plus lourdes (Question Bank et Courses)
+const LazyMdQuiz = dynamic(() => import('react-icons/md').then(mod => ({ default: mod.MdQuiz })), { 
+  ssr: false,
+  loading: () => <div className="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+});
+
+const LazyMdBook = dynamic(() => import('react-icons/md').then(mod => ({ default: mod.MdBook })), { 
+  ssr: false,
+  loading: () => <div className="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+});
 
 export const MenuSidebar = [
   { title: 'Dashboard', path: '/dashboard', icon: MdDashboard },
-  { title: 'Courses', path: '/courses', icon: MdBook },
-  { title: 'Question Bank', path: '/questions-bank', icon: MdQuiz },
+  { title: 'Courses', path: '/courses', icon: LazyMdBook },
+  { title: 'Question Bank', path: '/questions-bank', icon: LazyMdQuiz },
   { title: 'ATC Simulator', path: '/atc-simulator', icon: MdFlight },
   { title: 'News', path: '/news', icon: RolledNewspaperIcon },
   { title: 'Blog', path: '/blog', icon: MdArticle },

@@ -25,7 +25,7 @@ export default function Layout({ children }: Props) {
   const hideBackground = pathname === '/login' || pathname === '/signup';
 
   return (
-    <div className="flex h-screen relative">
+    <div className="flex h-screen relative overflow-hidden">
       {/* Beautiful animated background - Hide for login - Theme aware */}
       {!hideBackground && (
         <div className="fixed inset-0 -z-10 bg-background">
@@ -41,10 +41,10 @@ export default function Layout({ children }: Props) {
       )}
 
       {/* Content */}
-      <div className="flex w-full relative">
+      <div className="flex w-full h-full relative overflow-hidden">
         {/* Sidebar with glass effect */}
         {!hideSidebar && (
-          <aside className="top-0 left-0 h-full relative">
+          <aside className="top-0 left-0 h-full relative flex-shrink-0">
             <div className="absolute inset-0 bg-white/50 border-r backdrop-blur-md hidden md:block" />
             <div className="relative">
               <Sidebar />
@@ -54,9 +54,14 @@ export default function Layout({ children }: Props) {
 
         {/* Main content */}
         <main 
-          className={`overflow-y-auto h-full w-full relative ${!hideSidebar ? 'md:pl-20' : ''}`}
+          className={`flex-1 overflow-y-auto overflow-x-hidden h-full relative`}
+          style={{ 
+            height: '100vh',
+            maxHeight: '100vh',
+            width: 'calc(100% - 80px)', // 80px = w-20 (sidebar fermée)
+          }}
         >
-          <div className="relative z-10">
+          <div className="relative z-10 min-h-full">
             {children}
           </div>
         </main>
