@@ -129,7 +129,7 @@ const VideoPage = () => {
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Statistics Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="bg-white border border-blue-200 shadow-lg">
+            <Card className="bg-white dark:bg-card border border-gray-200 dark:border-border shadow-lg hover:border-blue-300 dark:hover:border-border-blue transition-colors">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -144,7 +144,7 @@ const VideoPage = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-white border border-blue-200 shadow-lg">
+            <Card className="bg-white dark:bg-card border border-gray-200 dark:border-border shadow-lg hover:border-blue-300 dark:hover:border-border-blue transition-colors">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -159,7 +159,7 @@ const VideoPage = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-white border border-blue-200 shadow-lg">
+            <Card className="bg-white dark:bg-card border border-gray-200 dark:border-border shadow-lg hover:border-blue-300 dark:hover:border-border-blue transition-colors">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -174,7 +174,7 @@ const VideoPage = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-white border border-blue-200 shadow-lg">
+            <Card className="bg-white dark:bg-card border border-gray-200 dark:border-border shadow-lg hover:border-blue-300 dark:hover:border-border-blue transition-colors">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -191,7 +191,7 @@ const VideoPage = () => {
           </div>
 
           {/* Continue Learning Section */}
-          <Card className="bg-white border border-blue-200 shadow-lg">
+          <Card className="bg-white dark:bg-card border border-gray-200 dark:border-border shadow-lg hover:border-blue-300 dark:hover:border-border-blue transition-colors">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
@@ -200,7 +200,7 @@ const VideoPage = () => {
                 </div>
                 <Button
                   variant="outline"
-                  className="border-blue-200 hover:bg-blue-50"
+                  className="border-gray-200 dark:border-border hover:border-blue-300 dark:hover:border-border-blue hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors"
                   onClick={() => setIsBrowseModalOpen(true)}
                 >
                   <Search className="w-4 h-4 mr-2" />
@@ -212,7 +212,7 @@ const VideoPage = () => {
                 {mockRecentVideos.map((video) => (
                   <div
                     key={video.id}
-                    className="group cursor-pointer bg-gradient-to-br from-blue-50 to-white rounded-xl border border-blue-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                    className="group cursor-pointer bg-gradient-to-br from-blue-50 to-white dark:from-slate-800/50 dark:to-card rounded-xl border border-gray-200 dark:border-border hover:border-blue-300 dark:hover:border-border-blue hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
                     onClick={() => setIsBrowseModalOpen(true)}
                   >
                     <div className="relative aspect-video overflow-hidden">
@@ -296,16 +296,16 @@ const VideoPage = () => {
     if (!videos?.videos?.length) {
       return (
         <div className="max-w-4xl mx-auto">
-          <Card className="bg-white border border-blue-200 shadow-lg">
+          <Card className="bg-white dark:bg-card border border-gray-200 dark:border-border shadow-lg">
             <CardContent className="p-12 text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Film className="w-8 h-8 text-blue-600" />
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Film className="w-8 h-8 text-blue-600 dark:text-blue-400" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">No Videos Available</h2>
-              <p className="text-gray-600 mb-6">Try selecting a different topic or adjusting your search</p>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-foreground mb-2">No Videos Available</h2>
+              <p className="text-gray-600 dark:text-text-secondary mb-6">Try selecting a different topic or adjusting your search</p>
               <Button
                 variant="outline"
-                className="border-blue-200 hover:bg-blue-50"
+                className="border-gray-200 dark:border-border hover:border-blue-300 dark:hover:border-border-blue hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors"
                 onClick={() => setIsBrowseModalOpen(true)}
               >
                 <Search className="w-4 h-4 mr-2" />
@@ -321,7 +321,7 @@ const VideoPage = () => {
       <div className="max-w-7xl mx-auto">
         {/* Topic Header */}
         <div className="mb-6">
-          <div className="bg-white rounded-xl border border-blue-200 shadow-lg p-6">
+          <div className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border shadow-lg p-6 hover:border-blue-300 dark:hover:border-border-blue transition-colors">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold text-gray-900">{videos.topic}</h2>
@@ -331,7 +331,7 @@ const VideoPage = () => {
               </div>
               {videos.channel_profile_image && (
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-blue-200">
+                  <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-200 dark:border-border">
                     <Image
                       src={videos.channel_profile_image}
                       alt={videos.channel_name}
@@ -352,7 +352,7 @@ const VideoPage = () => {
           {videos.videos.map((video, index) => (
             <Card 
               key={index} 
-              className="group bg-white border border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden cursor-pointer"
+              className="group bg-white dark:bg-card border border-gray-200 dark:border-border hover:border-blue-300 dark:hover:border-border-blue shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden cursor-pointer"
               onClick={() => handleVideoClick(video)}
             >
               <CardContent className="p-0">

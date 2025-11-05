@@ -149,7 +149,7 @@ const Dashboard = () => {
           className="mb-6 cursor-pointer"
           onClick={() => window.open(dashboardData.latestArticle.link, '_blank')}
         >
-          <div className="flex h-80 bg-card rounded-2xl border border-border-blue shadow-lg overflow-hidden">
+          <div className="flex h-80 bg-card rounded-2xl border border-gray-200 dark:border-border shadow-lg overflow-hidden hover:border-blue-300 dark:hover:border-border-blue transition-colors">
             {/* Image - Left (3/8 = 37.5%) */}
             <div className="w-[37.5%] relative">
               <img
@@ -220,7 +220,7 @@ const Dashboard = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-card rounded-2xl p-6 border border-border-blue shadow-lg"
+            className="bg-card rounded-2xl p-6 border border-gray-200 dark:border-border shadow-lg hover:border-blue-300 dark:hover:border-border-blue transition-colors"
           >
             <h2 className="text-xl font-bold text-card-foreground mb-6">Today's courses</h2>
             
@@ -248,7 +248,7 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="bg-card rounded-2xl p-6 border border-border-blue shadow-lg"
+            className="bg-card rounded-2xl p-6 border border-gray-200 dark:border-border shadow-lg hover:border-blue-300 dark:hover:border-border-blue transition-colors"
           >
             <h2 className="text-xl font-bold text-card-foreground mb-6">Performance</h2>
             
@@ -312,7 +312,7 @@ const Dashboard = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="bg-card rounded-2xl p-6 border border-border-blue shadow-lg"
+            className="bg-card rounded-2xl p-6 border border-gray-200 dark:border-border shadow-lg hover:border-blue-300 dark:hover:border-border-blue transition-colors"
           >
             <h2 className="text-xl font-bold text-card-foreground mb-6 flex items-center gap-2">
               <Bell className="w-5 h-5" />
@@ -330,7 +330,7 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
-            className="lg:col-span-3 bg-card rounded-2xl p-6 border border-border-blue shadow-lg"
+            className="lg:col-span-3 bg-card rounded-2xl p-6 border border-gray-200 dark:border-border shadow-lg hover:border-blue-300 dark:hover:border-border-blue transition-colors"
           >
             <div className="mb-6">
               <div className="text-4xl font-bold text-card-foreground mb-2">
@@ -415,7 +415,7 @@ const Dashboard = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
-            className="lg:col-span-1 bg-card rounded-2xl p-6 border border-border-blue shadow-lg"
+            className="lg:col-span-1 bg-card rounded-2xl p-6 border border-gray-200 dark:border-border shadow-lg hover:border-blue-300 dark:hover:border-border-blue transition-colors"
           >
             <h2 className="text-xl font-bold text-card-foreground mb-6">Leaderboard</h2>
             <div className="space-y-3">

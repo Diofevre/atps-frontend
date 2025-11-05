@@ -118,7 +118,7 @@ const ManualPage = () => {
           <div className="max-w-7xl mx-auto space-y-6">
             {/* Statistics Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card className="bg-white border border-blue-200 shadow-lg">
+              <Card className="bg-white dark:bg-card border border-gray-200 dark:border-border shadow-lg hover:border-blue-300 dark:hover:border-border-blue transition-colors">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -133,7 +133,7 @@ const ManualPage = () => {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border border-blue-200 shadow-lg">
+              <Card className="bg-white dark:bg-card border border-gray-200 dark:border-border shadow-lg hover:border-blue-300 dark:hover:border-border-blue transition-colors">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -148,7 +148,7 @@ const ManualPage = () => {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border border-blue-200 shadow-lg">
+              <Card className="bg-white dark:bg-card border border-gray-200 dark:border-border shadow-lg hover:border-blue-300 dark:hover:border-border-blue transition-colors">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -163,7 +163,7 @@ const ManualPage = () => {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border border-blue-200 shadow-lg">
+              <Card className="bg-white dark:bg-card border border-gray-200 dark:border-border shadow-lg hover:border-blue-300 dark:hover:border-border-blue transition-colors">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -180,7 +180,7 @@ const ManualPage = () => {
             </div>
 
             {/* Continue Reading Section */}
-            <Card className="bg-white border border-blue-200 shadow-lg">
+            <Card className="bg-white dark:bg-card border border-gray-200 dark:border-border shadow-lg hover:border-blue-300 dark:hover:border-border-blue transition-colors">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div>
@@ -199,7 +199,7 @@ const ManualPage = () => {
                   {mockRecentManuals.map((manual) => (
                     <div
                       key={manual.id}
-                      className="group cursor-pointer bg-gradient-to-br from-blue-50 to-white rounded-xl border border-blue-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                      className="group cursor-pointer bg-gradient-to-br from-blue-50 to-white dark:from-slate-800/50 dark:to-card rounded-xl border border-gray-200 dark:border-border hover:border-blue-300 dark:hover:border-border-blue hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
                     >
                       <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-blue-100 to-blue-50">
                         <Image
@@ -294,7 +294,7 @@ const ManualPage = () => {
     if (!topicLessons?.Lesson || topicLessons.Lesson.length === 0) {
       return (
         <div className="max-w-4xl mx-auto">
-          <Card className="bg-white border border-blue-200 shadow-lg">
+          <Card className="bg-white dark:bg-card border border-gray-200 dark:border-border shadow-lg">
             <CardContent className="p-12 text-center">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Book className="w-8 h-8 text-blue-600" />
@@ -312,11 +312,11 @@ const ManualPage = () => {
       <div className="max-w-7xl mx-auto">
         {/* Topic Header */}
         <div className="mb-6">
-          <Card className="bg-white border border-blue-200 shadow-lg">
+          <Card className="bg-white dark:bg-card border border-gray-200 dark:border-border shadow-lg hover:border-blue-300 dark:hover:border-border-blue transition-colors">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Lessons Overview</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-foreground">Lessons Overview</h2>
                   <p className="text-sm text-gray-600 mt-1">
             {topicLessons.Lesson.length} {topicLessons.Lesson.length === 1 ? 'lesson' : 'lessons'} available
                   </p>
@@ -331,7 +331,7 @@ const ManualPage = () => {
           {topicLessons.Lesson.map((lesson) => (
             <Card
               key={lesson.lesson_id}
-              className="group bg-white border border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+              className="group bg-white dark:bg-card border border-gray-200 dark:border-border hover:border-blue-300 dark:hover:border-border-blue shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
               onClick={() => handleLessonClick(lesson.lesson_id, topicLessons.topic_lesson_id, lesson.page_id, lesson.debut_page)}
             >
               <CardContent className="p-6">
@@ -352,7 +352,7 @@ const ManualPage = () => {
                     <span>Page {lesson.debut_page}</span>
                   </div>
                   
-                  <div className="mt-auto pt-4 border-t border-blue-200 w-full flex items-center justify-center gap-2 text-sm text-blue-600 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="mt-auto pt-4 border-t border-gray-200 dark:border-border w-full flex items-center justify-center gap-2 text-sm text-blue-600 dark:text-blue-400 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                     <span>View Lesson</span>
                     <ChevronRight className="w-4 h-4" />
                   </div>

@@ -20,10 +20,10 @@ export default function SignupPage() {
   }, []);
 
   return (
-    <div className="fixed inset-0 min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Animated gradient background with app colors */}
+    <div className="fixed inset-0 min-h-screen flex items-center justify-center relative overflow-hidden bg-background">
+      {/* Animated gradient background with app colors - Light mode */}
       <div 
-        className="absolute inset-0 transition-opacity duration-300"
+        className="absolute inset-0 transition-opacity duration-300 dark:hidden"
         style={{
           background: `
             radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, 
@@ -36,8 +36,23 @@ export default function SignupPage() {
         }}
       />
 
-      {/* Animated clouds/particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Animated gradient background - Dark mode */}
+      <div 
+        className="absolute inset-0 transition-opacity duration-300 hidden dark:block"
+        style={{
+          background: `
+            radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, 
+              rgba(30, 41, 59, 0.6) 0%, 
+              rgba(15, 23, 42, 0.4) 50%,
+              transparent 100%
+            ),
+            linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--background)) 100%)
+          `,
+        }}
+      />
+
+      {/* Animated clouds/particles - Light mode */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none dark:hidden">
         {[...Array(8)].map((_, i) => (
           <div
             key={i}
@@ -55,21 +70,37 @@ export default function SignupPage() {
         ))}
       </div>
 
+      {/* Animated clouds/particles - Dark mode */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none hidden dark:block">
+        {[...Array(8)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full opacity-10"
+            style={{
+              width: `${150 + Math.random() * 250}px`,
+              height: `${150 + Math.random() * 250}px`,
+              background: `radial-gradient(circle, rgba(${i % 2 === 0 ? '100,116,139' : '150,150,150'},0.3) 0%, transparent 70%)`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animation: `float ${12 + Math.random() * 8}s infinite ease-in-out`,
+              animationDelay: `${Math.random() * 4}s`,
+            }}
+          />
+        ))}
+      </div>
+
       {/* Glass morphism card - Two column layout */}
       <div className="relative z-10 w-full max-w-5xl mx-4">
         <div 
-          className="backdrop-blur-xl bg-white/80 rounded-3xl shadow-2xl border border-white/50 overflow-hidden"
+          className="backdrop-blur-xl bg-white/80 dark:bg-card/90 rounded-3xl shadow-2xl border border-white/50 dark:border-border overflow-hidden transition-all duration-300"
           style={{
             boxShadow: '0 20px 60px rgba(193, 224, 241, 0.4)',
           }}
         >
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Left side - Logo and branding */}
-            <div className="p-10 flex flex-col justify-center items-center" style={{
-              background: 'linear-gradient(135deg, rgba(193, 224, 241, 0.3) 0%, rgba(238, 206, 132, 0.2) 100%)'
-            }}>
-              <div className="inline-flex items-center justify-center mb-6 p-4 rounded-2xl" style={{
-                background: 'linear-gradient(135deg, rgba(193, 224, 241, 0.2) 0%, rgba(238, 206, 132, 0.2) 100%)',
+            <div className="p-10 flex flex-col justify-center items-center bg-gradient-to-br from-blue-50/50 to-yellow-50/30 dark:from-slate-800/50 dark:to-slate-700/30 transition-colors duration-300">
+              <div className="inline-flex items-center justify-center mb-6 p-4 rounded-2xl bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-white/50 dark:border-border transition-all duration-300" style={{
                 boxShadow: '0 8px 20px rgba(193, 224, 241, 0.3)',
               }}>
                 <Image
@@ -82,26 +113,24 @@ export default function SignupPage() {
                   unoptimized
                 />
               </div>
-              <h1 className="text-3xl font-bold mb-2 text-center" style={{
-                color: '#2D3748'
-              }}>
+              <h1 className="text-3xl font-bold mb-2 text-center text-foreground transition-colors duration-300">
                 Airline Transport Pilot
               </h1>
-              <p className="text-base text-center" style={{ color: '#718096' }}>Create your training account</p>
-              <p className="text-sm text-center mt-4 max-w-xs" style={{ color: '#718096' }}>
+              <p className="text-base text-center text-text-secondary transition-colors duration-300">Create your training account</p>
+              <p className="text-sm text-center mt-4 max-w-xs text-text-secondary transition-colors duration-300">
                 Join our community of future pilots and start your aviation journey today
               </p>
             </div>
 
             {/* Right side - Form */}
-            <div className="p-10">
+            <div className="p-10 bg-white/50 dark:bg-card/50 transition-colors duration-300">
               <SignupForm />
             </div>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-6 text-sm" style={{ color: '#718096' }}>
+        <div className="text-center mt-6 text-sm text-text-secondary transition-colors duration-300">
           <p>© 2024 Airline Transport Pilot School</p>
         </div>
       </div>

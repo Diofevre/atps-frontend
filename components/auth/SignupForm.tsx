@@ -164,19 +164,18 @@ export default function SignupForm() {
     return (
       <form onSubmit={handleVerifyCode} className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold mb-2" style={{ color: '#2D3748' }}>
+          <h2 className="text-2xl font-bold mb-2 text-foreground transition-colors duration-300">
             Email Verification
           </h2>
-          <p className="text-sm" style={{ color: '#718096' }}>
-            We've sent a verification code to <strong>{formData.email}</strong>
+          <p className="text-sm text-text-secondary transition-colors duration-300">
+            We've sent a verification code to <strong className="text-foreground">{formData.email}</strong>
           </p>
         </div>
 
         <div className="space-y-2">
           <label 
             htmlFor="code" 
-            className="block text-sm font-semibold"
-            style={{ color: '#4A5568' }}
+            className="block text-sm font-semibold text-foreground transition-colors duration-300"
           >
             Verification Code
           </label>
@@ -188,26 +187,15 @@ export default function SignupForm() {
             onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
             required
             disabled={loading}
-            className="w-full px-4 py-3.5 rounded-xl border-2 transition-all duration-200 focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed text-center text-2xl tracking-widest font-mono"
-            style={{
-              borderColor: '#C1E0F1',
-              backgroundColor: '#F7FAFC'
-            }}
-            onFocus={(e) => e.target.style.borderColor = '#EECE84'}
-            onBlur={(e) => e.target.style.borderColor = '#C1E0F1'}
+            className="w-full px-4 py-3.5 rounded-xl border-2 border-border-blue dark:border-border bg-card text-foreground placeholder:text-muted-foreground transition-all duration-200 focus:outline-none focus:border-yellow-400 dark:focus:border-yellow-500 disabled:bg-muted disabled:cursor-not-allowed text-center text-2xl tracking-widest font-mono"
           />
-          <p className="text-xs" style={{ color: '#718096' }}>
+          <p className="text-xs text-text-secondary transition-colors duration-300">
             This code expires in 2 minutes
           </p>
         </div>
 
         {error && (
-          <div className="px-4 py-3 rounded-xl text-sm font-medium flex items-center space-x-2"
-            style={{
-              backgroundColor: '#FED7D7',
-              color: '#C53030'
-            }}
-          >
+          <div className="px-4 py-3 rounded-xl text-sm font-medium flex items-center space-x-2 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 transition-colors duration-300">
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
             </svg>
@@ -216,12 +204,7 @@ export default function SignupForm() {
         )}
 
         {success && (
-          <div className="px-4 py-3 rounded-xl text-sm font-medium flex items-center space-x-2"
-            style={{
-              backgroundColor: '#C6F6D5',
-              color: '#22543D'
-            }}
-          >
+          <div className="px-4 py-3 rounded-xl text-sm font-medium flex items-center space-x-2 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 transition-colors duration-300">
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
@@ -232,12 +215,7 @@ export default function SignupForm() {
         <button
           type="submit"
           disabled={loading || verificationCode.length !== 6}
-          className="w-full py-4 px-6 rounded-xl font-semibold transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none relative overflow-hidden group"
-          style={{
-            background: '#EECE84',
-            color: '#2D3748',
-            boxShadow: '0 10px 30px rgba(238, 206, 132, 0.5)'
-          }}
+          className="w-full py-4 px-6 rounded-xl font-semibold bg-yellow-400 dark:bg-yellow-500 text-foreground shadow-lg shadow-yellow-400/50 dark:shadow-yellow-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-400/50 dark:hover:shadow-yellow-500/50 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none relative overflow-hidden group"
         >
           <span className="relative z-10">
             {loading ? (
@@ -253,18 +231,14 @@ export default function SignupForm() {
             )}
           </span>
           <div 
-            className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300"
-            style={{
-              background: 'rgba(0,0,0,0.1)'
-            }}
+            className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 bg-foreground/10"
           />
         </button>
 
         <button
           type="button"
           onClick={handleResendCode}
-          className="w-full py-3 px-6 rounded-xl font-medium transition-all duration-300 hover:bg-gray-100 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{ color: '#718096' }}
+          className="w-full py-3 px-6 rounded-xl font-medium transition-all duration-300 hover:bg-muted text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={loading || resendCooldown > 0}
         >
           {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend Code'}
@@ -281,10 +255,9 @@ export default function SignupForm() {
         <div className="space-y-2">
           <label 
             htmlFor="name" 
-            className="block text-sm font-semibold"
-            style={{ color: '#4A5568' }}
+            className="block text-sm font-semibold text-foreground transition-colors duration-300"
           >
-            Full Name <span className="text-red-500">*</span>
+            Full Name <span className="text-red-500 dark:text-red-400">*</span>
           </label>
           <input
             id="name"
@@ -294,23 +267,16 @@ export default function SignupForm() {
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             required
             disabled={loading}
-            className="w-full px-4 py-3.5 rounded-xl border-2 transition-all duration-200 focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
-            style={{
-              borderColor: '#C1E0F1',
-              backgroundColor: '#F7FAFC'
-            }}
-            onFocus={(e) => e.target.style.borderColor = '#EECE84'}
-            onBlur={(e) => e.target.style.borderColor = '#C1E0F1'}
+            className="w-full px-4 py-3.5 rounded-xl border-2 border-border-blue dark:border-border bg-card text-foreground placeholder:text-muted-foreground transition-all duration-200 focus:outline-none focus:border-yellow-400 dark:focus:border-yellow-500 disabled:bg-muted disabled:cursor-not-allowed"
           />
         </div>
 
         <div className="space-y-2">
           <label 
             htmlFor="username" 
-            className="block text-sm font-semibold"
-            style={{ color: '#4A5568' }}
+            className="block text-sm font-semibold text-foreground transition-colors duration-300"
           >
-            Username <span className="text-red-500">*</span>
+            Username <span className="text-red-500 dark:text-red-400">*</span>
           </label>
           <input
             id="username"
@@ -320,13 +286,7 @@ export default function SignupForm() {
             onChange={(e) => setFormData({ ...formData, username: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '') })}
             required
             disabled={loading}
-            className="w-full px-4 py-3.5 rounded-xl border-2 transition-all duration-200 focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
-            style={{
-              borderColor: '#C1E0F1',
-              backgroundColor: '#F7FAFC'
-            }}
-            onFocus={(e) => e.target.style.borderColor = '#EECE84'}
-            onBlur={(e) => e.target.style.borderColor = '#C1E0F1'}
+            className="w-full px-4 py-3.5 rounded-xl border-2 border-border-blue dark:border-border bg-card text-foreground placeholder:text-muted-foreground transition-all duration-200 focus:outline-none focus:border-yellow-400 dark:focus:border-yellow-500 disabled:bg-muted disabled:cursor-not-allowed"
           />
         </div>
       </div>
@@ -334,10 +294,9 @@ export default function SignupForm() {
       <div className="space-y-2">
         <label 
           htmlFor="email" 
-          className="block text-sm font-semibold"
-          style={{ color: '#4A5568' }}
+          className="block text-sm font-semibold text-foreground transition-colors duration-300"
         >
-          Email <span className="text-red-500">*</span>
+          Email <span className="text-red-500 dark:text-red-400">*</span>
         </label>
         <input
           id="email"
@@ -347,13 +306,7 @@ export default function SignupForm() {
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           required
           disabled={loading}
-          className="w-full px-4 py-3.5 rounded-xl border-2 transition-all duration-200 focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
-          style={{
-            borderColor: '#C1E0F1',
-            backgroundColor: '#F7FAFC'
-          }}
-          onFocus={(e) => e.target.style.borderColor = '#EECE84'}
-          onBlur={(e) => e.target.style.borderColor = '#C1E0F1'}
+          className="w-full px-4 py-3.5 rounded-xl border-2 border-border-blue dark:border-border bg-card text-foreground placeholder:text-muted-foreground transition-all duration-200 focus:outline-none focus:border-yellow-400 dark:focus:border-yellow-500 disabled:bg-muted disabled:cursor-not-allowed"
         />
       </div>
 
@@ -362,10 +315,9 @@ export default function SignupForm() {
         <div className="space-y-2">
           <label 
             htmlFor="password" 
-            className="block text-sm font-semibold"
-            style={{ color: '#4A5568' }}
+            className="block text-sm font-semibold text-foreground transition-colors duration-300"
           >
-            Password <span className="text-red-500">*</span>
+            Password <span className="text-red-500 dark:text-red-400">*</span>
           </label>
           <input
             id="password"
@@ -375,15 +327,9 @@ export default function SignupForm() {
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             required
             disabled={loading}
-            className="w-full px-4 py-3.5 rounded-xl border-2 transition-all duration-200 focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
-            style={{
-              borderColor: '#C1E0F1',
-              backgroundColor: '#F7FAFC'
-            }}
-            onFocus={(e) => e.target.style.borderColor = '#EECE84'}
-            onBlur={(e) => e.target.style.borderColor = '#C1E0F1'}
+            className="w-full px-4 py-3.5 rounded-xl border-2 border-border-blue dark:border-border bg-card text-foreground placeholder:text-muted-foreground transition-all duration-200 focus:outline-none focus:border-yellow-400 dark:focus:border-yellow-500 disabled:bg-muted disabled:cursor-not-allowed"
           />
-          <p className="text-xs" style={{ color: '#718096' }}>
+          <p className="text-xs text-text-secondary transition-colors duration-300">
             Min. 8 chars
           </p>
         </div>
@@ -391,10 +337,9 @@ export default function SignupForm() {
         <div className="space-y-2">
           <label 
             htmlFor="confirmPassword" 
-            className="block text-sm font-semibold"
-            style={{ color: '#4A5568' }}
+            className="block text-sm font-semibold text-foreground transition-colors duration-300"
           >
-            Confirm Password <span className="text-red-500">*</span>
+            Confirm Password <span className="text-red-500 dark:text-red-400">*</span>
           </label>
           <input
             id="confirmPassword"
@@ -404,24 +349,17 @@ export default function SignupForm() {
             onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
             required
             disabled={loading}
-            className="w-full px-4 py-3.5 rounded-xl border-2 transition-all duration-200 focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
-            style={{
-              borderColor: formData.password === formData.confirmPassword && formData.confirmPassword ? '#C6F6D5' : '#C1E0F1',
-              backgroundColor: '#F7FAFC'
-            }}
-            onFocus={(e) => e.target.style.borderColor = '#EECE84'}
-            onBlur={(e) => e.target.style.borderColor = formData.password === formData.confirmPassword && formData.confirmPassword ? '#C6F6D5' : '#C1E0F1'}
+            className={`w-full px-4 py-3.5 rounded-xl border-2 bg-card text-foreground placeholder:text-muted-foreground transition-all duration-200 focus:outline-none focus:border-yellow-400 dark:focus:border-yellow-500 disabled:bg-muted disabled:cursor-not-allowed ${
+              formData.password === formData.confirmPassword && formData.confirmPassword
+                ? 'border-green-500 dark:border-green-400'
+                : 'border-border-blue dark:border-border'
+            }`}
           />
         </div>
       </div>
 
       {error && (
-        <div className="px-4 py-3 rounded-xl text-sm font-medium flex items-center space-x-2"
-          style={{
-            backgroundColor: '#FED7D7',
-            color: '#C53030'
-          }}
-        >
+        <div className="px-4 py-3 rounded-xl text-sm font-medium flex items-center space-x-2 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 transition-colors duration-300">
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
           </svg>
@@ -432,38 +370,30 @@ export default function SignupForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-4 px-6 rounded-xl font-semibold transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none relative overflow-hidden group"
-        style={{
-          background: '#EECE84',
-          color: '#2D3748',
-          boxShadow: '0 10px 30px rgba(238, 206, 132, 0.5)'
-        }}
+        className="w-full py-4 px-6 rounded-xl font-semibold bg-yellow-400 dark:bg-yellow-500 text-foreground shadow-lg shadow-yellow-400/50 dark:shadow-yellow-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-400/50 dark:hover:shadow-yellow-500/50 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none relative overflow-hidden group"
       >
         <span className="relative z-10">
           {loading ? (
-                          <span className="flex items-center justify-center">
-                <svg className="animate-spin h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                </svg>
-                Creating account...
-              </span>
-            ) : (
-              'Create Account'
-            )}
+            <span className="flex items-center justify-center">
+              <svg className="animate-spin h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+              Creating account...
+            </span>
+          ) : (
+            'Create Account'
+          )}
         </span>
         <div 
-          className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300"
-          style={{
-            background: 'rgba(0,0,0,0.1)'
-          }}
+          className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 bg-foreground/10"
         />
       </button>
 
-      <div className="text-center text-sm pt-4" style={{ color: '#718096' }}>
+      <div className="text-center text-sm pt-4 text-text-secondary transition-colors duration-300">
         <p>
           Already have an account?{' '}
-          <a href="/login" className="font-semibold hover:underline" style={{ color: '#2D3748' }}>
+          <a href="/login" className="font-semibold hover:underline text-foreground transition-colors duration-300">
             Log in
           </a>
         </p>
