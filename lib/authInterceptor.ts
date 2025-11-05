@@ -18,8 +18,16 @@ export async function ensureValidToken(): Promise<boolean> {
     return false;
   }
 
-  // Check if token is expired or about to expire (within 5 minutes)
+  // Check if refresh_token is expired
   const now = Date.now();
+  if (tokens.refresh_expires_at && tokens.refresh_expires_at < now) {
+    // Refresh token is expired, user needs to login again
+    console.warn('⚠️ Refresh token expired, clearing auth');
+    clearAuth();
+    return false;
+  }
+
+  // Check if access token is expired or about to expire (within 5 minutes)
   const fiveMinutesFromNow = now + (5 * 60 * 1000);
   
   if (tokens.expires_at < fiveMinutesFromNow) {
