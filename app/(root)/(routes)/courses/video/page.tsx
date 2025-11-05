@@ -133,9 +133,9 @@ const VideoPage = () => {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">Total Watched</p>
-                    <p className="text-3xl font-bold text-gray-900">{mockStats.totalWatched}</p>
-                    <p className="text-xs text-gray-500 mt-1">videos</p>
+                    <p className="text-sm text-gray-600 dark:text-text-secondary mb-1">Total Watched</p>
+                    <p className="text-3xl font-bold text-gray-900 dark:text-foreground">{mockStats.totalWatched}</p>
+                    <p className="text-xs text-gray-500 dark:text-text-secondary mt-1">videos</p>
                   </div>
                   <div className="p-3 bg-blue-100 rounded-xl">
                     <Play className="w-6 h-6 text-blue-600" />
@@ -148,9 +148,9 @@ const VideoPage = () => {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">Completion Rate</p>
-                    <p className="text-3xl font-bold text-gray-900">{mockStats.completionRate}%</p>
-                    <p className="text-xs text-gray-500 mt-1">average</p>
+                    <p className="text-sm text-gray-600 dark:text-text-secondary mb-1">Completion Rate</p>
+                    <p className="text-3xl font-bold text-gray-900 dark:text-foreground">{mockStats.completionRate}%</p>
+                    <p className="text-xs text-gray-500 dark:text-text-secondary mt-1">average</p>
                   </div>
                   <div className="p-3 bg-green-100 rounded-xl">
                     <TrendingUp className="w-6 h-6 text-green-600" />
@@ -163,9 +163,9 @@ const VideoPage = () => {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">Hours Watched</p>
-                    <p className="text-3xl font-bold text-gray-900">{mockStats.hoursWatched}</p>
-                    <p className="text-xs text-gray-500 mt-1">total time</p>
+                    <p className="text-sm text-gray-600 dark:text-text-secondary mb-1">Hours Watched</p>
+                    <p className="text-3xl font-bold text-gray-900 dark:text-foreground">{mockStats.hoursWatched}</p>
+                    <p className="text-xs text-gray-500 dark:text-text-secondary mt-1">total time</p>
                   </div>
                   <div className="p-3 bg-yellow-100 rounded-xl">
                     <Clock className="w-6 h-6 text-yellow-600" />
@@ -178,9 +178,9 @@ const VideoPage = () => {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">In Progress</p>
-                    <p className="text-3xl font-bold text-gray-900">{mockStats.inProgress}</p>
-                    <p className="text-xs text-gray-500 mt-1">continue learning</p>
+                    <p className="text-sm text-gray-600 dark:text-text-secondary mb-1">In Progress</p>
+                    <p className="text-3xl font-bold text-gray-900 dark:text-foreground">{mockStats.inProgress}</p>
+                    <p className="text-xs text-gray-500 dark:text-text-secondary mt-1">continue learning</p>
                   </div>
                   <div className="p-3 bg-purple-100 rounded-xl">
                     <BookOpen className="w-6 h-6 text-purple-600" />
@@ -195,8 +195,8 @@ const VideoPage = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Continue Learning</h2>
-                  <p className="text-sm text-gray-600 mt-1">Pick up where you left off</p>
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-foreground">Continue Learning</h2>
+                  <p className="text-sm text-gray-600 dark:text-text-secondary mt-1">Pick up where you left off</p>
                 </div>
                 <Button
                   variant="outline"
@@ -238,11 +238,11 @@ const VideoPage = () => {
                           {video.topic}
                         </span>
                       </div>
-                      <h3 className="font-semibold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                      <h3 className="font-semibold text-gray-900 dark:text-foreground mb-3 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                         {video.title}
                       </h3>
                       <div className="space-y-2">
-                        <div className="flex items-center justify-between text-xs text-gray-600">
+                        <div className="flex items-center justify-between text-xs text-gray-600 dark:text-text-secondary">
                           <span>Progress</span>
                           <span>{video.progress}%</span>
                         </div>
@@ -288,7 +288,7 @@ const VideoPage = () => {
             <div className="absolute inset-0 border-4 border-blue-200 rounded-full"></div>
             <div className="absolute inset-0 border-4 border-blue-600 rounded-full border-t-transparent animate-spin"></div>
           </div>
-          <p className="mt-4 text-gray-600 font-medium">Loading videos...</p>
+          <p className="mt-4 text-gray-600 dark:text-text-secondary font-medium">Loading videos...</p>
         </div>
       );
     }
@@ -324,8 +324,8 @@ const VideoPage = () => {
           <div className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border shadow-lg p-6 hover:border-blue-300 dark:hover:border-border-blue transition-colors">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">{videos.topic}</h2>
-                <p className="text-sm text-gray-600 mt-1">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-foreground">{videos.topic}</h2>
+                <p className="text-sm text-gray-600 dark:text-text-secondary mt-1">
                   {videos.videos.length} {videos.videos.length === 1 ? 'video' : 'videos'} available
                 </p>
               </div>
@@ -340,7 +340,7 @@ const VideoPage = () => {
                       className="object-cover"
                     />
                   </div>
-                  <span className="text-sm font-medium text-gray-700">{videos.channel_name}</span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-text-secondary">{videos.channel_name}</span>
                 </div>
               )}
             </div>
@@ -371,10 +371,10 @@ const VideoPage = () => {
                   </div>
                 </div>
                 <div className="p-4">
-                  <h3 className="font-semibold text-sm line-clamp-2 mb-3 text-gray-900 group-hover:text-blue-600 transition-colors">
+                  <h3 className="font-semibold text-sm line-clamp-2 mb-3 text-gray-900 dark:text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {video.title}
                   </h3>
-                  <div className="flex items-center gap-3 text-xs text-gray-600 mb-3">
+                  <div className="flex items-center gap-3 text-xs text-gray-600 dark:text-text-secondary mb-3">
                     <div className="flex items-center gap-1">
                       <Clock className="w-3.5 h-3.5" />
                       <span>{video.duration}</span>
@@ -403,7 +403,7 @@ const VideoPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <Header
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}

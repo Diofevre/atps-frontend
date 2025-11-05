@@ -15,32 +15,57 @@ const ScientificCalculator: React.FC<ScientificCalculatorProps> = ({ isVisible, 
   const [operation, setOperation] = useState<string | null>(null);
   const [waitingForOperand, setWaitingForOperand] = useState(false);
   const [memory, setMemory] = useState<number>(0);
+  const [operationHistory, setOperationHistory] = useState<string>(''); // Historique des opérations complètes
+  const [isMobile, setIsMobile] = useState(false);
 
   const inputNumber = useCallback((num: string) => {
     if (waitingForOperand) {
       setDisplay(String(num));
       setWaitingForOperand(false);
+      // Si on attend un nouvel opérande, on continue l'historique
+      if (operationHistory) {
+        setOperationHistory(operationHistory + ' ' + num);
+      } else {
+        setOperationHistory(num);
+      }
     } else {
-      setDisplay(display === '0' ? String(num) : display + num);
+      const newDisplay = display === '0' ? String(num) : display + num;
+      setDisplay(newDisplay);
+      // Mettre à jour l'historique en remplaçant le dernier nombre
+      if (operationHistory && operation) {
+        const parts = operationHistory.split(' ');
+        parts[parts.length - 1] = newDisplay;
+        setOperationHistory(parts.join(' '));
+      } else if (!operationHistory) {
+        setOperationHistory(newDisplay);
+      } else {
+        setOperationHistory(operationHistory.slice(0, -display.length) + newDisplay);
+      }
     }
-  }, [display, waitingForOperand]);
+  }, [display, waitingForOperand, operationHistory, operation]);
 
   const inputOperation = useCallback((nextOperation: string) => {
     const inputValue = parseFloat(display);
 
     if (previousValue === null) {
       setPreviousValue(inputValue);
+      setOperationHistory(display + ' ' + nextOperation);
     } else if (operation) {
       const currentValue = previousValue || 0;
       const newValue = calculate(currentValue, inputValue, operation);
 
       setDisplay(String(newValue));
       setPreviousValue(newValue);
+      // Mettre à jour l'historique avec le résultat et la nouvelle opération
+      setOperationHistory(operationHistory + ' ' + display + ' ' + nextOperation);
+    } else {
+      // Première opération
+      setOperationHistory(display + ' ' + nextOperation);
     }
 
     setWaitingForOperand(true);
     setOperation(nextOperation);
-  }, [display, previousValue, operation]);
+  }, [display, previousValue, operation, operationHistory]);
 
   const calculate = (firstValue: number, secondValue: number, operation: string): number => {
     switch (operation) {
@@ -65,17 +90,20 @@ const ScientificCalculator: React.FC<ScientificCalculatorProps> = ({ isVisible, 
     if (previousValue !== null && operation) {
       const newValue = calculate(previousValue, inputValue, operation);
       setDisplay(String(newValue));
+      // Compléter l'historique avec le dernier nombre et le résultat
+      setOperationHistory(operationHistory + ' ' + display + ' = ' + String(newValue));
       setPreviousValue(null);
       setOperation(null);
       setWaitingForOperand(true);
     }
-  }, [display, previousValue, operation]);
+  }, [display, previousValue, operation, operationHistory]);
 
   const clear = useCallback(() => {
     setDisplay('0');
     setPreviousValue(null);
     setOperation(null);
     setWaitingForOperand(false);
+    setOperationHistory('');
   }, []);
 
   const clearEntry = useCallback(() => {
@@ -237,6 +265,16 @@ const ScientificCalculator: React.FC<ScientificCalculatorProps> = ({ isVisible, 
     }
   }, [isVisible, inputNumber, inputDecimal, inputOperation, performCalculation, clear, backspace, scientificFunction, memoryStore, memoryRecall, memoryClear]);
 
+  // Detect mobile/tablet screen size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // lg breakpoint
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Add keyboard event listener
   useEffect(() => {
     if (isVisible) {
@@ -272,10 +310,11 @@ const ScientificCalculator: React.FC<ScientificCalculatorProps> = ({ isVisible, 
           className="bg-gradient-to-b from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-3xl shadow-2xl p-4 sm:p-7 w-full max-w-md mx-2 sm:mx-4 pointer-events-auto border-2 border-slate-300 dark:border-border max-h-[90vh] overflow-y-auto"
           style={{ 
             position: 'fixed',
-            top: '20px',
-            left: 'calc(50% + 6cm)',
-            transform: 'translate(-50%, 0)',
-            zIndex: 9999
+            top: isMobile ? '50%' : '20px',
+            left: isMobile ? '50%' : 'calc(50% + 6cm)',
+            transform: isMobile ? 'translate(-50%, -50%)' : 'translate(-50%, 0)',
+            zIndex: 9999,
+            maxWidth: isMobile ? 'calc(100vw - 1rem)' : '28rem'
           }}
         >
             {/* Header */}
@@ -298,12 +337,14 @@ const ScientificCalculator: React.FC<ScientificCalculatorProps> = ({ isVisible, 
             </div>
 
           {/* Display */}
-          <div className="bg-gradient-to-b from-slate-900 to-slate-800 rounded-2xl p-5 mb-6 shadow-inner border-2 border-[#EECE84]/40">
+          <div className="bg-gradient-to-b from-slate-900 to-slate-800 rounded-2xl p-4 sm:p-5 mb-6 shadow-inner border-2 border-[#EECE84]/40 min-h-[120px] flex flex-col justify-end">
             <div className="text-right">
-              <div className="text-green-400 text-sm mb-2 font-mono">
-                {previousValue !== null && operation ? `${previousValue} ${operation}` : ''}
+              {/* Historique des opérations - scrollable si trop long */}
+              <div className="text-green-400 text-xs sm:text-sm mb-2 font-mono max-h-[60px] overflow-y-auto overflow-x-hidden break-words">
+                {operationHistory || (previousValue !== null && operation ? `${previousValue} ${operation}` : '')}
               </div>
-              <div className="text-green-300 text-3xl font-mono font-bold tracking-wider">
+              {/* Résultat principal */}
+              <div className="text-green-300 text-2xl sm:text-3xl font-mono font-bold tracking-wider break-all">
                 {display}
               </div>
             </div>
@@ -376,11 +417,38 @@ const ScientificCalculator: React.FC<ScientificCalculatorProps> = ({ isVisible, 
             <button className={operatorButtonClass} onClick={() => inputOperation('+')}>+</button>
           </div>
 
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-4 gap-2 mb-4">
             <button className={numberButtonClass} onClick={() => inputNumber('0')}>0</button>
             <button className={numberButtonClass} onClick={inputDecimal}>.</button>
             <button className={operatorButtonClass} onClick={() => scientificFunction('e')}>e</button>
             <button className="w-full h-10 rounded-xl font-bold text-sm bg-gradient-to-b from-[#EECE84] to-[#EECE84]/90 text-black hover:from-[#EECE84] hover:to-[#EECE84]/95 transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg border border-[#EECE84]/60" onClick={performCalculation}>=</button>
+          </div>
+
+          {/* Parenthèses row */}
+          <div className="grid grid-cols-2 gap-2">
+            <button 
+              className={operatorButtonClass} 
+              onClick={() => {
+                // Pour l'instant, on ajoute simplement "(" à l'affichage
+                // Une implémentation complète nécessiterait un parser d'expressions
+                const current = display === '0' ? '(' : display + '(';
+                setDisplay(current);
+                setOperationHistory(operationHistory + ' (');
+              }}
+            >
+              (
+            </button>
+            <button 
+              className={operatorButtonClass} 
+              onClick={() => {
+                // Pour l'instant, on ajoute simplement ")" à l'affichage
+                const current = display + ')';
+                setDisplay(current);
+                setOperationHistory(operationHistory + ' )');
+              }}
+            >
+              )
+            </button>
           </div>
         </motion.div>
       </motion.div>

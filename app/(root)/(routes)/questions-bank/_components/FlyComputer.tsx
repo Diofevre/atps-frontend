@@ -27,6 +27,13 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
   const [isPanning, setIsPanning] = useState(false); // État pour le panning
   const [panStart, setPanStart] = useState({ x: 0, y: 0 }); // Position de départ du pan
   
+  // Touch events states
+  const [touchStart, setTouchStart] = useState<{ x: number; y: number; time: number } | null>(null);
+  const [touchStartPosition, setTouchStartPosition] = useState<{ x: number; y: number } | null>(null);
+  const [lastTouch, setLastTouch] = useState<{ x: number; y: number } | null>(null);
+  const [initialPinchDistance, setInitialPinchDistance] = useState<number | null>(null);
+  const [touchElementType, setTouchElementType] = useState<'none' | 'cursor' | 'disc' | 'backDisc' | 'flycomputer' | 'pan'>('none');
+  
   // États pour la rotation de la face arrière (séparés de la face avant)
   const [backDiscRotation, setBackDiscRotation] = useState(0);
   const [isDraggingBackDisc, setIsDraggingBackDisc] = useState(false);
@@ -171,6 +178,103 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
     // Rotation simple : garder la valeur telle quelle
     setBackDiscRotation(newRotation);
     console.log('🔄 Rotation mise à jour (Face arrière):', newRotation, '°');
+  };
+
+  // Handlers pour les événements tactiles
+  const handleTouchStart = (e: React.TouchEvent, type: 'cursor' | 'disc' | 'backDisc' | 'flycomputer' | 'pan') => {
+    e.stopPropagation(); // Empêcher la propagation vers l'arrière-plan
+    
+    if (e.touches.length === 1) {
+      // Un seul doigt : drag/rotation
+      const touch = e.touches[0];
+      setTouchStart({ x: touch.clientX, y: touch.clientY, time: Date.now() });
+      setTouchStartPosition({ x: touch.clientX, y: touch.clientY });
+      setLastTouch({ x: touch.clientX, y: touch.clientY });
+      setTouchElementType(type);
+      
+      // Simuler handleMouseDown avec les coordonnées touch
+      const syntheticEvent = {
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      } as any;
+      handleMouseDown(syntheticEvent, type);
+    } else if (e.touches.length === 2 && type === 'pan') {
+      // Deux doigts : pinch-to-zoom
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      const distance = Math.hypot(
+        touch2.clientX - touch1.clientX,
+        touch2.clientY - touch1.clientY
+      );
+      setInitialPinchDistance(distance);
+      setTouchElementType('pan');
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    
+    if (e.touches.length === 1 && touchStart && touchElementType !== 'none') {
+      // Un seul doigt : continuer le drag/rotation
+      const touch = e.touches[0];
+      const syntheticEvent = {
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      } as any;
+      
+      // Continuer le mouvement basé sur le type d'élément
+      if (touchElementType === 'flycomputer' || touchElementType === 'cursor' || touchElementType === 'disc' || touchElementType === 'backDisc') {
+        handleMouseMove(syntheticEvent);
+      } else if (touchElementType === 'pan' && zoomLevel > 1) {
+        // Panning lors du zoom
+        const deltaX = touch.clientX - (lastTouch?.x || touch.clientX);
+        const deltaY = touch.clientY - (lastTouch?.y || touch.clientY);
+        setPanOffset(prev => ({
+          x: prev.x + deltaX,
+          y: prev.y + deltaY
+        }));
+      }
+      
+      setLastTouch({ x: touch.clientX, y: touch.clientY });
+    } else if (e.touches.length === 2 && initialPinchDistance && touchElementType === 'pan') {
+      // Deux doigts : zoom par pincement
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      const distance = Math.hypot(
+        touch2.clientX - touch1.clientX,
+        touch2.clientY - touch1.clientY
+      );
+      const scaleChange = distance / initialPinchDistance;
+      setZoomLevel(prev => Math.max(0.5, Math.min(3, prev * scaleChange)));
+      setInitialPinchDistance(distance);
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    
+    if (e.touches.length === 0) {
+      // Aucun doigt restant : terminer l'interaction
+      const syntheticEvent = {
+        clientX: lastTouch?.x || 0,
+        clientY: lastTouch?.y || 0,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      } as any;
+      
+      handleMouseUp(syntheticEvent);
+      
+      // Réinitialiser les états touch
+      setTouchStart(null);
+      setTouchStartPosition(null);
+      setLastTouch(null);
+      setInitialPinchDistance(null);
+      setTouchElementType('none');
+    }
   };
 
   const handleMouseDown = (e: React.MouseEvent, type: 'cursor' | 'disc' | 'backDisc' | 'flycomputer') => {
@@ -512,17 +616,30 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-50">
+    <div 
+      className="fixed inset-0 z-50"
+      style={{ touchAction: 'none' }} // Empêcher les interactions par défaut sur l'arrière-plan
+      onTouchStart={(e) => {
+        // Si on touche l'arrière-plan, ne rien faire (mais empêcher la propagation)
+        if (e.target === e.currentTarget) {
+          e.stopPropagation();
+        }
+      }}
+    >
       {/* E6B Flight Computer déplaçable - Positionné à droite */}
         <div 
           className="absolute w-full sm:w-2/3 h-full"
           style={{ 
             right: '-20%',
             transform: `translate(-53px, ${flyComputerPosition.y}px)`,
-            cursor: isDraggingFlyComputer ? 'grabbing' : 'grab'
+            cursor: isDraggingFlyComputer ? 'grabbing' : 'grab',
+            touchAction: 'auto' // Permet les interactions tactiles dans le conteneur
           }}
-        onMouseDown={(e) => handleMouseDown(e, 'flycomputer')}
-      >
+          onMouseDown={(e) => handleMouseDown(e, 'flycomputer')}
+          onTouchStart={(e) => handleTouchStart(e, 'flycomputer')}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
         {/* Barre de boutons centrée en haut */}
         <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-10">
           <div className="flex items-center gap-3 bg-black/20 backdrop-blur-sm rounded-full px-6 py-3 border border-white/10">
@@ -595,6 +712,10 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
             onMouseDown={zoomLevel > 1 ? handlePanStart : undefined}
             onMouseMove={zoomLevel > 1 ? handleMouseMove : undefined}
             onMouseUp={zoomLevel > 1 ? handleMouseUp : undefined}
+            onTouchStart={(e) => zoomLevel > 1 ? handleTouchStart(e, 'pan') : undefined}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            style={{ touchAction: 'pan-y pan-x pinch-zoom' }}
           >
             {!isFlipped ? (
               // Face avant - E6B interactif
@@ -620,6 +741,9 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
                       onMouseDown={(e) => handleMouseDown(e, 'cursor')}
                       onMouseEnter={() => setHoveredElement('cursor')}
                       onMouseLeave={() => setHoveredElement('none')}
+                      onTouchStart={(e) => handleTouchStart(e, 'cursor')}
+                      onTouchMove={handleTouchMove}
+                      onTouchEnd={handleTouchEnd}
                     >
                       <g 
                         dangerouslySetInnerHTML={{ __html: cursorSvg }}
@@ -645,6 +769,12 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
                     }}
                     onMouseEnter={() => setHoveredElement('disc')}
                     onMouseLeave={() => setHoveredElement('none')}
+                    onTouchStart={(e) => {
+                      e.stopPropagation();
+                      handleTouchStart(e, 'disc');
+                    }}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
                   >
                     {discSvg && (
                       <g 
@@ -680,6 +810,12 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
                   }}
                   onMouseEnter={() => setHoveredElement('disc')}
                   onMouseLeave={() => setHoveredElement('none')}
+                  onTouchStart={(e) => {
+                    e.stopPropagation();
+                    handleTouchStart(e, 'backDisc');
+                  }}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
                 >
                   {/* tas-dial SVG */}
                   {backDiscSvg && (
@@ -703,6 +839,7 @@ const FlyComputer: React.FC<FlyComputerProps> = ({ isVisible, onClose }) => {
           onClick={onClose}
           className="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10 bg-yellow-400 rounded-full shadow-lg hover:bg-yellow-500 p-2 text-yellow-900 hover:text-yellow-950"
           onMouseDown={(e) => e.stopPropagation()} // Empêcher le drag du flycomputer
+          onTouchStart={(e) => e.stopPropagation()}
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

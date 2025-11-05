@@ -68,6 +68,10 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ images, isOpen, onClose, init
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   
+  // Touch events states
+  const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
+  const [initialDistance, setInitialDistance] = useState<number | null>(null);
+  
   // Tool states
   const [activeTool, setActiveTool] = useState<'none' | 'point' | 'line' | 'circle' | 'perpendicular' | 'angle' | 'ruler'>('none');
   const [points, setPoints] = useState<Point[]>([]);
@@ -356,13 +360,14 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ images, isOpen, onClose, init
     setIsDragging(false);
   };
 
-  const handleWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
-    const delta = e.deltaY > 0 ? 0.9 : 1.1;
-    setScale(prev => Math.max(0.1, Math.min(10, prev * delta))); // Zoom de 10% à 1000%
-  };
+  // Désactivé : le scroll sert maintenant à naviguer dans l'image, pas à zoomer
+  // const handleWheel = (e: React.WheelEvent) => {
+  //   e.preventDefault();
+  //   const delta = e.deltaY > 0 ? 0.9 : 1.1;
+  //   setScale(prev => Math.max(0.1, Math.min(10, prev * delta))); // Zoom de 10% à 1000%
+  // };
 
-  // Fonction pour obtenir les coordonnées précises sur l'image
+  // Fonction pour obtenir les coordonnées précises sur l'image (mouse)
   const getImageCoordinates = (e: React.MouseEvent) => {
     if (!imageRef.current) return null;
 
@@ -391,6 +396,133 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ images, isOpen, onClose, init
     const finalY = normalizedY * imageHeight;
     
     return { x: finalX, y: finalY };
+  };
+
+  // Fonction pour obtenir les coordonnées précises sur l'image (touch)
+  const getImageCoordinatesTouch = (touch: React.Touch) => {
+    if (!imageRef.current) return null;
+
+    const imageRect = imageRef.current.getBoundingClientRect();
+    
+    // Position du touch relative à l'image
+    const touchX = touch.clientX - imageRect.left;
+    const touchY = touch.clientY - imageRect.top;
+    
+    // Dimensions de l'image
+    const imageWidth = imageRef.current.naturalWidth;
+    const imageHeight = imageRef.current.naturalHeight;
+    const displayWidth = imageRect.width;
+    const displayHeight = imageRect.height;
+    
+    // Vérifier si le touch est dans les limites de l'image
+    if (touchX < 0 || touchX > displayWidth || touchY < 0 || touchY > displayHeight) {
+      return null;
+    }
+    
+    // Convertir les coordonnées de l'affichage vers les coordonnées de l'image originale
+    const normalizedX = touchX / displayWidth;
+    const normalizedY = touchY / displayHeight;
+    
+    const finalX = normalizedX * imageWidth;
+    const finalY = normalizedY * imageHeight;
+    
+    return { x: finalX, y: finalY };
+  };
+
+  // Gestion des événements tactiles pour le drag
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (activeTool !== 'none') return;
+    
+    if (e.touches.length === 1) {
+      // Un seul doigt : drag
+      const touch = e.touches[0];
+      setIsDragging(true);
+      setTouchStart({ x: touch.clientX, y: touch.clientY });
+      setDragStart({
+        x: touch.clientX - position.x,
+        y: touch.clientY - position.y
+      });
+    } else if (e.touches.length === 2) {
+      // Deux doigts : pinch-to-zoom
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      const distance = Math.hypot(
+        touch2.clientX - touch1.clientX,
+        touch2.clientY - touch1.clientY
+      );
+      setInitialDistance(distance);
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 1 && isDragging && touchStart) {
+      // Un seul doigt : drag continu
+      const touch = e.touches[0];
+      setPosition({
+        x: touch.clientX - dragStart.x,
+        y: touch.clientY - dragStart.y
+      });
+    } else if (e.touches.length === 2 && initialDistance) {
+      // Deux doigts : zoom par pincement
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      const distance = Math.hypot(
+        touch2.clientX - touch1.clientX,
+        touch2.clientY - touch1.clientY
+      );
+      const scaleChange = distance / initialDistance;
+      setScale(prev => Math.max(0.5, Math.min(5, prev * scaleChange)));
+      setInitialDistance(distance);
+    }
+    
+    // Gestion des outils avec touch
+    if (activeTool !== 'none' && e.touches.length === 1) {
+      const touch = e.touches[0];
+      const coords = getImageCoordinatesTouch(touch);
+      if (!coords) return;
+      
+      // Simuler les événements de souris pour les outils
+      const syntheticEvent = {
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+        preventDefault: () => {}
+      } as any;
+      
+      if (activeTool === 'line' && isDrawingLine && lineStart) {
+        setMousePosition(coords);
+        const distance = Math.sqrt(
+          Math.pow(coords.x - lineStart.x, 2) + Math.pow(coords.y - lineStart.y, 2)
+        );
+        if (distance > 5) {
+          setHasMoved(true);
+        }
+      } else if (activeTool === 'circle' && isDrawingCircle) {
+        setMousePosition(coords);
+      }
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (e.touches.length === 0) {
+      setIsDragging(false);
+      setTouchStart(null);
+      setInitialDistance(null);
+    }
+    
+    // Gestion du clic pour les outils
+    if (e.changedTouches.length === 1 && activeTool !== 'none') {
+      const touch = e.changedTouches[0];
+      const coords = getImageCoordinatesTouch(touch);
+      if (coords) {
+        // Simuler un clic de souris
+        const syntheticEvent = {
+          clientX: touch.clientX,
+          clientY: touch.clientY,
+          preventDefault: () => {}
+        } as any;
+        handleImageClick(syntheticEvent as any);
+      }
+    }
   };
 
   // Gestion du clic pour placer un point ou dessiner une ligne/cercle
@@ -787,6 +919,14 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ images, isOpen, onClose, init
       <div 
         className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
         onClick={handleBackdropClick}
+        onTouchStart={(e) => {
+          // Empêcher les événements touch de se propager à l'arrière-plan
+          if (e.target === e.currentTarget) {
+            // Si on clique sur l'arrière-plan, fermer
+            onClose();
+          }
+        }}
+        style={{ touchAction: 'none' }} // Empêcher les interactions par défaut sur l'arrière-plan
       >
         <motion.div
           ref={modalRef}
@@ -806,9 +946,13 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ images, isOpen, onClose, init
             border: '2px solid #e5e7eb',
             pointerEvents: 'auto',
             willChange: isDraggingModal || isResizing ? 'transform' : 'auto',
-            userSelect: 'none' // Désactive la sélection de texte dans tout le modal
+            userSelect: 'none', // Désactive la sélection de texte dans tout le modal
+            touchAction: 'auto' // Permet les interactions tactiles dans le modal
           }}
           onClick={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()} // Empêcher la propagation des événements touch
+          onTouchMove={(e) => e.stopPropagation()}
+          onTouchEnd={(e) => e.stopPropagation()}
         >
           {/* Resize Handles */}
           <div 
@@ -877,16 +1021,20 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ images, isOpen, onClose, init
           {/* Image Container */}
           <div 
             ref={imageContainerRef}
-            className="absolute inset-0 mt-14 mb-16 flex items-center justify-center overflow-hidden bg-white"
+            className="absolute inset-0 mt-14 mb-16 flex items-center justify-center overflow-auto bg-white"
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
-            onWheel={handleWheel}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
             onClick={handleImageClick}
             style={{ 
               cursor: (activeTool === 'point' || activeTool === 'line' || activeTool === 'circle' || activeTool === 'perpendicular' || activeTool === 'angle' || activeTool === 'ruler') ? 'crosshair' : (isDragging ? 'grabbing' : 'grab'),
-              userSelect: 'none' // Désactive la sélection de texte dans le conteneur d'image
+              userSelect: 'none', // Désactive la sélection de texte dans le conteneur d'image
+              touchAction: 'pan-y pan-x pinch-zoom', // Permet le scroll et le zoom par pincement
+              WebkitOverflowScrolling: 'touch' // Smooth scrolling sur iOS
             }}
           >
             {/* Conteneur avec image et annotations */}

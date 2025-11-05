@@ -122,9 +122,9 @@ const ManualPage = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">Total Read</p>
-                      <p className="text-3xl font-bold text-gray-900">{mockStats.totalRead}</p>
-                      <p className="text-xs text-gray-500 mt-1">manuals</p>
+                      <p className="text-sm text-gray-600 dark:text-text-secondary mb-1">Total Read</p>
+                      <p className="text-3xl font-bold text-gray-900 dark:text-foreground">{mockStats.totalRead}</p>
+                      <p className="text-xs text-gray-500 dark:text-text-secondary mt-1">manuals</p>
                     </div>
                     <div className="p-3 bg-blue-100 rounded-xl">
                       <Book className="w-6 h-6 text-blue-600" />
@@ -137,9 +137,9 @@ const ManualPage = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">Completion Rate</p>
-                      <p className="text-3xl font-bold text-gray-900">{mockStats.completionRate}%</p>
-                      <p className="text-xs text-gray-500 mt-1">average</p>
+                      <p className="text-sm text-gray-600 dark:text-text-secondary mb-1">Completion Rate</p>
+                      <p className="text-3xl font-bold text-gray-900 dark:text-foreground">{mockStats.completionRate}%</p>
+                      <p className="text-xs text-gray-500 dark:text-text-secondary mt-1">average</p>
                     </div>
                     <div className="p-3 bg-green-100 rounded-xl">
                       <TrendingUp className="w-6 h-6 text-green-600" />
@@ -152,9 +152,9 @@ const ManualPage = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">Pages Read</p>
-                      <p className="text-3xl font-bold text-gray-900">{mockStats.pagesRead.toLocaleString()}</p>
-                      <p className="text-xs text-gray-500 mt-1">total pages</p>
+                      <p className="text-sm text-gray-600 dark:text-text-secondary mb-1">Pages Read</p>
+                      <p className="text-3xl font-bold text-gray-900 dark:text-foreground">{mockStats.pagesRead.toLocaleString()}</p>
+                      <p className="text-xs text-gray-500 dark:text-text-secondary mt-1">total pages</p>
                     </div>
                     <div className="p-3 bg-yellow-100 rounded-xl">
                       <FileText className="w-6 h-6 text-yellow-600" />
@@ -167,9 +167,9 @@ const ManualPage = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">In Progress</p>
-                      <p className="text-3xl font-bold text-gray-900">{mockStats.inProgress}</p>
-                      <p className="text-xs text-gray-500 mt-1">continue reading</p>
+                      <p className="text-sm text-gray-600 dark:text-text-secondary mb-1">In Progress</p>
+                      <p className="text-3xl font-bold text-gray-900 dark:text-foreground">{mockStats.inProgress}</p>
+                      <p className="text-xs text-gray-500 dark:text-text-secondary mt-1">continue reading</p>
                     </div>
                     <div className="p-3 bg-purple-100 rounded-xl">
                       <BookOpen className="w-6 h-6 text-purple-600" />
@@ -184,11 +184,11 @@ const ManualPage = () => {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900">Continue Reading</h2>
-                    <p className="text-sm text-gray-600 mt-1">Pick up where you left off</p>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-foreground">Continue Reading</h2>
+                    <p className="text-sm text-gray-600 dark:text-text-secondary mt-1">Pick up where you left off</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-gray-600 dark:text-text-secondary">
                       {mockStats.completed} completed
                     </span>
                     <CheckCircle2 className="w-5 h-5 text-green-600" />
@@ -218,13 +218,13 @@ const ManualPage = () => {
                           <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-md">
                             {manual.topic}
                   </span>
-                          <span className="text-xs text-gray-500">{manual.lastOpened}</span>
+                          <span className="text-xs text-gray-500 dark:text-text-secondary">{manual.lastOpened}</span>
                         </div>
-                        <h3 className="font-semibold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                        <h3 className="font-semibold text-gray-900 dark:text-foreground mb-3 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                           {manual.title}
                         </h3>
                         <div className="space-y-2">
-                          <div className="flex items-center justify-between text-xs text-gray-600">
+                          <div className="flex items-center justify-between text-xs text-gray-600 dark:text-text-secondary">
                             <span>Progress</span>
                             <span>{manual.progress}%</span>
                           </div>
@@ -269,7 +269,7 @@ const ManualPage = () => {
             <div className="absolute inset-0 border-4 border-blue-200 rounded-full"></div>
             <div className="absolute inset-0 border-4 border-blue-600 rounded-full border-t-transparent animate-spin"></div>
           </div>
-          <p className="mt-4 text-gray-600 font-medium">Loading lessons...</p>
+          <p className="mt-4 text-gray-600 dark:text-text-secondary font-medium">Loading lessons...</p>
         </div>
       );
     }
@@ -282,8 +282,8 @@ const ManualPage = () => {
                     <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <FileText className="w-8 h-8 text-red-600" />
                     </div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Error Loading Lessons</h2>
-                    <p className="text-gray-600">{error}</p>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-foreground mb-2">Error Loading Lessons</h2>
+                    <p className="text-gray-600 dark:text-text-secondary">{error}</p>
                   </CardContent>
                 </Card>
               </div>
@@ -299,8 +299,8 @@ const ManualPage = () => {
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Book className="w-8 h-8 text-blue-600" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">No Lessons Available</h2>
-              <p className="text-gray-600 mb-6">Try selecting a different topic</p>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-foreground mb-2">No Lessons Available</h2>
+              <p className="text-gray-600 dark:text-text-secondary mb-6">Try selecting a different topic</p>
             </CardContent>
           </Card>
         </div>
@@ -343,11 +343,11 @@ const ManualPage = () => {
                     </div>
                   </div>
                   
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-foreground mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     Lesson {lesson.lesson_id}
                   </h3>
                   
-                  <div className="flex items-center justify-center gap-2 text-sm text-gray-600 mb-4">
+                  <div className="flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-text-secondary mb-4">
                     <Book className="w-4 h-4" />
                     <span>Page {lesson.debut_page}</span>
                   </div>
@@ -366,7 +366,7 @@ const ManualPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <HeaderManual
         onTopicChange={setSelectedTopicId}
       />

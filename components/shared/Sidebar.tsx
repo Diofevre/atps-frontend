@@ -1,14 +1,27 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MenuSidebar } from "@/lib/menu-sidebar";
 import Image from "next/image";
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { useTheme } from 'next-themes';
+import { Moon, Sun } from 'lucide-react';
 
 const Sidebar = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Éviter les problèmes d'hydratation avec next-themes
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
 
   return (
     <div
@@ -18,7 +31,8 @@ const Sidebar = () => {
         isOpen ? "w-60" : "w-20"
       }`}
       style={{ 
-        height: '100vh',
+        height: '100dvh',
+        minHeight: '100vh',
         overflow: 'hidden',
       }}
     >
@@ -76,6 +90,32 @@ const Sidebar = () => {
           );
         })}
       </ul>
+
+      {/* Theme Toggle Button - Fixed at bottom */}
+      <div className="flex-shrink-0 px-5 pb-5">
+        <button
+          onClick={toggleTheme}
+          className={`w-full flex items-center gap-3 p-3 rounded-md transition-all duration-200 ${
+            'hover:bg-sidebar-accent text-sidebar-foreground hover:text-[#EECE84]'
+          }`}
+          aria-label={mounted && theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          <span className="text-2xl min-w-[24px] flex-shrink-0 flex items-center justify-center text-sidebar-foreground relative">
+            {mounted && (
+              <>
+                <Sun className={`h-6 w-6 transition-all duration-300 ${theme === 'dark' ? 'scale-0 rotate-90 opacity-0' : 'scale-100 rotate-0 opacity-100'}`} />
+                <Moon className={`h-6 w-6 absolute transition-all duration-300 ${theme === 'dark' ? 'scale-100 rotate-0 opacity-100' : 'scale-0 -rotate-90 opacity-0'}`} />
+              </>
+            )}
+            {!mounted && <Sun className="h-6 w-6" />}
+          </span>
+          <span className={`text-base font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${
+            isOpen ? "opacity-100 w-auto" : "opacity-0 w-0"
+          }`}>
+            {mounted ? (theme === 'dark' ? 'Light Mode' : 'Dark Mode') : 'Theme'}
+          </span>
+        </button>
+      </div>
     </div>
   );
 };

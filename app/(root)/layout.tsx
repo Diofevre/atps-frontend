@@ -25,7 +25,7 @@ export default function Layout({ children }: Props) {
   const hideBackground = pathname === '/login' || pathname === '/signup';
 
   return (
-    <div className="flex h-screen relative overflow-hidden">
+    <div className="flex relative overflow-hidden" style={{ height: '100dvh', minHeight: '100vh' }}>
       {/* Beautiful animated background - Hide for login - Theme aware */}
       {!hideBackground && (
         <div className="fixed inset-0 -z-10 bg-background">
@@ -54,10 +54,11 @@ export default function Layout({ children }: Props) {
 
         {/* Main content */}
         <main 
-          className={`flex-1 overflow-y-auto overflow-x-hidden h-full relative`}
+          className={`flex-1 overflow-y-auto overflow-x-hidden relative`}
           style={{ 
-            height: '100vh',
-            maxHeight: '100vh',
+            height: '100dvh',
+            minHeight: '100vh',
+            maxHeight: '100dvh',
             width: 'calc(100% - 80px)', // 80px = w-20 (sidebar fermée)
           }}
         >
